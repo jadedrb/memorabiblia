@@ -1,0 +1,257 @@
+body {
+  margin: 0;
+  background-color: seashell;
+  font-family: monospace;
+  position: relative;
+}
+nav {
+  background-color: papayawhip;
+  margin-top: 0;
+  height: 50px;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+ul {
+  list-style: none;
+  display: flex;
+  justify-content: space-around;
+  width: 100%;
+}
+.link {
+  text-decoration: none;
+  color: black;
+  font-size: 15pt;
+  font-weight: 600;
+}
+.link:hover {
+  border-bottom: 3px solid grey;
+  color: midnightblue;
+}
+.link:active {
+  border-bottom: 5px solid black;
+  color: orange;
+}
+.book {
+  display: grid;
+  position: relative;
+  grid-template: 1fr / 1fr 1fr 1fr 10px;
+  grid-gap: 20px;
+  width: 100%;
+  border: 1px solid black;
+
+}
+.delete {
+  position: absolute;
+  top: 0;
+  right: 8px;
+  font-size: 20pt;
+  opacity: .1;
+}
+.delete:hover {
+  cursor: pointer;
+  font-weight: bold;
+  opacity: .5;
+}
+.delete:active {
+  color: red;
+  font-weight: bolder;
+  opacity: 1;
+}
+img {
+  height: 100%;
+  max-height: 450px;
+  max-width: 300px;
+  background-color: black;
+  color: white;
+  font-size: 65pt;
+  overflow: auto;
+  word-wrap: break-word;
+}
+.book img:hover {
+  border-left: 15px solid black;
+  opacity: .6;
+  cursor: pointer;
+}
+.book-info:hover {
+  border-left: 5px solid black;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: peachpuff;
+}
+.memory:hover {
+  border-left: 5px solid black;
+  padding-left: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  background-color: peachpuff;
+}
+.book-info:active {
+  border-left: 20px solid black;
+  padding-left: 10px;
+  background-color: grey;
+  cursor: pointer;
+}
+.memory:active {
+  border-left: 20px solid black;
+  padding-left: 10px;
+  background-color: grey;
+  cursor: pointer;
+}
+.book-info {
+  width: 80%;
+  padding: 10px;
+}
+.book-info span {
+  color: orange;
+  font-size: 15pt;
+  overflow-wrap: break-word;
+}
+.modal {
+  position: fixed;
+  top: 0;
+  opacity: .8;
+  height: 100%;
+  width: 100%;
+  background-color: white;
+  font-size: 30pt;
+  display: flex;
+  justify-content: center;
+}
+form {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.close {
+  width: 100%;
+}
+.book-cover {
+  width: 1100px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+.book-cover img {
+  height: 600px;
+}
+.book-cover input {
+  width: 98%;
+}
+.book-memory {
+  width: 1500px;
+}
+.book-memory input {
+  width: 98%;
+}
+.book-memory textarea {
+  width: 98%;
+  height: 100px;
+}
+.memory span {
+  color: orange;
+  font-size: 13pt;
+  word-spacing: -5px;
+  letter-spacing: -1px;
+  overflow-wrap: break-word;
+}
+.memory {
+  margin-left: -30px;
+}
+.options {
+  display: flex;
+  justify-content: space-around;
+  padding: 10px;
+  font-size: 11pt;
+}
+.options input {
+  margin: 10px;
+}
+.category {
+  margin: 10px;
+}
+.new-book {
+  padding: 10px;
+  border: 1px solid black;
+  cursor: pointer;
+}
+.new-book:hover {
+  background-color: black;
+  color: white;
+}
+.new-book:active {
+  background-color: yellow;
+  color: black;
+}
+.start-finish {
+  cursor: pointer;
+}
+.start-finish:hover {
+  color: lime;
+}
+.start-finish:active {
+  color: red;
+}
+.inputs {
+  width: 100%;
+  text-align: center;
+}
+.memora {
+  font-size: 70pt;
+  text-align: center;
+}
+.bib {
+  color: midnightblue;
+}
+.lia {
+  color: cadetblue;
+}
+.dot {
+  color: grey;
+  opacity: .3;
+}
+.subtext {
+  text-align: center;
+  font-style: italic;
+  color: black;
+}
+.subtext-parent {
+  position: relative;
+}
+.subtext-boxes {
+  position: absolute;
+  top: 140px;
+  display: grid;
+  grid-template: 1fr / 1fr 1fr 1fr;
+  grid-gap: 11px;
+  color: grey;
+  opacity: .5;
+  margin-left: 15px;
+}
+.current-reading {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 70px;
+}
+.scroll-covers {
+  position: absolute;
+  bottom: 35px;
+}
+.scroll-covers button {
+  margin: 15px;
+}
+.selection {
+  font-size: 15pt;
+}
+.random-color {
+  font-size: 15pt;
+}
+.random-color:hover {
+  font-weight: bold;
+  cursor: pointer;
+}
+.random-color:active {
+  color: grey;
+}
