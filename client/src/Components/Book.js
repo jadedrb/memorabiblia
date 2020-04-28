@@ -4,13 +4,29 @@ import Modal from './Modal'
 class Book extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { message: 0 }
+    this.state = { message: 0, tab: 'info' }
     this.handleClick = this.handleClick.bind(this)
+    this.switchTab = this.switchTab.bind(this)
+  }
+
+  componentDidMount() {
+    if (window.innerWidth <= 550) this.setState({tab: 'image'})
+    else this.setState({tab: 'info'})
+  }
+
+  componentDidUpdate() {
+    if (!this.props.screen) {
+      if (window.innerWidth <= 550 && this.state.tab !== 'image') this.setState({tab: 'image'})
+      else if (window.innerWidth > 550 && this.state.tab !== 'info') this.setState({tab: 'info'})
+      this.props.resetScreenCheck()
+    }
   }
 
   handleClick(modalNum) {
     this.state.message ? this.setState({message: 0}) : this.setState({message: modalNum})
   }
+
+  switchTab(tab) { this.setState({tab}) }
 
   render() {
 
@@ -23,12 +39,12 @@ class Book extends React.Component {
 
     let image = (
       <React.Fragment>
-        <img className='img-div' src={book.url} alt={book.title || 'Untitled'} onClick={() => this.handleClick(1)} />
+        <img className='img-div' src={book.url} alt={book.title || 'Untitled'} onClick={() => this.handleClick(1)} style={{display: window.innerWidth < 551 && this.state.tab !== 'image' ? 'none' : 'block'}}/>
       </React.Fragment>
     )
 
     let memory = (
-      <div className='memory' onClick={() => this.handleClick(3)}>
+      <div className='memory' onClick={() => this.handleClick(3)} style={{display: window.innerWidth < 931 && this.state.tab !== 'memory' ? 'none' : 'block'}}>
         <p>Why I Read It <br />
           <span style={color}>{book.why}</span>
         </p>
@@ -51,8 +67,13 @@ class Book extends React.Component {
 
     return (
       <div style={everyOther ? bakColorOne : bakColorTwo} className='book'>
+        <div className='mobile-friendly'> 
+          <div onClick={() => this.switchTab('info')}></div> 
+          <div onClick={() => this.switchTab('memory')}></div> 
+          <div className='extremely-friendly-div' onClick={() => this.switchTab('image')}></div> 
+        </div>
         {image}
-        <div className='book-info' onClick={() => this.handleClick(2)}>
+        <div className='book-info' onClick={() => this.handleClick(2)} style={{display: window.innerWidth < 931 && this.state.tab !== 'info' ? 'none' : 'block'}}>
           <p>Title <br />
             <span style={color}>{book.title}</span>
           </p>

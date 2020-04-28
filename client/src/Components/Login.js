@@ -13,9 +13,11 @@ class Login extends Component {
       statusP: undefined,
       statusE: undefined,
       userbase: {},
-      emails: {},
+      moreInfo: {},
       returningUser: true,
       attempt: false,
+      isLoading: false,
+      isMounted: false,
       preventRender: false
     }
     this.onChange = this.onChange.bind(this)
@@ -86,7 +88,9 @@ class Login extends Component {
     
     // Check for successful login
     if (statusU && statusP && returningUser) {
-        this.props.setUser(username, email)
+        email = this.state.moreInfo[username].email
+        let creationDate = this.state.moreInfo[username].creationDate
+        this.props.setUser(username, email, creationDate)
     // Check for successful sign-up
     } else if (statusU && statusP && statusE) {
         let { username, password, userbase, email } = this.state
@@ -95,8 +99,10 @@ class Login extends Component {
         if (username === '' || password === '') { return }
         if (userbase.hasOwnProperty(username)) { return }
 
-        axios.post('/api/users', {username, password, email})
-        this.props.setUser(username, email)
+        let creationDate = new Date()
+        creationDate = creationDate.toString().substring(0,15)
+        axios.post('/api/users', {username, password, email, creationDate})
+        this.props.setUser(username, email, creationDate)
     }
     this.setState({attempt: true})
   }
@@ -126,15 +132,18 @@ class Login extends Component {
   }
 
   componentDidMount() {
-    this.setState({statusU: false, statusP: false, statusE: false, attempt: false})
+    this.setState({statusU: false, statusP: false, statusE: false, attempt: false, isLoading: true})
     axios
         .get('/api/users')
         .then(res => {
+            console.log('users')
             let userbase = {}
-            res.data.map(user => userbase[user.username] = user.password)
-            this.setState({userbase})
-            console.log(this.state.userbase)
-            console.log('^userbase')
+            let moreInfo = {}
+            res.data.forEach(user => {
+              userbase[user.username] = user.password
+              moreInfo[user.username] = {email: user.email, creationDate: user.email}
+            })
+            this.setState({userbase, moreInfo, isLoading: false})
     })
   }
 
@@ -177,10 +186,10 @@ class Login extends Component {
     else validP = 'none'
 
     if (returningUser) {
-      colorF = 'white'
+      colorF = '#FBFBFB'
       emailInput = '';
       options = (
-        <p>Don't have an account? <span className='options' onClick={() => this.loginSignup('signup')}>Sign up</span>.</p>
+        <p>Don't have an account? <span className='options opb' onClick={() => this.loginSignup('signup')}>Sign up</span></p>
       )
     } else {
       colorF = '#FFF7E7'
@@ -191,7 +200,7 @@ class Login extends Component {
         </label>
       )
       options = (
-        <p>Already have an account? <span className='options' value={email} onClick={() => this.loginSignup('login')}>Login</span>.</p>
+        <p>Already have an account? <span className='options opb' value={email} onClick={() => this.loginSignup('login')}>Login</span></p>
       )
     }
 

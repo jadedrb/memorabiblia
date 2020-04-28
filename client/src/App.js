@@ -15,24 +15,30 @@ class App extends Component {
         finished: {id: 22},
         user: 'none',
         email: '',
+        creationDate: '',
+        updateHomePage: false,
         isLoaded: false,
-        books: []
+        books: [],
+        switchPage: false,
+        searchBar: true,
+        hamburger: false,
       }
       this.setUser = this.setUser.bind(this)
       this.onChange = this.onChange.bind(this)
       this.randomColor = this.randomColor.bind(this)
       this.newBook = this.newBook.bind(this)
       this.chronological = this.chronological.bind(this)
-      this.currentAndRecent = this.currentAndRecent.bind(this)
       this.bookBlueprint = this.bookBlueprint.bind(this)
+      this.handleAttention = this.handleAttention.bind(this)
+      this.minimize = this.minimize.bind(this)
   }
 
-  setUser(user = 'none', email = '') { 
+  setUser(user = 'none', email = '', creationDate) {
     let { books } = this.state
     if (user !== 'none') {
-      this.setState({user, email}) 
+      this.setState({user, email, creationDate}) 
       if (books.length > 0) {
-        books.map((b,i) => {
+        books.forEach((b,i) => {
           let bCopy = {...b}
           bCopy.user = user
           axios
@@ -63,7 +69,7 @@ class App extends Component {
         let userBooks = [];
         let Book = this.bookBlueprint()
         let defaultUrl = 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png'
-        res.data.filter(b => b.user === this.state.user).map((b,i) => {
+        res.data.filter(b => b.user === this.state.user).forEach((b,i) => {
           let url = b.url !== defaultUrl && b.url ? b.url : defaultUrl
           let currentBook = new Book(i, b.title, b.author, b.genre, b.pages, b.started = null, b.finished = null, b.rating, b.why, b.words, b.quotes, b.moments, b.color, url, b.published, b.user, b._id)
           userBooks.push({...currentBook});
@@ -94,10 +100,11 @@ class App extends Component {
   bookBlueprint() {
     class Book {
       constructor(id, title, author, genre, pages, started, finished,
-                  rating, why, words, quotes, moments, color, url, published, user, _id) {
+                  rating, why, words, quotes, moments, color, url, published, user, _id, creationDate) {
         this.id = id; this.title = title; this.author = author; this.genre = genre; this.pages = pages;
         this.started = started; this.finished = finished; this.rating = rating; this.why = why;
-        this.words = words; this.quotes = quotes; this.moments = moments; this.color = color; this.url = url; this.published = published; this.user = user; this._id = _id;
+        this.words = words; this.quotes = quotes; this.moments = moments; this.color = color; this.url = url; 
+        this.published = published; this.user = user; this._id = _id; this.creationDate = creationDate;
       }
     }
     return Book;
@@ -106,9 +113,11 @@ class App extends Component {
   newBook() {
       let Book = this.bookBlueprint();
       let books = this.state.books
-      let nextId = books.length > 0 ? books[books.length - 1].id + 1 : 0
+      let nextId = books.length > 0 ? books.length : 0
+      let creationDate = new Date()
+      creationDate = creationDate.toString()
       let newBook = new Book(nextId, '', '', '', '', null, null, '',
-                            'because', 'words', 'to be or not to be', 'that one time when', this.randomColor(), 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png', '', this.state.user, '')
+                            'because', 'words', 'to be or not to be', 'that one time when', this.randomColor(), 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png', '', this.state.user, '', creationDate)
       if (this.state.user !== 'none') {
         console.log('POST request')
         axios
@@ -144,14 +153,7 @@ class App extends Component {
      let date2 = new Date()
      date = date.toUTCString().split(' ')
      date2 = date2.toLocaleTimeString().split(':')
-
-     let day;
-     let month;
-     let year;
-     let hour;
-     let minute;
-     let timeOfDay;
-
+     let day, month, year, hour, minute, timeOfDay;
      day = Number(date[1][0]) ? day = date[1] : day = date[1][1]
 
      let dateObj = {Jan: '1', Feb: '2', Mar: '3', Apr: '4', May: '5', Jun: '6', Jul: '7', Aug: '8', Sep: '9', Oct: '10', Nov: '11', Dec: '12'}
@@ -196,12 +198,6 @@ class App extends Component {
     })
   }
 
-  currentAndRecent(current, recent) {
-    if (current !== undefined && current.id !== this.state.current.id) {
-      this.setState({current: current, finished: recent})
-    }
-  }
-
   onChange(e, other, extra) {
     let stateCopy = this.state.books.slice()
     let idNum;
@@ -241,24 +237,38 @@ class App extends Component {
       if (published) { book.published = published }
       if (pages) { book.pages = pages }
       if (url) { book.url = url }
-      console.log('list')
-      console.log(author)
-      console.log(title)
-      console.log(published)
-      console.log(pages)
-      console.log(url)
-      console.log('ok then')
-      console.log(book)
     } else {
       book[property] = e.target.value
     }
-    console.log('we got here')
     this.setState({ books: stateCopy })
   }
 
+  handleAttention(book) { 
+    console.log(book)
+    this.setState({switchPage: book}) 
+    setTimeout(() => this.setState({switchPage: false}), 100)
+  }
+
+  minimize(bar = 'searchBar') { 
+    if (bar === 'searchBar') {
+      this.setState({searchBar: !this.state.searchBar}) 
+    } else {
+      let menuBtn = document.querySelector('.menu-btn')
+      let navList = document.querySelector('.nav-list')
+      if (this.state.hamburger) {
+        navList.classList.remove('block-list')
+        menuBtn.classList.remove('open')
+      } else {
+        navList.classList.add('block-list')
+        menuBtn.classList.add('open')
+      }
+      this.setState({hamburger: !this.state.hamburger}) 
+    }
+  }
+
+  componentDidMount() { console.log('v1.01') }
+
   componentDidUpdate() {
-    let current = this.chronological(this.state.books, 'asc').filter(b => b.started !== null)
-    this.currentAndRecent(current[0], current[1])
     if (this.state.isLoaded === true) {
       if (!this.state.books.length) { this.newBook() }
       this.setState({isLoaded: 'Done'})
@@ -266,20 +276,34 @@ class App extends Component {
   }
 
   render() {
-    let { user } = this.state
+    let { user, switchPage } = this.state
     return (
-      <div>
+      <div id='grandpa'>
         <Router>
           <nav>
-            <ul>
-              <li><Link to="/" className='link'>HOME</Link></li>
-              <li><Link to="/MyReads" className='link'>MY READS</Link></li>
-              {user !== 'none' && <li><Link to="/Profile" className='link'>PROFILE</Link></li>}
-              <li><Link onClick={() => user !== 'none' && this.setUser()} to="/Log" className='link'>{user === 'none' ? 'LOGIN' : 'LOGOUT'}</Link></li>
+            <div className='menu-btn' onClick={() => this.minimize('hamburger')}><div className='menu-btn_burger'></div></div>
+            <ul className='nav-list'>
+              <li><Link to="/" className='link' onClick={() => this.minimize('hamburger')}>HOME</Link></li>
+              <li><Link to="/MyReads" className='link' onClick={() => this.minimize('hamburger')}>MY READS</Link></li>
+              {user !== 'none' && <li><Link to="/Profile" className='link' onClick={() => this.minimize('hamburger')}>PROFILE</Link></li>}
+              <li>
+                <Link 
+                    onClick={() => {
+                                user !== 'none' && this.setUser()
+                                this.minimize('hamburger')}} 
+                    to="/Log" 
+                    className='link'>{user === 'none' ? 'LOGIN' : 'LOGOUT'}
+                </Link>
+              </li>
             </ul>
           </nav>
           <Switch>
-            <Route exact path="/" render={() => <Home current={this.state.current} finished={this.state.finished} />} />
+            {switchPage ? <Redirect exact path="/" to="/MyReads"/> : ''}
+            {switchPage ? <Redirect path="/Profile" to="/MyReads"/> : ''}
+            <Route exact path="/" render={() => <Home 
+                                                    books={this.state.books} 
+                                                    timeStamp={this.timeStamp} 
+                                                    handleAttention={this.handleAttention}/>} />
             <Route path="/MyReads" render={() => <ReadingList 
                                                     books={this.state.books} 
                                                     onChange={this.onChange} 
@@ -287,8 +311,14 @@ class App extends Component {
                                                     deleteBook={this.deleteBook} 
                                                     chron={this.chronological} 
                                                     randomC={this.randomColor}
-                                                    bookBlueprint={this.bookBlueprint}/>} />
-            <Route path="/Profile" render={() => <Profile setUser={this.setUser} data={this.state}/>}/>
+                                                    bookBlueprint={this.bookBlueprint}
+                                                    switchPage={this.state.switchPage}
+                                                    searchBar={this.state.searchBar}
+                                                    minimize={this.minimize}/>} />
+            <Route path="/Profile" render={() => <Profile setUser={this.setUser} 
+                                                    data={this.state} 
+                                                    timeStamp={this.timeStamp} 
+                                                    handleAttention={this.handleAttention}/>}/>
             <Redirect path="/Log" to="/Profile"/>
           </Switch>
         </Router>

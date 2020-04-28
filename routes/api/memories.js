@@ -16,7 +16,8 @@ router.get('/', (req, res) => {
 router.post('/', (req, res) => {
     const newMemory = new Memory({
         color: req.body.color,
-        user: req.body.user
+        user: req.body.user,
+        creationDate: req.body.creationDate
     });
 
     newMemory

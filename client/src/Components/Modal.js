@@ -14,6 +14,7 @@ class Modal extends React.Component {
 
   componentDidMount() {
     modal.appendChild(this.el)
+    this.el.id = 'modal-edit-view'
     let currentUrl = this.props.book.url
     let defaultLink = 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png'
     if (this.props.modalNum === 1) {

@@ -17,7 +17,8 @@ router.post('/', (req, res) => {
     const newUser = new User({
         username: req.body.username,
         password: req.body.password,
-        email: req.body.email
+        email: req.body.email,
+        creationDate: req.body.creationDate
     });
 
     newUser
@@ -25,5 +26,13 @@ router.post('/', (req, res) => {
         .then(user => res.json(user))
         .catch(err => res.status(404).json('Error: ' + err));
 });
+
+// DELETE a user
+router.delete('/remove/:id', (req, res) => {
+    User
+        .findById(req.params.id)
+        .then(user => user.remove().then(() => res.json({success: true})))
+        .catch(err => res.status(404).json('Error: ' + err));
+})
 
 module.exports = router;

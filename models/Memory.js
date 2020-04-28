@@ -16,6 +16,7 @@ const MemorySchema = new Schema({
     quotes: { type: String, default: 'to be or not to be' },
     moments: { type: String, default: 'that one time when' },
     url: { type: String, default: '' },
+    creationDate: { type: String },
     color: { type: String },
     user: { type: String }
 });
