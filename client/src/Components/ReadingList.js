@@ -4,7 +4,7 @@ import Book from './Book'
 class ReadingList extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { value: '', organize: 'chrono', defaultMsg: 'myframes', displayMsg: 'block', isMounted: false, screen: 0 }
+    this.state = { value: '', organize: 'chrono', defaultMsg: 'myframes', displayMsg: 'block', isMounted: false, screen: 0, resolution: 0 }
     this.handleChange = this.handleChange.bind(this)
     this.handleDropdown = this.handleDropdown.bind(this)
     this.reportWindowSize = this.reportWindowSize.bind(this)
@@ -46,8 +46,7 @@ class ReadingList extends React.Component {
 
   reportWindowSize() {
     console.log(window.innerWidth > 930 ? window.innerWidth + ' desktop' : window.innerWidth + ' mobile')
-    console.log(typeof window.innerWidth)
-    this.setState({screen: false})
+    if (window.innerWidth !== this.state.resolution) this.setState({screen: false, resolution: window.innerWidth})
   }
 
   handleChange(e) {
@@ -149,7 +148,7 @@ class ReadingList extends React.Component {
         top: this.props.searchBar ? '35px' : '0',
         left: this.props.searchBar ? '10px' : '0',
         textAlign: 'center',
-        border: 'none',
+        border: this.props.searchBar ? 'none' : '1px solid grey',
         height: this.props.searchBar ? '54px' : '25px',
         lineHeight: this.props.searchBar ? '48px' : '20px'
       }

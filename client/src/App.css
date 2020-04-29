@@ -37,7 +37,7 @@ ul {
   position: relative;
   grid-template: 1fr / 1fr 1fr 1fr 10px;
   grid-gap: 20px;
-  width: 100%;
+  justify-self: stretch;
   border: 1px solid black;
 
 }
@@ -180,7 +180,7 @@ form {
 }
 #minimize {
   position: absolute;
-  border-right: 1px dotted grey;
+  border: 1px solid grey;
   color: grey;
   font-size: 20pt;
   opacity: .5;
@@ -189,14 +189,12 @@ form {
   color: black;
   cursor: pointer;
   font-weight: bold;
-  border-right: 1px solid black;
   opacity: 1;
 }
 #minimize:active {
   color: white;
   cursor: pointer;
   font-weight: bold;
-  border-right: 1px dotted white;
   background-color: grey;
 }
 .options input {
@@ -322,7 +320,7 @@ form {
   text-align: center;
   z-index: -1;
   height: 400px;
-  margin-top: 150px;
+  margin-top: 100px;
   margin-bottom: 100px;
   justify-content: space-between;
   letter-spacing: 10px;
@@ -590,6 +588,7 @@ form {
 
 
 
+
 /* Keyframe Animations */
 
 
@@ -716,8 +715,6 @@ form {
     flex-direction: row;
     position: block;
     justify-content: center;
-    width: 100%;
-
   }
   .book-info {
     display: none;
@@ -739,7 +736,7 @@ form {
   .mobile-friendly {
     position: absolute;
     left: 0;
-    width: 25px;
+    width: 30px;
     height: 100%;
   }
   .mobile-friendly div {
@@ -860,9 +857,6 @@ form {
   .category {
     margin: 10px;
   }
-  .delete {
-    top: 50px;
-  }
 }
 
 @media (max-width: 550px) {
@@ -870,7 +864,7 @@ form {
     display: block;
   }
   .mobile-friendly {
-    width: 20px;
+    width: 30px;
   }
   .mobile-friendly div {
     height: 33%;
@@ -917,6 +911,7 @@ form {
   .block-list li {
     border: 1px solid black;
     text-align: center;
+    padding: 10px;
   }
   .link {
     cursor: pointer;
