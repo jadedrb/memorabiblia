@@ -12,8 +12,6 @@ class ReadingList extends React.Component {
   }
 
   componentDidUpdate() {
-    console.log('componentDidUpdate')
-    console.log(this.props.books.length)
     if (this.state.defaultMsg === 'appear') {
       console.log('stabalize')
       this.setState({displayMsg: 'block', defaultMsg: 'myframes'})
@@ -136,7 +134,7 @@ class ReadingList extends React.Component {
     if (window.innerWidth > 550) {
       searchBar = {
         position: this.props.searchBar ? 'absolute' : 'relative',
-        top: this.props.searchBar ? '54px' : '0',
+        top: this.props.searchBar ? '55px' : '0',
         paddingRight: this.props.searchBar ? '10px' : '0',
         textAlign: 'center',
         height: this.props.searchBar ? '50px' : '25px',

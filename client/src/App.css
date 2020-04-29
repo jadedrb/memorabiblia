@@ -174,6 +174,7 @@ form {
 .options {
   display: flex;
   justify-content: space-around;
+  align-items: center;
   padding: 10px;
   font-size: 11pt;
   display: flex;
@@ -204,17 +205,18 @@ form {
   margin: 10px;
 }
 .new-book {
+  display: flex;
+  align-self: center;
   padding: 10px;
   border: 1px solid black;
   cursor: pointer;
 }
 .new-book:hover {
-  background-color: black;
-  color: white;
+  background-color: grey;
 }
 .new-book:active {
-  background-color: yellow;
-  color: black;
+  background-color: black;
+  color: white;
 }
 .start-finish {
   cursor: pointer;
@@ -585,7 +587,28 @@ form {
   transform: rotate(-45deg) translate(35px, 35px);
 
 } 
+select {
+  border: 0;
+  background: transparent;
+}
+.category {
+  position: relative;
+  display: flex;
+  height: 20px;
+  border: 1px solid black;
+  border-radius: 10px;
+}
+.options div input {
+  background: rgb(219, 211, 211);
+  border: 1px solid black;
+}
 
+.options div input:focus {
+  background: transparent;
+  outline: none !important;
+  border:2px solid rgb(58, 57, 57);
+  box-shadow: 0 0 10px rgb(0, 0, 0);
+}
 
 
 

@@ -22,6 +22,8 @@ class App extends Component {
         switchPage: false,
         searchBar: true,
         hamburger: false,
+        nextId: 0,
+        deletedIds: []
       }
       this.setUser = this.setUser.bind(this)
       this.onChange = this.onChange.bind(this)
@@ -87,8 +89,9 @@ class App extends Component {
     console.log('delete book ' + id)
     let deleting = window.confirm('Are you sure you want to delete? This will remove the book entry permanently.')
     if (deleting) {
-      let onesLessBook = this.state.books.slice().filter(b => b.id !== id)
-      this.setState({books: onesLessBook})
+      let onesLessBook = [...this.state.books].filter(b => b.id !== id)
+      let deletedIds = onesLessBook.length ? [...this.state.deletedIds, id] : []
+      this.setState({books: onesLessBook, deletedIds})
       if (this.state.user !== 'none') {
         axios
           .delete(`/api/memories/remove/${_id}`)
@@ -112,24 +115,29 @@ class App extends Component {
 
   newBook() {
       let Book = this.bookBlueprint();
-      let books = this.state.books
-      let nextId = books.length > 0 ? books.length : 0
+      let { books, user } = this.state
+
+      let nextId = books.length ? this.state.nextId : 0
+      let deletedIds = [...this.state.deletedIds]
+      if (books.length) !deletedIds.length ? nextId = this.state.nextId + 1 : nextId = this.state.nextId
+      let actualId = !deletedIds.length ? nextId : deletedIds.shift()
+
       let creationDate = new Date()
       creationDate = creationDate.toString()
-      let newBook = new Book(nextId, '', '', '', '', null, null, '',
-                            'because', 'words', 'to be or not to be', 'that one time when', this.randomColor(), 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png', '', this.state.user, '', creationDate)
-      if (this.state.user !== 'none') {
+      let newBook = new Book(actualId, '', '', '', '', null, null, '',
+                            'because', 'words', 'to be or not to be', 'that one time when', this.randomColor(), 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png', '', user, '', creationDate)
+      if (user !== 'none') {
         console.log('POST request')
         axios
           .post('/api/memories', newBook)
           .then(res => {
             newBook._id = res.data._id
-            this.setState({books: [...this.state.books, newBook]})
+            this.setState({books: [...books, newBook], nextId, deletedIds})
             console.log(this.state)
             console.log('state^')
           })
       } else {
-        this.setState({books: [...this.state.books, newBook]})
+        this.setState({books: [...books, newBook], nextId, deletedIds})
       }
   }
 
@@ -266,7 +274,7 @@ class App extends Component {
     }
   }
 
-  componentDidMount() { console.log('v1.01') }
+  componentDidMount() { console.log('v1.02') }
 
   componentDidUpdate() {
     if (this.state.isLoaded === true) {
