@@ -642,6 +642,14 @@ select {
   display: flex;
   justify-content: space-around;
 }
+.extra-opacity {
+  position: absolute;
+  bottom: -500px;
+  height: 500px;
+  width: 100vw;
+  opacity: .8;
+  background-color: white;
+}
 /* Keyframe Animations */
 
 
@@ -1067,21 +1075,18 @@ select {
 
 @media (max-height: 400px) {
   .book-cover img {
-    border: 3px solid blue;
     height: 250px;
     width: 200px;
   }
 }
 @media (max-height: 360px) {
   .book-cover img {
-    border: 3px solid blue;
     height: 200px;
     width: 150px;
   }
 }
 @media (max-height: 310px) {
   .book-cover img {
-    border: 3px solid blue;
     height: 150px;
     width: 100px;
   }

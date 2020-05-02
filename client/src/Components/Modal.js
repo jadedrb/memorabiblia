@@ -290,6 +290,7 @@ class Modal extends React.Component {
               : bookStats}
             {modal === 1 && this.state.covers !== null ? scrollCovers : modal === 1 ? loading : ''}
         <div className='close' onClick={done}></div>
+        <div className='extra-opacity'></div>
       </div>,
       this.el)
   }
