@@ -647,8 +647,9 @@ select {
   bottom: -500px;
   height: 500px;
   width: 100vw;
-  opacity: .8;
+  opacity: .9;
   background-color: white;
+  
 }
 /* Keyframe Animations */
 
@@ -982,6 +983,9 @@ select {
     font-weight: bold;
     opacity: .2;
     transform: rotate(-90deg);
+  }
+  .delete-account {
+    top: 50px;
   }
 }
 
