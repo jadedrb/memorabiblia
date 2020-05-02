@@ -121,8 +121,8 @@ img {
   position: fixed;
   top: 0;
   opacity: .8;
-  height: 100%;
-  width: 100%;
+  height: 100vh;
+  width: 100vw;
   background-color: white;
   font-size: 30pt;
   display: flex;
@@ -609,7 +609,34 @@ select {
   border:2px solid rgb(58, 57, 57);
   box-shadow: 0 0 10px rgb(0, 0, 0);
 }
-
+.d-modal {
+  font-size: 40pt;
+  z-index: 99;
+}
+.modal form input, textarea {
+  border: 2px solid grey;
+}
+.modal form input:focus, textarea:focus {
+  outline: none !important;
+  border:2px solid rgb(58, 57, 57);
+  box-shadow: 0 0 10px rgb(0, 0, 0);
+}
+.flip-text {
+  display: flex;
+  position: absolute;
+  left: -37px;
+  margin-top: 70px;
+  width: 100px;
+  font-weight: bold;
+  opacity: .2;
+  transform: rotate(-90deg);
+}
+.flip-text:hover {
+  opacity: 5;
+}
+.add-api-hover:hover {
+  border: 3px solid lime;
+}
 
 
 /* Keyframe Animations */
@@ -754,7 +781,7 @@ select {
   .img-div {
     height: 300px;
     max-width: 250px;
-    margin-left: 25px;
+    margin-left: 30px;
   }
   .mobile-friendly {
     position: absolute;
@@ -763,17 +790,19 @@ select {
     height: 100%;
   }
   .mobile-friendly div {
-    height: 50%;
+    height: 49.9%;
     border-right: 1px solid black;
     border-top: 1px dotted black;
     background-color: #615148;
   }
   .mobile-friendly div:hover {
     background-color: black;
+    color: white;
     cursor: pointer;
   }
   .mobile-friendly div:active {
     background-color: white;
+    color: black;
   }
   nav {
     width: 100%;
@@ -844,6 +873,12 @@ select {
   .profile-book {
     justify-self: right;
   }
+  .book-cover form {
+    font-size: 25pt;
+  }
+  .book-memory {
+    font-size: 25pt;
+  }
 }
 
 @media (max-width: 680px) {
@@ -857,28 +892,24 @@ select {
     font-size: 30pt;
     height: 250px;
   }
-}
-
-
-@media (max-width: 450px) {
-  #read-to-remember {
-    font-size: 30pt;
-    max-height: 500px;
-    min-width: 0px;
-    overflow-wrap: break-word;
+  .book-cover img {
+    width: 250px;
+    height: 350px;
   }
-  .options {
-    display: flex;
-    justify-content: space-around;
-    padding: 10px;
-    font-size: 11pt;
+  .book-cover form {
+    font-size: 20pt;
   }
-  .options input {
-    width: 70px;
-    margin: 10px;
+  .d-modal {
+    font-size: 35pt;
   }
-  .category {
-    margin: 10px;
+  .modal {
+    font-size: 25pt;
+  }
+  .book-memory {
+    font-size: 23pt;
+  }
+  .random-color {
+    font-size: 10pt;
   }
 }
 
@@ -939,8 +970,49 @@ select {
   .link {
     cursor: pointer;
   }
+  .book-memory {
+    font-size: 20pt;
+  }
+  .modal form {
+    font-size: 20pt;
+  }
+  .flip-text {
+    display: flex;
+    position: absolute;
+    left: -12px;
+    margin-top: 40px;
+    width: 50px;
+    font-weight: bold;
+    opacity: .2;
+    transform: rotate(-90deg);
+  }
 }
 
+
+@media (max-width: 450px) {
+  #read-to-remember {
+    font-size: 30pt;
+    max-height: 500px;
+    min-width: 0px;
+    overflow-wrap: break-word;
+  }
+  .options {
+    display: flex;
+    justify-content: space-around;
+    padding: 10px;
+    font-size: 11pt;
+  }
+  .options input {
+    width: 100px;
+    margin: 10px;
+  }
+  .category {
+    margin: 10px;
+  }
+  .modal form {
+    font-size: 15pt;
+  }
+}
 
 @media (max-width: 380px) {
   #user-info {
@@ -964,11 +1036,33 @@ select {
     margin-top: 10px;
     padding-top: 10px;
   }
+  .book-cover form {
+    font-size: 15pt;
+  }
+  .book-cover img {
+    width: 200px;
+    height: 300px;
+  }
 }
 
+@media (max-height: 700px) {
+  .book-cover img {
+    height: 400px;
+  }
+}
+@media (max-height: 700px) {
+  .book-cover img {
+    width: 100%;
+    height: 350px;
+  }
+}
 @media (max-height: 600px) {
   .modal {
     font-size: 25pt;
+  }
+  .book-cover img {
+    height: 300px;
+    width: 250px;
   }
 }
 
@@ -976,11 +1070,14 @@ select {
   .modal {
     font-size: 20pt;
   }
+  .scroll-covers { 
+    bottom: 0;
+  }
 }
 
 @media (max-height: 430px) {
-  .modal {
-    font-size: 15pt;
+  .book-cover {
+    justify-content: initial;
   }
 }
 

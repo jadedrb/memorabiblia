@@ -274,7 +274,7 @@ class App extends Component {
     }
   }
 
-  componentDidMount() { console.log('v1.02') }
+  componentDidMount() { console.log('v1.03') }
 
   componentDidUpdate() {
     if (this.state.isLoaded === true) {

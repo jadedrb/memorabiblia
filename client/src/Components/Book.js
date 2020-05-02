@@ -68,9 +68,9 @@ class Book extends React.Component {
     return (
       <div style={everyOther ? bakColorOne : bakColorTwo} className='book'>
         <div className='mobile-friendly'> 
-          <div onClick={() => this.switchTab('info')}></div> 
-          <div onClick={() => this.switchTab('memory')}></div> 
-          <div className='extremely-friendly-div' onClick={() => this.switchTab('image')}></div> 
+          <div className='div-info' onClick={() => this.switchTab('info')}><p className='flip-text'>INFO</p></div> 
+          <div className='div-memory' onClick={() => this.switchTab('memory')}><p className='flip-text'>MEMORY</p></div> 
+          <div className='extremely-friendly-div div-image' onClick={() => this.switchTab('image')}><p className='flip-text'>COVER</p></div> 
         </div>
         {image}
         <div className='book-info' onClick={() => this.handleClick(2)} style={{display: window.innerWidth < 931 && this.state.tab !== 'info' ? 'none' : 'block'}}>

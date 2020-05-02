@@ -4,7 +4,8 @@ function StatBox(props) {
 
     let result, title;
     let other = [-1,-1,-1];
-    let defaultImg = 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png'
+    let originalDefaultImg = 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png'
+    let defaultImg = originalDefaultImg
     let [ header ] = props.header 
 
     const compareDates = (dOne, dTwo) => {
@@ -173,13 +174,43 @@ function StatBox(props) {
                 defaultImg = quotable && quotable.url
                 title = quotable && quotable.title
                 break;
+            case 'A book from a favored genre':
+                console.log('in it')
+                let genreObj = {}
+                props.books.forEach(b => {
+                    if (genreObj.hasOwnProperty(b.genre)) genreObj[b.genre].push(b)
+                    else if (b.genre) genreObj[b.genre] = [b]
+                })
+                console.log(genreObj)
+                let topGenre = Object.entries(genreObj).sort((a,b) => b[1].length - a[1].length)[0]
+                topGenre = topGenre && topGenre[1]
+                let randomBook = topGenre && topGenre[Math.floor(Math.random() * topGenre.length)]
+                result = randomBook && `${randomBook.genre}`
+                title = randomBook && randomBook.title
+                defaultImg = randomBook && randomBook.url
+                break;
+            case 'A book from a favored author':
+                let authorObj = {}
+                props.books.forEach(b => {
+                    if (authorObj.hasOwnProperty(b.author)) authorObj[b.author].push(b)
+                    else if (b.author) authorObj[b.author] = [b]
+                })
+                console.log(authorObj)
+                let topauthor = Object.entries(authorObj).sort((a,b) => b[1].length - a[1].length)[0]
+                topauthor = topauthor && topauthor[1]
+                let randomBook1 = topauthor && topauthor[Math.floor(Math.random() * topauthor.length)]
+                result = randomBook1 && `${randomBook1.author}`
+                title = randomBook1 && randomBook1.title
+                defaultImg = randomBook1 && randomBook1.url
+                break;
             default:
                 break;
         }
     }
-    console.log(title)
-    console.log('^^')
+
+    if (!defaultImg) defaultImg = originalDefaultImg
     let cover = <img className='profile-book' src={defaultImg} onClick={() => props.handleAttention(title)} alt=''></img>
+
     return(
         <div className='stat-box'>
             {result && !String(result).includes('-1') ? <div className='stat-head'>{header} <br/><span className='lil-stat'>({result}{header && header.includes('favorite') ? '/10' : ''})</span></div> : ''}

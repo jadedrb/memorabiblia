@@ -7,10 +7,87 @@ const modal = document.getElementById('modal-root')
 class Modal extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { covers: null, index: 0 }
+    this.state = { covers: null, index: 0, isLoading: false }
+    this.bookCoverApiRequest = this.bookCoverApiRequest.bind(this)
   }
 
   el = document.createElement('div')
+
+  bookCoverApiRequest() {
+
+    let api = 'https://www.googleapis.com/books/v1/volumes?q='
+    let book = this.props.book.title
+  /*  let key = '&key=AIzaSyBayP6jaFr0KAZv_iVFGdbAsmeXiQpr9Y8' */
+    let author = this.props.book.author
+    this.setState({isLoading: true})
+
+    axios.get(api + book)
+      .then((response) => {
+        let booksApi = response.data.items
+        let infoArr = []
+        booksApi.forEach(b => {
+          let temp = {}
+          let myProp;
+          myProp = 'title'
+          if (b.volumeInfo.hasOwnProperty(myProp)) { temp.title = b.volumeInfo.title }
+          myProp = 'authors'
+          if (b.volumeInfo.hasOwnProperty(myProp)) { temp.author = b.volumeInfo.authors[0] }
+          myProp = 'publishedDate'
+          if (b.volumeInfo.hasOwnProperty(myProp)) { temp.published = b.volumeInfo.publishedDate }
+          myProp = 'pageCount'
+          if (b.volumeInfo.hasOwnProperty(myProp)) { temp.pages = b.volumeInfo.pageCount }
+          myProp = 'imageLinks'
+          if (b.volumeInfo.hasOwnProperty(myProp)) {
+            myProp = 'thumbnail'
+            if (b.volumeInfo.imageLinks.hasOwnProperty(myProp)) { temp.url = b.volumeInfo.imageLinks.thumbnail }
+          }
+
+          infoArr.push(temp)
+        })
+
+        let firstFilter = infoArr.filter(info => {
+          return info.title.slice(0, book.length).toLowerCase() === book.toLowerCase()
+        })
+
+        let secondFilter;
+
+        if (firstFilter.length > 1 && author !== '') {
+          secondFilter = firstFilter.filter(info => {
+            let checkForProp = 'author'
+            if (!info.hasOwnProperty(checkForProp)) { return false }
+            if (info.author.slice(0, author.length).toLowerCase() === author.toLowerCase()) {
+              return true
+            } else if (info.author.split(' ')[1].slice(0, author.length).toLowerCase() === author.toLowerCase()) {
+              return true
+            }
+            return false
+          })
+        }
+
+        if (secondFilter !== undefined && secondFilter.length > 0) {
+          secondFilter.sort((a, b) => {
+            let newA = a.hasOwnProperty('published') && a.published.includes('-') ? a.published.split('-')[0] : a.published
+            let newB = b.hasOwnProperty('published') && b.published.includes('-') ? b.published.split('-')[0] : b.published
+            return Number(newA) - Number(newB)
+          })
+          this.setState({ covers: secondFilter })
+          this.props.onChange('api', secondFilter[0], this.props.book.id)
+          console.log('yessiree')
+        } else if (firstFilter !== undefined && firstFilter.length > 0){
+          firstFilter.sort((a, b) => {
+            let newA = a.hasOwnProperty('published') && a.published.includes('-') ? a.published.split('-')[0] : a.published
+            let newB = b.hasOwnProperty('published') && b.published.includes('-') ? b.published.split('-')[0] : b.published
+            return Number(newA) - Number(newB)
+          })
+          this.setState({ covers: firstFilter })
+          this.props.onChange('api', firstFilter[0], this.props.book.id)
+          console.log('yezziree')
+        }
+        console.log(firstFilter)
+        console.log(secondFilter)
+        this.setState({isLoading: 'done'})
+      })
+  }
 
   componentDidMount() {
     modal.appendChild(this.el)
@@ -20,78 +97,7 @@ class Modal extends React.Component {
     if (this.props.modalNum === 1) {
       if (currentUrl === defaultLink || currentUrl === '') {
         if (this.props.book.title !== '') {
-
-          let api = 'https://www.googleapis.com/books/v1/volumes?q='
-          let book = this.props.book.title
-        /*  let key = '&key=AIzaSyBayP6jaFr0KAZv_iVFGdbAsmeXiQpr9Y8' */
-          let author = this.props.book.author
-
-          axios.get(api + book)
-            .then((response) => {
-              let booksApi = response.data.items
-              let infoArr = []
-              booksApi.forEach(b => {
-                let temp = {}
-                let myProp;
-                myProp = 'title'
-                if (b.volumeInfo.hasOwnProperty(myProp)) { temp.title = b.volumeInfo.title }
-                myProp = 'authors'
-                if (b.volumeInfo.hasOwnProperty(myProp)) { temp.author = b.volumeInfo.authors[0] }
-                myProp = 'publishedDate'
-                if (b.volumeInfo.hasOwnProperty(myProp)) { temp.published = b.volumeInfo.publishedDate }
-                myProp = 'pageCount'
-                if (b.volumeInfo.hasOwnProperty(myProp)) { temp.pages = b.volumeInfo.pageCount }
-                myProp = 'imageLinks'
-                if (b.volumeInfo.hasOwnProperty(myProp)) {
-                  myProp = 'thumbnail'
-                  if (b.volumeInfo.imageLinks.hasOwnProperty(myProp)) { temp.url = b.volumeInfo.imageLinks.thumbnail }
-                }
-
-                infoArr.push(temp)
-              })
-
-              let firstFilter = infoArr.filter(info => {
-                return info.title.slice(0, book.length).toLowerCase() === book.toLowerCase()
-              })
-
-              let secondFilter;
-
-              if (firstFilter.length > 1 && author !== '') {
-                secondFilter = firstFilter.filter(info => {
-                  let checkForProp = 'author'
-                  if (!info.hasOwnProperty(checkForProp)) { return false }
-                  if (info.author.slice(0, author.length).toLowerCase() === author.toLowerCase()) {
-                    return true
-                  } else if (info.author.split(' ')[1].slice(0, author.length).toLowerCase() === author.toLowerCase()) {
-                    return true
-                  }
-                  return false
-                })
-              }
-
-              if (secondFilter !== undefined && secondFilter.length > 0) {
-                secondFilter.sort((a, b) => {
-                  let newA = a.hasOwnProperty('published') && a.published.includes('-') ? a.published.split('-')[0] : a.published
-                  let newB = b.hasOwnProperty('published') && b.published.includes('-') ? b.published.split('-')[0] : b.published
-                  return Number(newA) - Number(newB)
-                })
-                this.setState({ covers: secondFilter })
-                this.props.onChange('api', secondFilter[0], this.props.book.id)
-                console.log('yessiree')
-              } else if (firstFilter !== undefined && firstFilter.length > 0){
-                firstFilter.sort((a, b) => {
-                  let newA = a.hasOwnProperty('published') && a.published.includes('-') ? a.published.split('-')[0] : a.published
-                  let newB = b.hasOwnProperty('published') && b.published.includes('-') ? b.published.split('-')[0] : b.published
-                  return Number(newA) - Number(newB)
-                })
-                this.setState({ covers: firstFilter })
-                this.props.onChange('api', firstFilter[0], this.props.book.id)
-                console.log('yezziree')
-              }
-              console.log(firstFilter)
-              console.log(secondFilter)
-            })
-          console.log('yep')
+          this.bookCoverApiRequest()
         }
       }
     }
@@ -266,14 +272,23 @@ class Modal extends React.Component {
       </div>
     )
 
+    let loading = ( 
+      <div className='scroll-covers'>
+        {this.state.isLoading && this.state.isLoading !== 'done' ? 'Loading...' : ''}
+        {this.state.isLoading === 'done' && this.state.covers === null ? 'No results found.' : ''}
+        {this.state.covers === null && this.props.book.title && !this.state.isLoading && this.state.isLoading !== 'done' ? <button onClick={() => this.bookCoverApiRequest()}>Find new covers</button> : ''}
+      </div> 
+    )
+
     return ReactDOM.createPortal(
       <div className='modal'>
+        <div className='delete d-modal' onClick={done}>X</div>
         <div className='close' onClick={done}></div>
-          {modal === 3 ? bookMemory
-            : modal === 2 ? bookStats
-            : modal === 1 ? bookCover
-            : bookStats}
-          {modal === 1 && this.state.covers !== null ? scrollCovers : ''}
+            {modal === 3 ? bookMemory
+              : modal === 2 ? bookStats
+              : modal === 1 ? bookCover
+              : bookStats}
+            {modal === 1 && this.state.covers !== null ? scrollCovers : modal === 1 ? loading : ''}
         <div className='close' onClick={done}></div>
       </div>,
       this.el)
