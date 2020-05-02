@@ -68,15 +68,24 @@ class App extends Component {
     axios
       .get('/api/memories')
       .then(res => {
+        let { books } = this.state
         let userBooks = [];
         let Book = this.bookBlueprint()
         let defaultUrl = 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png'
-        res.data.filter(b => b.user === this.state.user).forEach((b,i) => {
+
+        let nextId = books.length ? this.state.nextId : 0
+        let deletedIds = [...this.state.deletedIds]
+
+        res.data.filter(b => b.user === this.state.user).forEach(b => {
           let url = b.url !== defaultUrl && b.url ? b.url : defaultUrl
-          let currentBook = new Book(i, b.title, b.author, b.genre, b.pages, b.started = null, b.finished = null, b.rating, b.why, b.words, b.quotes, b.moments, b.color, url, b.published, b.user, b._id)
+
+          if (userBooks.length) !deletedIds.length ? nextId += 1 : nextId += 0
+          let actualId = !deletedIds.length ? nextId : deletedIds.shift()
+
+          let currentBook = new Book(actualId, b.title, b.author, b.genre, b.pages, b.started = null, b.finished = null, b.rating, b.why, b.words, b.quotes, b.moments, b.color, url, b.published, b.user, b._id, b.creationDate)
           userBooks.push({...currentBook});
         })
-        this.setState({isLoaded: true, books: userBooks})
+        this.setState({isLoaded: true, books: userBooks, deletedIds, nextId})
         console.log(userBooks)
         console.log('^userBooks')
         console.log(res)
