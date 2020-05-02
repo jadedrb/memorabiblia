@@ -135,7 +135,7 @@ class Modal extends React.Component {
     }
 
     let bookStats = (
-      <form>
+      <form className='book-info-modal'>
         <label>TITLE<br/>
           <input
             value={book.title}

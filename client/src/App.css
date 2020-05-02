@@ -126,8 +126,8 @@ img {
   background-color: white;
   font-size: 30pt;
   display: flex;
+  flex-direction: row;
   justify-content: center;
-  overflow-y: auto;
 }
 form {
   display: flex;
@@ -638,7 +638,10 @@ select {
   border: 3px solid lime;
 }
 
-
+.book-memory {
+  display: flex;
+  justify-content: space-around;
+}
 /* Keyframe Animations */
 
 
@@ -742,8 +745,6 @@ select {
 
 
 /* Media Quieries / Mobile Support */
-
-
 
 @media (max-width: 930px) {
   .memora {
@@ -902,14 +903,8 @@ select {
   .d-modal {
     font-size: 35pt;
   }
-  .modal {
-    font-size: 25pt;
-  }
   .book-memory {
-    font-size: 23pt;
-  }
-  .random-color {
-    font-size: 10pt;
+    font-size: 20pt;
   }
 }
 
@@ -970,12 +965,6 @@ select {
   .link {
     cursor: pointer;
   }
-  .book-memory {
-    font-size: 20pt;
-  }
-  .modal form {
-    font-size: 20pt;
-  }
   .flip-text {
     display: flex;
     position: absolute;
@@ -1009,7 +998,7 @@ select {
   .category {
     margin: 10px;
   }
-  .modal form {
+  .book-memory {
     font-size: 15pt;
   }
 }
@@ -1057,9 +1046,7 @@ select {
   }
 }
 @media (max-height: 600px) {
-  .modal {
-    font-size: 25pt;
-  }
+
   .book-cover img {
     height: 300px;
     width: 250px;
@@ -1067,9 +1054,6 @@ select {
 }
 
 @media (max-height: 520px) {
-  .modal {
-    font-size: 20pt;
-  }
   .scroll-covers { 
     bottom: 0;
   }
@@ -1081,8 +1065,109 @@ select {
   }
 }
 
+@media (max-height: 400px) {
+  .book-cover img {
+    border: 3px solid blue;
+    height: 250px;
+    width: 200px;
+  }
+}
 @media (max-height: 360px) {
-  .modal {
+  .book-cover img {
+    border: 3px solid blue;
+    height: 200px;
+    width: 150px;
+  }
+}
+@media (max-height: 310px) {
+  .book-cover img {
+    border: 3px solid blue;
+    height: 150px;
+    width: 100px;
+  }
+}
+
+@media (max-height: 260px) {
+ .modal {
+   font-size: 20pt;
+ }
+ .random-color {
+   font-size: 10pt;
+ }
+}
+
+@media screen and (max-height: 620px) and (orientation:landscape) {
+  .book-info-modal {
+    display: grid;
+    align-self: center;
+    width: 100vw;
+    grid-template: 1fr / 1fr 1fr 1fr;
+    justify-content: center;
+    grid-gap: 20px;
+  }
+}
+
+@media screen and (max-height: 620px) and (max-width: 570px) and (orientation:landscape) {
+  .book-info-modal label {
+    font-size: 25pt;
+  }
+}
+
+@media screen and (max-height: 620px) and (max-width: 475px) and (orientation:landscape) {
+  .book-info-modal label {
+    font-size: 20pt;
+  }
+  .random-color {
+    font-size: 10pt;
+  }
+}
+
+@media screen and (max-height: 620px) and (max-width: 390px) and (orientation:landscape) {
+  .book-info-modal label {
+    font-size: 15pt;
+  }
+  .random-color {
+    font-size: 8pt;
+  }
+}
+
+@media screen and (max-height: 460px) and (orientation:landscape) {
+  .book-memory {
+    display: grid;
+    align-self: center;
+    width: 100vw;
+    grid-template: 1fr / 1fr 1fr;
+    justify-content: center;
+    grid-gap: 10px;
+  }
+  .book-memory label {
+    width: 500px;
+  }
+}
+
+@media screen and (max-width: 1030px) and (orientation:landscape) {
+  .book-memory label {
+    width: 400px;
+    font-size: 25pt;
+  }
+}
+@media screen and (max-width: 825px) and (orientation:landscape) {
+  .book-memory label {
+    width: 300px;
+    font-size: 20pt;
+  }
+}
+
+@media screen and (max-width: 625px) and (orientation:landscape) {
+  .book-memory label {
+    width: 250px;
+    font-size: 15pt;
+  }
+}
+
+@media screen and (max-width: 525px) and (orientation:landscape) {
+  .book-memory label {
+    width: 200px;
     font-size: 10pt;
   }
 }
