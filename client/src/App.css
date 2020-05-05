@@ -624,7 +624,7 @@ select {
 .flip-text {
   display: flex;
   position: absolute;
-  left: -37px;
+  left: -34px;
   margin-top: 70px;
   width: 100px;
   font-weight: bold;
@@ -981,7 +981,7 @@ select {
   .flip-text {
     display: flex;
     position: absolute;
-    left: -12px;
+    left: -9px;
     margin-top: 40px;
     width: 50px;
     font-weight: bold;

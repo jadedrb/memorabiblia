@@ -269,7 +269,7 @@ class App extends Component {
   minimize(bar = 'searchBar') { 
     if (bar === 'searchBar') {
       this.setState({searchBar: !this.state.searchBar}) 
-    } else {
+    } else if (window.innerWidth < 550) {
       let menuBtn = document.querySelector('.menu-btn')
       let navList = document.querySelector('.nav-list')
       if (this.state.hamburger) {

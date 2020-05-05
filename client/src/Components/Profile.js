@@ -140,15 +140,7 @@ class Profile extends Component {
         let statBoxes;
 
         if (!books.length || !choices.length) {
-            statBoxes = (
-                <div id='profile-stats'>
-                    <StatBox header={''} books={books} timeStamp={this.props.timeStamp} handleAttention={this.props.handleAttention}/>
-                    <StatBox header={''} books={books} timeStamp={this.props.timeStamp} handleAttention={this.props.handleAttention}/>
-                    <StatBox header={''} books={books} timeStamp={this.props.timeStamp} handleAttention={this.props.handleAttention}/>
-                    <StatBox header={''} books={books} timeStamp={this.props.timeStamp} handleAttention={this.props.handleAttention}/>
-                    <StatBox header={''} books={books} timeStamp={this.props.timeStamp} handleAttention={this.props.handleAttention}/>
-                </div>
-            )
+            statBoxes = <div id='profile-stats'></div>
         } else {
             statBoxes = (
                 <div id='profile-stats'>
