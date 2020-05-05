@@ -16,9 +16,11 @@ class Profile extends Component {
             booksRead: 0, 
             totalBooks: 0, 
             inNeedOfAttention: [], 
-            choices: []
+            choices: [],
+            theme: 'light'
         }
         this.deleteAccount = this.deleteAccount.bind(this)
+        this.changeTheme = this.changeTheme.bind(this)
     }
     componentDidMount() {
         let { books } = this.props.data
@@ -50,7 +52,6 @@ class Profile extends Component {
 
         while (choices.length < 6) {
             let pick = boxes.splice(random(boxes), 1)
-            console.log(pick)
             choices.push(...pick)
         }
 
@@ -93,6 +94,21 @@ class Profile extends Component {
             }
         }
     }
+
+    changeTheme() {
+        if (this.state.theme === 'light') {
+            document.querySelector('body').style.backgroundColor = 'rgb(31,23,15)'
+            document.querySelector('body').style.color = 'white'
+            document.querySelector('nav').style.backgroundColor = 'rgb(44,33,2)'
+            this.setState({theme: 'dark'})
+        } else {
+            document.querySelector('body').style.backgroundColor = 'seashell'
+            document.querySelector('body').style.color = 'black'
+            document.querySelector('nav').style.backgroundColor = 'papayawhip'
+            this.setState({theme: 'light'})
+        }
+    }
+
     render() {
         let { user, books, email, creationDate } = this.props.data
         let { pagesRead, totalPages, booksRead, totalBooks, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece } = this.state
@@ -115,24 +131,26 @@ class Profile extends Component {
         )
 
         let choices = [...this.state.choices]
+
         const random = arr => Math.floor(Math.random() * arr.length)
 
         let booksReadC = booksRead === totalBooks ? {color: '#3577CB'} : {color: '#9FBEE5'}
         let pagesReadC = pagesRead === totalPages ? {color: '#3577CB'} : {color: '#9FBEE5'}
 
-        let profileStats = (
-            <div id='profile-parent'>
-                {properties && properties.length !== 0 ? attention : noStress}
-                <ul id='basic-stats'>
-                    <li>You have read <span style={booksReadC}>{booksRead}</span> out of <span className='total'>{totalBooks}</span> book{totalBooks === 1 ? '' : 's'}</li>
-                    <li>That's <span style={pagesReadC}>{pagesRead}</span> out of <span className='total'>{totalPages}</span> pages</li><br/>
-                    {whyTextPiece && whyTextPiece !== 'because' ? <li><span>Why</span><br/> <span className='u-dots'>...</span> {whyTextPiece} <span className='u-dots'>...</span></li> : ''}
-                    {wordTextPiece && wordTextPiece !== 'words' ? <li><span>Word</span><br/> <span className='u-dots'>...</span> {wordTextPiece} <span className='u-dots'>...</span></li> : ''}
-                    {quoteTextPiece && quoteTextPiece !== 'to be or not to be' ? <li><span>Quote</span><br/> <span className='u-dots'>...</span> {quoteTextPiece} <span className='u-dots'>...</span></li> : ''}
-                    {momentTextPiece && momentTextPiece !== 'that one time when' ? <li><span>Moment</span><br/> <span className='u-dots'>...</span> {momentTextPiece} <span className='u-dots'>...</span></li> : ''}
-                </ul>
-                <div id='just-a-border'></div>
-                <div id='dot-barrier'><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span></div>
+        let statBoxes;
+
+        if (!books.length || !choices.length) {
+            statBoxes = (
+                <div id='profile-stats'>
+                    <StatBox header={''} books={books} timeStamp={this.props.timeStamp} handleAttention={this.props.handleAttention}/>
+                    <StatBox header={''} books={books} timeStamp={this.props.timeStamp} handleAttention={this.props.handleAttention}/>
+                    <StatBox header={''} books={books} timeStamp={this.props.timeStamp} handleAttention={this.props.handleAttention}/>
+                    <StatBox header={''} books={books} timeStamp={this.props.timeStamp} handleAttention={this.props.handleAttention}/>
+                    <StatBox header={''} books={books} timeStamp={this.props.timeStamp} handleAttention={this.props.handleAttention}/>
+                </div>
+            )
+        } else {
+            statBoxes = (
                 <div id='profile-stats'>
                     <StatBox 
                         header={choices.splice(choices.indexOf(choices[random(choices)]), 1)} 
@@ -165,8 +183,26 @@ class Profile extends Component {
                         timeStamp={this.props.timeStamp}
                         handleAttention={this.props.handleAttention}/>
                 </div>
+            )
+        }
+
+        let profileStats = (
+            <div id='profile-parent'>
+                {properties && properties.length !== 0 ? attention : noStress}
+                <ul id='basic-stats'>
+                    <li>You have read <span style={booksReadC}>{booksRead}</span> out of <span className='total'>{totalBooks}</span> book{totalBooks === 1 ? '' : 's'}</li>
+                    <li>That's <span style={pagesReadC}>{pagesRead}</span> out of <span className='total'>{totalPages}</span> pages</li><br/>
+                    {whyTextPiece && whyTextPiece !== 'because' ? <li><span>Why</span><br/> <span className='u-dots'>...</span> {whyTextPiece} <span className='u-dots'>...</span></li> : ''}
+                    {wordTextPiece && wordTextPiece !== 'words' ? <li><span>Word</span><br/> <span className='u-dots'>...</span> {wordTextPiece} <span className='u-dots'>...</span></li> : ''}
+                    {quoteTextPiece && quoteTextPiece !== 'to be or not to be' ? <li><span>Quote</span><br/> <span className='u-dots'>...</span> {quoteTextPiece} <span className='u-dots'>...</span></li> : ''}
+                    {momentTextPiece && momentTextPiece !== 'that one time when' ? <li><span>Moment</span><br/> <span className='u-dots'>...</span> {momentTextPiece} <span className='u-dots'>...</span></li> : ''}
+                </ul>
+                <div id='just-a-border'></div>
+                <div id='dot-barrier'><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span></div>
+                {statBoxes}
             </div>
         )
+
         let userInfo = (
             <ul id='user-info'>
                 <li>Email: {email}</li>
@@ -179,6 +215,7 @@ class Profile extends Component {
                 {user === 'none' ? <Login setUser={this.props.setUser}/> : <div id='userInfo'>{userInfo}<h1> Welcome <span id='user-name'>{user}</span><span id='profile-dot'>.</span></h1></div>}
                 {user === 'none' ? '' : profileStats}
                 {user === 'none' ? '' : <div className='delete delete-account' onClick={this.deleteAccount}>X</div>}
+                {user === 'none' ? '' : <div className='theme' onClick={this.changeTheme} style={{display: 'none'}}>Theme</div>}
             </div>
         )
     }

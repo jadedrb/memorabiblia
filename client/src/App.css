@@ -647,9 +647,13 @@ select {
   bottom: -500px;
   height: 500px;
   width: 100vw;
-  opacity: .9;
   background-color: white;
-  
+}
+.theme {
+  position: absolute;
+  top: 60px;
+  opacity: .2;
+  cursor: pointer;
 }
 /* Keyframe Animations */
 
@@ -791,12 +795,12 @@ select {
   .img-div {
     height: 300px;
     max-width: 250px;
-    margin-left: 30px;
+    margin-left: 35px;
   }
   .mobile-friendly {
     position: absolute;
     left: 0;
-    width: 30px;
+    width: 35px;
     height: 100%;
   }
   .mobile-friendly div {
@@ -922,7 +926,7 @@ select {
     display: block;
   }
   .mobile-friendly {
-    width: 30px;
+    width: 35px;
   }
   .mobile-friendly div {
     height: 33%;
