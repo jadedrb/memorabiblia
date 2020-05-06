@@ -97,20 +97,21 @@ img {
 .book-info:active {
   animation: bookanimactive .25s ease-in-out 1 normal;
   border-left: 20px solid black;
-  padding-left: 10px;
+  padding-left: 20px;
   background-color: grey;
   cursor: pointer;
 }
 .memory:active {
   animation: bookanimactive .25s ease-in-out 1 normal;
   border-left: 20px solid black;
-  padding-left: 10px;
+  padding-left: 20px;
   background-color: grey;
   cursor: pointer;
 }
 .book-info {
   width: 80%;
   padding: 10px;
+  padding-left: 20px;
 }
 .book-info span {
   color: orange;
@@ -655,6 +656,8 @@ select {
   opacity: .2;
   cursor: pointer;
 }
+
+
 /* Keyframe Animations */
 
 
@@ -916,9 +919,6 @@ select {
   .d-modal {
     font-size: 35pt;
   }
-  .book-memory {
-    font-size: 20pt;
-  }
 }
 
 @media (max-width: 550px) {
@@ -1014,9 +1014,6 @@ select {
   .category {
     margin: 10px;
   }
-  .book-memory {
-    font-size: 15pt;
-  }
 }
 
 @media (max-width: 380px) {
@@ -1047,6 +1044,12 @@ select {
   .book-cover img {
     width: 200px;
     height: 300px;
+  }
+}
+
+@media (max-width: 345px) {
+  .book-memory {
+    font-size: 30px;
   }
 }
 
@@ -1100,89 +1103,23 @@ select {
   }
 }
 
-@media (max-height: 260px) {
- .modal {
-   font-size: 20pt;
- }
- .random-color {
-   font-size: 10pt;
- }
+.modal-info-container {
+  display: grid;
+  width: 100vw;
+  overflow: auto;
 }
-
-@media screen and (max-height: 620px) and (orientation:landscape) {
-  .book-info-modal {
-    display: grid;
-    align-self: center;
-    width: 100vw;
-    grid-template: 1fr / 1fr 1fr 1fr;
-    justify-content: center;
-    grid-gap: 20px;
-  }
+.book-memory {
+  width: 100vw;
 }
-
-@media screen and (max-height: 620px) and (max-width: 570px) and (orientation:landscape) {
-  .book-info-modal label {
-    font-size: 25pt;
-  }
+.book-cover {
+  width: 100vw;
+  text-align: center;
 }
-
-@media screen and (max-height: 620px) and (max-width: 475px) and (orientation:landscape) {
-  .book-info-modal label {
-    font-size: 20pt;
-  }
-  .random-color {
-    font-size: 10pt;
-  }
+.close {
+  display: none;
 }
-
-@media screen and (max-height: 620px) and (max-width: 390px) and (orientation:landscape) {
-  .book-info-modal label {
-    font-size: 15pt;
-  }
-  .random-color {
-    font-size: 8pt;
-  }
+.scroll-covers {
+  width: 100vw;
+  text-align: center;
 }
-
-@media screen and (max-height: 460px) and (orientation:landscape) {
-  .book-memory {
-    display: grid;
-    align-self: center;
-    width: 100vw;
-    grid-template: 1fr / 1fr 1fr;
-    justify-content: center;
-    grid-gap: 10px;
-  }
-  .book-memory label {
-    width: 500px;
-  }
-}
-
-@media screen and (max-width: 1030px) and (orientation:landscape) {
-  .book-memory label {
-    width: 400px;
-    font-size: 25pt;
-  }
-}
-@media screen and (max-width: 825px) and (orientation:landscape) {
-  .book-memory label {
-    width: 300px;
-    font-size: 20pt;
-  }
-}
-
-@media screen and (max-width: 625px) and (orientation:landscape) {
-  .book-memory label {
-    width: 250px;
-    font-size: 15pt;
-  }
-}
-
-@media screen and (max-width: 525px) and (orientation:landscape) {
-  .book-memory label {
-    width: 200px;
-    font-size: 10pt;
-  }
-}
-
 

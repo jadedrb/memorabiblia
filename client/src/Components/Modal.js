@@ -284,11 +284,13 @@ class Modal extends React.Component {
       <div className='modal'>
         <div className='delete d-modal' onClick={done}>X</div>
         <div className='close' onClick={done}></div>
+          <div className='modal-info-container'>
             {modal === 3 ? bookMemory
               : modal === 2 ? bookStats
               : modal === 1 ? bookCover
               : bookStats}
             {modal === 1 && this.state.covers !== null ? scrollCovers : modal === 1 ? loading : ''}
+          </div>
         <div className='close' onClick={done}></div>
         <div className='extra-opacity'></div>
       </div>,
