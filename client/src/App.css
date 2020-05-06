@@ -1107,6 +1107,7 @@ select {
   display: grid;
   width: 100vw;
   overflow: auto;
+  text-align: center;
 }
 .book-memory {
   width: 100vw;
