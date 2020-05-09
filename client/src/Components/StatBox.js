@@ -204,6 +204,19 @@ class StatBox extends Component {
                     title = randomBook1 && randomBook1.title
                     defaultImg = randomBook1 && randomBook1.url
                     break;
+                case 'Most efficient read':
+                    this.props.books.forEach((b,i) => {
+                        if (b.finished === null || !b.pages || isNaN(b.pages)) return 
+                        let [ date1, date2 ] = grabDates(i)
+                        let [ days, hours ] = compareDates(date1, date2)
+                        let efficiency = Math.round(b.pages / days)
+                        if (Number(other[0]) < Number(efficiency)) setLowestOrHighest(efficiency, hours, b)
+                    })
+                    let [ efish, , b5 ] = other
+                    defaultImg = b5.url
+                    title = b5.title
+                    result = `${efish} pages a day`
+                    break;
                 default:
                     break;
             }
