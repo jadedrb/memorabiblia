@@ -456,7 +456,6 @@ form {
   border-radius: 10px;
   display: flex;
   flex-direction: column;
-  justify-content: center;
   text-align: center;
   font-size: 12pt;
   padding: 25px;
@@ -759,6 +758,11 @@ select {
   }
 }
 
+@media (max-width: 1200px) {
+  #userInfo h1 {
+    text-align: right;
+  }
+}
 
 /* Media Quieries / Mobile Support */
 
@@ -1044,6 +1048,15 @@ select {
   .book-cover img {
     width: 200px;
     height: 300px;
+  }
+}
+@media (max-width: 395px) {
+  #user-info {
+    display: flex;
+    justify-content: space-evenly;
+    min-width: 200px;
+    margin: 30px;
+    margin-left: -60px;
   }
 }
 

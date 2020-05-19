@@ -191,6 +191,7 @@ class Modal extends React.Component {
         {msg}
         </div>
         <div
+          style={{color: this.props.book.color}}
           className='random-color'
           onClick={() => console.log(this.props.randomC(book.id))}>
           Random Text Color
