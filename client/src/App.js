@@ -68,6 +68,9 @@ class App extends Component {
     axios
       .get('/api/memories')
       .then(res => {
+        console.log(res)
+        console.log('^res')
+
         let { books } = this.state
         let userBooks = [];
         let Book = this.bookBlueprint()
@@ -82,14 +85,12 @@ class App extends Component {
           if (userBooks.length) !deletedIds.length ? nextId += 1 : nextId += 0
           let actualId = !deletedIds.length ? nextId : deletedIds.shift()
 
-          let currentBook = new Book(actualId, b.title, b.author, b.genre, b.pages, b.started = null, b.finished = null, b.rating, b.why, b.words, b.quotes, b.moments, b.color, url, b.published, b.user, b._id, b.creationDate)
+          let currentBook = new Book(actualId, b.title, b.author, b.genre, b.pages, b.started, b.finished, b.rating, b.why, b.words, b.quotes, b.moments, b.color, url, b.published, b.user, b._id, b.creationDate)
           userBooks.push({...currentBook});
         })
         this.setState({isLoaded: true, books: userBooks, deletedIds, nextId})
         console.log(userBooks)
         console.log('^userBooks')
-        console.log(res)
-        console.log('^res')
       });
   }
 
