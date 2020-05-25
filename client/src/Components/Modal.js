@@ -7,8 +7,10 @@ const modal = document.getElementById('modal-root')
 class Modal extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { covers: null, index: 0, isLoading: false }
+    this.state = { covers: null, index: 0, isLoading: false, define: false}
     this.bookCoverApiRequest = this.bookCoverApiRequest.bind(this)
+    this.definitions = this.definitions.bind(this)
+    this.defineApi = this.defineApi.bind(this)
   }
 
   el = document.createElement('div')
@@ -87,6 +89,26 @@ class Modal extends React.Component {
         console.log(secondFilter)
         this.setState({isLoading: 'done'})
       })
+  }
+
+  definitions() { this.setState({definitions: !this.state.definitions}) }
+
+  defineApi(word) {
+    let api = `https://www.dictionaryapi.com/api/v3/references/collegiate/json/`
+    let key = '?key=2a27edfb-fe26-4c68-82e0-46e7b00348fd'
+    let lastCh = word[word.length - 1].toLowerCase()
+    if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
+    axios.get(api + word + key)
+      .then(res => {
+        let concatDefs = ''
+        res.data[0].shortdef.forEach((def,i) => {
+          i++
+          def += '\n\n'
+          concatDefs += i + '. ' + def
+        })
+        alert(`${word.toUpperCase()}\n\n${concatDefs}`)
+      })
+
   }
 
   componentDidMount() {
@@ -224,11 +246,16 @@ class Modal extends React.Component {
           </input>
         </label>
         <label>INTERESTING WORDS<br/>
-          <input
+          {!this.state.definitions ? <input
             value={book.words}
             name={`words-${book.id}`}
             onChange={onChange}>
-          </input>
+          </input> : <div id='define'>{book.words.split(' ').map((w,i) => <span key={i} className='random-color' onClick={() => this.defineApi(w)}>{w} </span>)}</div>}
+          {book.words && book.words !== 'words' ? <div 
+            className='random-color'
+            onClick={this.definitions}>
+              {!this.state.definitions ? 'Define' : 'Back'}
+          </div> : ''}
         </label>
         <label>FAVORITE QUOTE(S)<br/>
           <textarea
