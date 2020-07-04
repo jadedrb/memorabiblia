@@ -23,6 +23,7 @@ class Login extends Component {
     this.onChange = this.onChange.bind(this)
     this.onSubmit = this.onSubmit.bind(this)
     this.clearAttempt = this.clearAttempt.bind(this)
+    this.convertMonth = this.convertMonth.bind(this)
   }
 
   onChange(e) {
@@ -117,6 +118,11 @@ class Login extends Component {
 
   clearAttempt() { this.setState({attempt: false}) }
 
+  convertMonth(date) {
+    let dateObj = {Jan: '1', Feb: '2', Mar: '3', Apr: '4', May: '5', Jun: '6', Jul: '7', Aug: '8', Sep: '9', Oct: '10', Nov: '11', Dec: '12'}
+    return dateObj[date]
+  }
+
   componentDidUpdate() {
 
     let {
@@ -140,8 +146,9 @@ class Login extends Component {
             let userbase = {}
             let moreInfo = {}
             res.data.forEach(user => {
+              let date = user.creationDate.split(' ')
               userbase[user.username] = user.password
-              moreInfo[user.username] = {email: user.email, creationDate: user.creationDate.split(' ').slice(1).join(' ')}
+              moreInfo[user.username] = {email: user.email, creationDate: `${this.convertMonth(date[1])}/${date[2]}/${date[3].slice(2)}`}
             })
             this.setState({userbase, moreInfo, isLoading: false})
     })

@@ -10,7 +10,6 @@ class Modal extends React.Component {
     this.state = { covers: null, index: 0, isLoading: false, define: false}
     this.bookCoverApiRequest = this.bookCoverApiRequest.bind(this)
     this.definitions = this.definitions.bind(this)
-    this.defineApi = this.defineApi.bind(this)
   }
 
   el = document.createElement('div')
