@@ -182,12 +182,12 @@ class Profile extends Component {
             <div id='profile-parent'>
                 {properties && properties.length !== 0 ? attention : noStress}
                 <ul id='basic-stats'>
-                    <li>You have read <span style={booksReadC}>{booksRead}</span> out of <span className='total'>{totalBooks}</span> book{totalBooks === 1 ? '' : 's'}</li>
-                    <li>That's <span style={pagesReadC}>{pagesRead}</span> out of <span className='total'>{totalPages}</span> pages</li><br/>
-                    {whyTextPiece && whyTextPiece !== 'because' ? <li><span>Why</span><br/> <span className='u-dots'>...</span> {whyTextPiece} <span className='u-dots'>...</span></li> : ''}
-                    {wordTextPiece && wordTextPiece !== 'words' ? <li><span>Word</span><br/> <span className='u-dots'>...</span> {wordTextPiece} <span className='u-dots'>...</span></li> : ''}
-                    {quoteTextPiece && quoteTextPiece !== 'to be or not to be' ? <li><span>Quote</span><br/> <span className='u-dots'>...</span> {quoteTextPiece} <span className='u-dots'>...</span></li> : ''}
-                    {momentTextPiece && momentTextPiece !== 'that one time when' ? <li><span>Moment</span><br/> <span className='u-dots'>...</span> {momentTextPiece} <span className='u-dots'>...</span></li> : ''}
+                    <li>You have read <span style={booksReadC}>{booksRead}</span> out of <span className='hl-blue'>{totalBooks}</span> book{totalBooks === 1 ? '' : 's'}</li>
+                    <li>That's <span style={pagesReadC}>{pagesRead}</span> out of <span className='hl-blue'>{totalPages}</span> pages</li><br/>
+                    {whyTextPiece && whyTextPiece !== 'because' ? <li><span className='hl-blue'>Why</span><br/> <span className='u-dots'>...</span> {whyTextPiece} <span className='u-dots'>...</span></li> : ''}
+                    {wordTextPiece && wordTextPiece !== 'words' ? <li><span className='hl-blue'>Word</span><br/> <span className='u-dots'>...</span> {wordTextPiece.split(' ').map((w,i) => <span key={i} className='profile-words' onClick={() => this.props.defineApi(w)}>{w} </span>)} <span className='u-dots'>...</span></li> : ''}
+                    {quoteTextPiece && quoteTextPiece !== 'to be or not to be' ? <li><span className='hl-blue'>Quote</span><br/> <span className='u-dots'>...</span> {quoteTextPiece} <span className='u-dots'>...</span></li> : ''}
+                    {momentTextPiece && momentTextPiece !== 'that one time when' ? <li><span className='hl-blue'>Moment</span><br/> <span className='u-dots'>...</span> {momentTextPiece} <span className='u-dots'>...</span></li> : ''}
                 </ul>
                 <div id='just-a-border'></div>
                 <div id='dot-barrier'><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span></div>

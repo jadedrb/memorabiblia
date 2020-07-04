@@ -141,7 +141,7 @@ class Login extends Component {
             let moreInfo = {}
             res.data.forEach(user => {
               userbase[user.username] = user.password
-              moreInfo[user.username] = {email: user.email, creationDate: user.email}
+              moreInfo[user.username] = {email: user.email, creationDate: user.creationDate.split(' ').slice(1).join(' ')}
             })
             this.setState({userbase, moreInfo, isLoading: false})
     })

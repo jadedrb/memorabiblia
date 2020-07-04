@@ -93,24 +93,6 @@ class Modal extends React.Component {
 
   definitions() { this.setState({definitions: !this.state.definitions}) }
 
-  defineApi(word) {
-    let api = `https://www.dictionaryapi.com/api/v3/references/collegiate/json/`
-    let key = '?key=2a27edfb-fe26-4c68-82e0-46e7b00348fd'
-    let lastCh = word[word.length - 1].toLowerCase()
-    if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
-    axios.get(api + word + key)
-      .then(res => {
-        let concatDefs = ''
-        res.data[0].shortdef.forEach((def,i) => {
-          i++
-          def += '\n\n'
-          concatDefs += i + '. ' + def
-        })
-        alert(`${word.toUpperCase()}\n\n${concatDefs}`)
-      })
-
-  }
-
   componentDidMount() {
     modal.appendChild(this.el)
     this.el.id = 'modal-edit-view'
@@ -250,7 +232,7 @@ class Modal extends React.Component {
             value={book.words}
             name={`words-${book.id}`}
             onChange={onChange}>
-          </input> : <div id='define'>{book.words.split(' ').map((w,i) => <span key={i} className='random-color' onClick={() => this.defineApi(w)}>{w} </span>)}</div>}
+          </input> : <div id='define'>{book.words.split(' ').map((w,i) => <span key={i} className='random-color' onClick={() => this.props.defineApi(w)}>{w} </span>)}</div>}
           {book.words && book.words !== 'words' ? <div 
             className='random-color'
             onClick={this.definitions}>

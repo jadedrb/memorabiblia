@@ -113,6 +113,7 @@ class Book extends React.Component {
                       started={this.state.started}
                       startAndFinish={this.startAndFinish}
                       randomC={this.props.randomC}
+                      defineApi={this.props.defineApi}
                     /> : null}
         <div className='delete' onClick={() => this.props.deleteBook(book)}>X</div>
       </div>

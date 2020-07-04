@@ -47,15 +47,9 @@ class ReadingList extends React.Component {
     if (window.innerWidth !== this.state.resolution) this.setState({screen: false, resolution: window.innerWidth})
   }
 
-  handleChange(e) {
-    this.setState({ value: e.target.value })
-    console.log(this.state.displayMsg)
-  }
+  handleChange(e) { this.setState({ value: e.target.value }) }
 
-  handleDropdown(e) {
-    this.setState({ organize: e.target.value })
-    console.log(this.state.organize)
-  }
+  handleDropdown(e) { this.setState({ organize: e.target.value }) }
 
   render() {
 
@@ -74,7 +68,8 @@ class ReadingList extends React.Component {
         books = filteredBooks
     }
 
-    if (!document.getElementById('modal-edit-view')) {
+
+    if (true) {  // !document.getElementById('modal-edit-view')
       switch(this.state.organize) {
         case 'chrono-date-asc':
           books = this.props.chron(books, 'asc')
@@ -186,7 +181,8 @@ class ReadingList extends React.Component {
                               randomC={this.props.randomC}
                               bookBlueprint={this.props.bookBlueprint}
                               screen={this.state.screen}
-                              resetScreenCheck={this.resetScreenCheck}/>)}
+                              resetScreenCheck={this.resetScreenCheck}
+                              defineApi={this.props.defineApi}/>)}
         <div id='r-t-r-wrapper'><div id='read-to-remember' style={defaultMsg}><div>Read</div>.<div>Rememeber</div>.<div>Relish</div></div></div>
       </div>
     )

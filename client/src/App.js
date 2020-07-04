@@ -68,8 +68,6 @@ class App extends Component {
     axios
       .get('/api/memories')
       .then(res => {
-        console.log(res)
-        console.log('^res')
 
         let { books } = this.state
         let userBooks = [];
@@ -284,7 +282,24 @@ class App extends Component {
     }
   }
 
-  componentDidMount() { console.log('v1.05') }
+  defineApi(word) {
+    let api = `https://www.dictionaryapi.com/api/v3/references/collegiate/json/`
+    let key = '?key=2a27edfb-fe26-4c68-82e0-46e7b00348fd'
+    let lastCh = word[word.length - 1].toLowerCase()
+    if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
+    axios.get(api + word + key)
+      .then(res => {
+        let concatDefs = ''
+        res.data[0].shortdef.forEach((def,i) => {
+          i++
+          def += '\n\n'
+          concatDefs += i + '. ' + def
+        })
+        alert(`${word.toUpperCase()}\n\n${concatDefs}`)
+      })
+  }
+
+  componentDidMount() { console.log('v1.06') }
 
   componentDidUpdate() {
     if (this.state.isLoaded === true) {
@@ -332,11 +347,13 @@ class App extends Component {
                                                     bookBlueprint={this.bookBlueprint}
                                                     switchPage={this.state.switchPage}
                                                     searchBar={this.state.searchBar}
-                                                    minimize={this.minimize}/>} />
+                                                    minimize={this.minimize}
+                                                    defineApi={this.defineApi}/>} />
             <Route path="/Profile" render={() => <Profile setUser={this.setUser} 
                                                     data={this.state} 
                                                     timeStamp={this.timeStamp} 
-                                                    handleAttention={this.handleAttention}/>}/>
+                                                    handleAttention={this.handleAttention}
+                                                    defineApi={this.defineApi}/>}/>
             <Redirect path="/Log" to="/Profile"/>
           </Switch>
         </Router>
