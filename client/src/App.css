@@ -1129,21 +1129,7 @@ select {
     width: 100px;
   }
 }
-@media (min-height: 630px) {
-  .book-info-modal {
-    height: 100vh;
-  }
-}
-@media (min-height: 440px) {
-  .book-memory {
-    height: 100vh;
-  }
-}
-@media (min-height: 800px) {
-  .book-cover { 
-    height: 100vh;
-  }
-}
+
 
 .modal-info-container {
   display: grid;
@@ -1151,12 +1137,17 @@ select {
   overflow: auto;
   text-align: center;
 }
+.book-info-modal {
+  min-height: 100vh;
+}
 .book-memory {
   width: 100vw;
+  min-height: 100vh;
 }
 .book-cover {
   width: 100vw;
   text-align: center;
+  min-height: 100vh;
 }
 .close {
   display: none;

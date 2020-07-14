@@ -181,7 +181,7 @@ class Profile extends Component {
             )
         }
 
-        let splitCriteria = /[\.\,\-\s]\s/.test(wordTextPiece) ? /[\.\,\-\s]\s/ : ' '
+        let splitCriteria = /[.,\-\s]\s/.test(wordTextPiece) ? /[.,\-\s]\s/ : ' '
 
         let profileStats = (
             <div id='profile-parent'>

@@ -217,7 +217,7 @@ class Modal extends React.Component {
       </div>
     )
 
-    let splitCriteria = /[\.\,\-\s]\s/.test(book.words) ? /[\.\,\-\s]\s/ : ' '
+    let splitCriteria = /[.,\-\s]\s/.test(book.words) ? /[.,\-\s]\s/ : ' '
 
     let bookMemory = (
       <form className='book-memory'>
