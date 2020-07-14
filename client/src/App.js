@@ -290,16 +290,19 @@ class App extends Component {
     axios.get(api + word + key)
       .then(res => {
         let concatDefs = ''
-        res.data[0].shortdef.forEach((def,i) => {
-          i++
-          def += '\n\n'
-          concatDefs += i + '. ' + def
-        })
-        alert(`${word.toUpperCase()}\n\n${concatDefs}`)
+        let shortdef = res.data[0].shortdef
+        if (shortdef) {
+          shortdef.forEach((def,i) => {
+            i++
+            def += '\n\n'
+            concatDefs += i + '. ' + def
+          })
+          alert(`${word.toUpperCase()}\n\n${concatDefs}`)
+        }
       })
   }
 
-  componentDidMount() { console.log('v1.06') }
+  componentDidMount() { console.log('v1.07') }
 
   componentDidUpdate() {
     if (this.state.isLoaded === true) {

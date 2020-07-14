@@ -17,6 +17,7 @@ class Profile extends Component {
             totalBooks: 0, 
             inNeedOfAttention: [], 
             choices: [],
+            noStressMsgs: '',
             theme: 'light'
         }
         this.deleteAccount = this.deleteAccount.bind(this)
@@ -31,6 +32,9 @@ class Profile extends Component {
         let defaultImg = 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png'
         let bookPropStore = {}
         let inNeedOfAttention = [0, 0];
+
+        let noStressMsgs = ['All entries filled', 'Nothing to worry about', 'Dutiful. Well done', 'Your memory is strong', 'Maybe add more books']
+        noStressMsgs = noStressMsgs[Math.floor(Math.random() * noStressMsgs.length)]
 
         books.forEach((b, i) => {
             if (typeof(Number(b.pages)) === 'number') totalPages += Number(b.pages)
@@ -68,7 +72,7 @@ class Profile extends Component {
 
         let [ whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece ] = userTextPieces
 
-        this.setState({totalPages, pagesRead, booksRead, totalBooks, inNeedOfAttention, choices, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece})
+        this.setState({totalPages, pagesRead, booksRead, totalBooks, inNeedOfAttention, choices, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs})
     }
 
     deleteAccount() {
@@ -111,9 +115,8 @@ class Profile extends Component {
 
     render() {
         let { user, books, email, creationDate } = this.props.data
-        let { pagesRead, totalPages, booksRead, totalBooks, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece } = this.state
+        let { pagesRead, totalPages, booksRead, totalBooks, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs } = this.state
         let [ properties, bookNeed ] = this.state.inNeedOfAttention
-        let noStressMsgs = ['All entries filled', 'Nothing to worry about', 'Dutiful. Well done', 'Your memory is strong', 'Maybe add more books']
 
         let attention = (
             <div id='attention'>
@@ -127,7 +130,7 @@ class Profile extends Component {
         )
 
         let noStress = (
-            <div id='no-stress'>{noStressMsgs[Math.floor(Math.random() * noStressMsgs.length)]} <span role="img" aria-label="check mark">✔️</span></div>
+            <div id='no-stress'>{noStressMsgs} <span role="img" aria-label="check mark">✔️</span></div>
         )
 
         let choices = [...this.state.choices]
@@ -178,6 +181,8 @@ class Profile extends Component {
             )
         }
 
+        let splitCriteria = /[\.\,\-\s]\s/.test(wordTextPiece) ? /[\.\,\-\s]\s/ : ' '
+
         let profileStats = (
             <div id='profile-parent'>
                 {properties && properties.length !== 0 ? attention : noStress}
@@ -185,7 +190,7 @@ class Profile extends Component {
                     <li>You have read <span style={booksReadC}>{booksRead}</span> out of <span className='hl-blue'>{totalBooks}</span> book{totalBooks === 1 ? '' : 's'}</li>
                     <li>That's <span style={pagesReadC}>{pagesRead}</span> out of <span className='hl-blue'>{totalPages}</span> pages</li><br/>
                     {whyTextPiece && whyTextPiece !== 'because' ? <li><span className='hl-blue'>Why</span><br/> <span className='u-dots'>...</span> {whyTextPiece} <span className='u-dots'>...</span></li> : ''}
-                    {wordTextPiece && wordTextPiece !== 'words' ? <li><span className='hl-blue'>Word</span><br/> <span className='u-dots'>...</span> {wordTextPiece.split(' ').map((w,i) => <span key={i} className='profile-words' onClick={() => this.props.defineApi(w)}>{w} </span>)} <span className='u-dots'>...</span></li> : ''}
+                    {wordTextPiece && wordTextPiece !== 'words' ? <li><span className='hl-blue'>Word</span><br/> <span className='u-dots'>...</span> {wordTextPiece.split(splitCriteria).map((w,i) => <span key={i} className='profile-words' onClick={() => this.props.defineApi(w)}>{w} </span>)} <span className='u-dots'>...</span></li> : ''}
                     {quoteTextPiece && quoteTextPiece !== 'to be or not to be' ? <li><span className='hl-blue'>Quote</span><br/> <span className='u-dots'>...</span> {quoteTextPiece} <span className='u-dots'>...</span></li> : ''}
                     {momentTextPiece && momentTextPiece !== 'that one time when' ? <li><span className='hl-blue'>Moment</span><br/> <span className='u-dots'>...</span> {momentTextPiece} <span className='u-dots'>...</span></li> : ''}
                 </ul>
@@ -204,10 +209,10 @@ class Profile extends Component {
         )
         return (
             <div id='profile'>
-                {user === 'none' ? <Login setUser={this.props.setUser}/> : <div id='userInfo'><h1> Welcome <span id='user-name'>{user}</span><span id='profile-dot'>.</span></h1>{userInfo}</div>}
-                {user === 'none' ? '' : profileStats}
-                {user === 'none' ? '' : <div className='delete delete-account' onClick={this.deleteAccount}>X</div>}
-                {user === 'none' ? '' : <div className='theme' onClick={this.changeTheme} style={{display: 'none'}}>Theme</div>}
+                {user !== 'none' ? <Login setUser={this.props.setUser}/> : <div id='userInfo'><h1> Welcome <span id='user-name'>{user}</span><span id='profile-dot'>.</span></h1>{userInfo}</div>}
+                {user !== 'none' ? '' : profileStats}
+                {user !== 'none' ? '' : <div className='delete delete-account' onClick={this.deleteAccount}>X</div>}
+                {user !== 'none' ? '' : <div className='theme' onClick={this.changeTheme} style={{display: 'none'}}>Theme</div>}
             </div>
         )
     }

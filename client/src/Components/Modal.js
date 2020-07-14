@@ -217,6 +217,8 @@ class Modal extends React.Component {
       </div>
     )
 
+    let splitCriteria = /[\.\,\-\s]\s/.test(book.words) ? /[\.\,\-\s]\s/ : ' '
+
     let bookMemory = (
       <form className='book-memory'>
         <label>WHY I READ IT<br/>
@@ -231,7 +233,7 @@ class Modal extends React.Component {
             value={book.words}
             name={`words-${book.id}`}
             onChange={onChange}>
-          </input> : <div id='define'>{book.words.split(' ').map((w,i) => <span key={i} className='random-color' onClick={() => this.props.defineApi(w)}>{w} </span>)}</div>}
+          </input> : <div id='define'>{book.words.split(splitCriteria).map((w,i) => <span key={i} className='random-color' onClick={() => this.props.defineApi(w)}>{w} </span>)}</div>}
           {book.words && book.words !== 'words' ? <div 
             className='random-color'
             onClick={this.definitions}>

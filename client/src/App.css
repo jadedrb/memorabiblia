@@ -666,6 +666,7 @@ select {
 }
 
 
+
 /* Keyframe Animations */
 
 
@@ -1126,6 +1127,16 @@ select {
   .book-cover img {
     height: 150px;
     width: 100px;
+  }
+}
+@media (min-height: 630px) {
+  .book-info-modal {
+    height: 100vh;
+  }
+}
+@media (min-height: 440px) {
+  .book-memory {
+    height: 100vh;
   }
 }
 
