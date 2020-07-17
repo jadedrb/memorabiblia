@@ -1251,7 +1251,7 @@ select {
 }
 #wrong-words {
   grid-column: 1 / span 2;
-  height: 20px;
+  text-align: center;
   border-bottom: 1px solid black;
   background: rgb(199, 199, 199);
 }

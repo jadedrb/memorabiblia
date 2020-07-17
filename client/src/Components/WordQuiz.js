@@ -51,18 +51,18 @@ function WordQuiz(props) {
                     console.log(typeof def)
                     console.log(def.split('.').slice(1))
                     let definitions = def.split('.').slice(1)
-                    let chosenDefinition = definitions[randomIndex(definitions)].split('\n')[0].trim()
+                    let chosenDefinition = definitions.length ? definitions[randomIndex(definitions)].split('\n')[0].trim() : 'No definition (API please!)'
                     resolve(chosenDefinition)
                 })
         })
     }
 
-    const nextWord = () => {
+    const nextWord = (correct) => {
         let tempChoices = determineChoices([...wordBank])
         let tempCurrentWord = tempChoices.length ? tempChoices[randomIndex(tempChoices)] : 'test'
         let tempScore = [...score]
-        tempScore[0]++
-        if (tempScore[0] > tempScore[1]) tempScore[1]++
+        if (correct) tempScore[0]++
+        if (tempScore[0] > props.streak) props.setStreak(props.streak + 1)
         setScore(tempScore)
         setChoices(tempChoices)
         setCurrentWord(tempCurrentWord)
@@ -96,7 +96,7 @@ function WordQuiz(props) {
                 otherChoices.forEach(c => c.style.opacity = '1')
                 defDiv.style.borderColor = 'black'
                 defWord.style.borderColor = 'black'
-                nextWord()
+                nextWord(true)
             }, 1500)
 
         } else {
@@ -137,7 +137,7 @@ function WordQuiz(props) {
     let footer = (
         <div id='quiz-footer'>
             <p><span>Current Streak</span><span>Longest Streak</span><span>Total Wrong</span></p>
-            <p><span>{score[0]}</span><span>{score[1]}</span><span>{wrongWords.length}</span></p>
+            <p><span>{score[0]}</span><span>{props.streak}</span><span>{wrongWords.length}</span></p>
         </div>
     )
 

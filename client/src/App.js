@@ -23,6 +23,7 @@ class App extends Component {
         switchPage: false,
         searchBar: true,
         hamburger: false,
+        streak: 0,
         nextId: 0,
         deletedIds: []
       }
@@ -34,6 +35,7 @@ class App extends Component {
       this.bookBlueprint = this.bookBlueprint.bind(this)
       this.handleAttention = this.handleAttention.bind(this)
       this.minimize = this.minimize.bind(this)
+      this.setStreak = this.setStreak.bind(this)
   }
 
   setUser(user = 'none', email = '', creationDate) {
@@ -306,6 +308,8 @@ class App extends Component {
     })
   }
 
+  setStreak(streak) { this.setState({streak}) }
+
   componentDidMount() { console.log('v1.08') }
 
   componentDidUpdate() {
@@ -365,6 +369,8 @@ class App extends Component {
                                                     defineApi={this.defineApi}/>}/>
             <Route path='/WordQuiz' render={() => <WordQuiz
                                                     books={this.state.books}
+                                                    setStreak={this.setStreak}
+                                                    streak={this.state.streak}
                                                     defineApi={this.defineApi}/>}/>
             <Redirect path="/Log" to="/Profile"/>
           </Switch>
