@@ -47,9 +47,6 @@ function WordQuiz(props) {
             props
                 .defineApi(word)
                 .then(def => {
-                    console.log(def)
-                    console.log(typeof def)
-                    console.log(def.split('.').slice(1))
                     let definitions = def.split('.').slice(1)
                     let chosenDefinition = definitions.length ? definitions[randomIndex(definitions)].split('\n')[0].trim() : 'No definition (API please!)'
                     resolve(chosenDefinition)
