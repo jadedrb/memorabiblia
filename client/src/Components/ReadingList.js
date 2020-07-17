@@ -182,6 +182,7 @@ class ReadingList extends React.Component {
                               bookBlueprint={this.props.bookBlueprint}
                               screen={this.state.screen}
                               resetScreenCheck={this.resetScreenCheck}
+                              minimize={this.props.minimize}
                               defineApi={this.props.defineApi}/>)}
         <div id='r-t-r-wrapper'><div id='read-to-remember' style={defaultMsg}><div>Read</div>.<div>Rememeber</div>.<div>Relish</div></div></div>
       </div>

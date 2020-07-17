@@ -94,6 +94,7 @@ class Modal extends React.Component {
 
   componentDidMount() {
     modal.appendChild(this.el)
+    this.props.minimize('collapse')
     this.el.id = 'modal-edit-view'
     let currentUrl = this.props.book.url
     let defaultLink = 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png'
@@ -233,7 +234,7 @@ class Modal extends React.Component {
             value={book.words}
             name={`words-${book.id}`}
             onChange={onChange}>
-          </input> : <div id='define'>{book.words.split(splitCriteria).map((w,i) => <span key={i} className='random-color' onClick={() => this.props.defineApi(w)}>{w} </span>)}</div>}
+          </input> : <div id='define'>{book.words.split(splitCriteria).map((w,i) => <span key={i} className='random-color' onClick={() => this.props.defineApi(w).then(def => alert(def))}>{w} </span>)}</div>}
           {book.words && book.words !== 'words' ? <div 
             className='random-color'
             onClick={this.definitions}>

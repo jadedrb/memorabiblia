@@ -26,7 +26,10 @@ class Book extends React.Component {
     this.state.message ? this.setState({message: 0}) : this.setState({message: modalNum})
   }
 
-  switchTab(tab) { this.setState({tab}) }
+  switchTab(tab) { 
+    this.props.minimize('collapse')
+    this.setState({tab}) 
+  }
 
   render() {
 
@@ -114,6 +117,7 @@ class Book extends React.Component {
                       startAndFinish={this.startAndFinish}
                       randomC={this.props.randomC}
                       defineApi={this.props.defineApi}
+                      minimize={this.props.minimize}
                     /> : null}
         <div className='delete' onClick={() => this.props.deleteBook(book)}>X</div>
       </div>

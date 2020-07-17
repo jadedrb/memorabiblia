@@ -1131,6 +1131,8 @@ select {
 }
 
 
+
+
 .modal-info-container {
   display: grid;
   width: 100vw;
@@ -1159,3 +1161,127 @@ select {
   text-align: center;
 }
 
+#quiz-container {
+  display: grid;
+  column-gap: 30px;
+  grid-template: 1fr / 1fr 1fr;
+}
+
+#quiz-container h5 {
+  grid-column: 1 / span 2;
+  display: flex;
+  justify-content: space-evenly;
+}
+
+#quiz-container h5 span {
+  border: 1px solid grey;
+  color: grey;
+  width: 50%;
+  text-align: center;
+  opacity: .4;
+  padding: 5px;
+}
+
+#quiz-definition {
+  border: 1px solid black;
+  border-radius: 5px;
+  font-size: 12pt;
+  padding: 10px;
+  margin: 20px;
+}
+
+#quiz-choices {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  height: 200px;
+  text-align: center;
+  font-size: 15pt;
+  padding: 0;
+}
+
+#quiz-choices li {
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 90%;
+  overflow: auto;
+}
+
+#quiz-choices li:hover {
+  opacity: .4;
+  cursor: pointer;
+}
+
+#quiz-choices li:active {
+  opacity: 1;
+  background: black;
+  color: white;
+}
+
+@media (max-width: 600px) {
+  #quiz-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+  }
+  #quiz-choices {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin: 0;
+  }
+}
+
+#quiz-footer {
+  margin-top: 150px;
+  grid-column: 1 / span 2;
+  border-top: 4px solid black;
+  border-bottom: 4px solid black;
+  padding-bottom: 10px;
+}
+#quiz-footer p {
+  display: flex;
+  justify-content: space-evenly;
+  width: 100%;
+}
+#quiz-footer p:nth-child(2) {
+  font-size: 30pt;
+  margin: 0;
+}
+#wrong-words {
+  grid-column: 1 / span 2;
+  height: 20px;
+  border-bottom: 1px solid black;
+  background: rgb(199, 199, 199);
+}
+#retry-button {
+  display: flex;
+  grid-column: 1 / span 2;
+  justify-content: center;
+  background: grey;
+  color: white;
+  font-size: 20pt;
+  align-items: center;
+  height: 40px;
+  border: 1px solid black;
+}
+#retry-button:hover {
+  cursor: pointer;
+  background: rgb(63, 63, 63);
+}
+#retry-button:active {
+  background: black;
+  font-weight: bolder;
+}
+#word-count {
+  position: absolute;
+  top: 60px;
+  opacity: .3;
+}
+#black-space {
+  grid-column: 1 / span 2;
+  width: 100%;
+  background: rgb(43, 43, 43);
+  height: 100vh;
+}

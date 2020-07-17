@@ -6,6 +6,7 @@ import axios from 'axios';
 import Home from './Components/Home';
 import ReadingList from './Components/ReadingList';
 import Profile from './Components/Profile';
+import WordQuiz from './Components/WordQuiz';
 
 class App extends Component {
   constructor() {
@@ -274,7 +275,7 @@ class App extends Component {
       if (this.state.hamburger) {
         navList.classList.remove('block-list')
         menuBtn.classList.remove('open')
-      } else {
+      } else if (bar !== 'collapse') {
         navList.classList.add('block-list')
         menuBtn.classList.add('open')
       }
@@ -283,26 +284,29 @@ class App extends Component {
   }
 
   defineApi(word) {
-    let api = `https://www.dictionaryapi.com/api/v3/references/collegiate/json/`
-    let key = '?key=2a27edfb-fe26-4c68-82e0-46e7b00348fd'
-    let lastCh = word[word.length - 1].toLowerCase()
-    if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
-    axios.get(api + word + key)
-      .then(res => {
-        let concatDefs = ''
-        let shortdef = res.data[0].shortdef
-        if (shortdef) {
-          shortdef.forEach((def,i) => {
-            i++
-            def += '\n\n'
-            concatDefs += i + '. ' + def
-          })
-          alert(`${word.toUpperCase()}\n\n${concatDefs}`)
-        }
-      })
+    return new Promise((resolve, reject) => {
+      let api = `https://www.dictionaryapi.com/api/v3/references/collegiate/json/`
+      let key = '?key=2a27edfb-fe26-4c68-82e0-46e7b00348fd'
+      let lastCh = word[word.length - 1].toLowerCase()
+      if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
+      axios.get(api + word + key)
+        .then(res => {
+          let concatDefs = ''
+          let shortdef = res.data[0].shortdef
+          if (shortdef) {
+            shortdef.forEach((def,i) => {
+              i++
+              def += '\n\n'
+              concatDefs += i + '. ' + def
+            })
+            resolve(`${word.toUpperCase()}\n\n${concatDefs}`)
+          }
+        })
+        .catch(e => reject(e))
+    })
   }
 
-  componentDidMount() { console.log('v1.07') }
+  componentDidMount() { console.log('v1.08') }
 
   componentDidUpdate() {
     if (this.state.isLoaded === true) {
@@ -322,6 +326,7 @@ class App extends Component {
               <li><Link to="/" className='link' onClick={() => this.minimize('hamburger')}>HOME</Link></li>
               <li><Link to="/MyReads" className='link' onClick={() => this.minimize('hamburger')}>MY READS</Link></li>
               {user !== 'none' && <li><Link to="/Profile" className='link' onClick={() => this.minimize('hamburger')}>PROFILE</Link></li>}
+              <li><Link to='WordQuiz' className='link' onClick={() => this.minimize('hamburger')}>WORD QUIZ</Link></li>
               <li>
                 <Link 
                     onClick={() => {
@@ -352,10 +357,14 @@ class App extends Component {
                                                     searchBar={this.state.searchBar}
                                                     minimize={this.minimize}
                                                     defineApi={this.defineApi}/>} />
-            <Route path="/Profile" render={() => <Profile setUser={this.setUser} 
+            <Route path="/Profile" render={() => <Profile 
+                                                    setUser={this.setUser} 
                                                     data={this.state} 
                                                     timeStamp={this.timeStamp} 
                                                     handleAttention={this.handleAttention}
+                                                    defineApi={this.defineApi}/>}/>
+            <Route path='/WordQuiz' render={() => <WordQuiz
+                                                    books={this.state.books}
                                                     defineApi={this.defineApi}/>}/>
             <Redirect path="/Log" to="/Profile"/>
           </Switch>
