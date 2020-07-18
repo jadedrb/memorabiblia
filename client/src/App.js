@@ -293,6 +293,7 @@ class App extends Component {
       if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
       axios.get(api + word + key)
         .then(res => {
+          console.log('here2')
           let concatDefs = ''
           let shortdef = res.data[0].shortdef
           if (shortdef) {
@@ -302,9 +303,10 @@ class App extends Component {
               concatDefs += i + '. ' + def
             })
             resolve(`${word.toUpperCase()}\n\n${concatDefs}`)
+          } else {
+            reject('No definition (API please!)')
           }
         })
-        .catch(e => reject(e))
     })
   }
 

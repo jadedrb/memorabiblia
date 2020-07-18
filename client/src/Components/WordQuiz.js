@@ -14,7 +14,7 @@ function WordQuiz(props) {
         // Convert all words for all book entries into one big array of strings
         let bank = ''
         props.books.forEach(b => bank += b.words + '. ')
-        let tempBank = bank.split(/[.,\-\s]\s/)
+        let tempBank = bank.split(/[.,\-\s]\s/).filter(w => w.toLowerCase() !== 'words')
         console.log(tempBank)
         if (tempBank.length > 4) {
             let tempChoices = determineChoices([...tempBank])
@@ -22,7 +22,9 @@ function WordQuiz(props) {
             setWordBank(tempBank)
             setChoices(tempChoices)
             setCurrentWord(tempCurrentWord)
-            determineDef(tempCurrentWord).then(def => setCurrentDef(def))
+            determineDef(tempCurrentWord)
+                .then(def => setCurrentDef(def))
+                .catch(e => setCurrentDef(e))
         }
     }, [])
 
@@ -47,10 +49,13 @@ function WordQuiz(props) {
             props
                 .defineApi(word)
                 .then(def => {
+                    console.log('here')
                     let definitions = def.split('.').slice(1)
+                    console.log(definitions)
                     let chosenDefinition = definitions.length ? definitions[randomIndex(definitions)].split('\n')[0].trim() : 'No definition (API please!)'
                     resolve(chosenDefinition)
                 })
+                .catch(e => reject(e))
         })
     }
 
@@ -63,7 +68,7 @@ function WordQuiz(props) {
         setScore(tempScore)
         setChoices(tempChoices)
         setCurrentWord(tempCurrentWord)
-        determineDef(tempCurrentWord).then(def => setCurrentDef(def)).catch(e => alert(e))
+        determineDef(tempCurrentWord).then(def => setCurrentDef(def)).catch(e => setCurrentDef(e))
     }
 
     const checkAnswer = (answer, choice) => {
