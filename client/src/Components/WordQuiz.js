@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 
 function WordQuiz(props) {
     let [wordBank, setWordBank] = useState([])
@@ -9,6 +10,8 @@ function WordQuiz(props) {
     let [score, setScore] = useState([0,0])
     let [otherBoxes, setOtherBoxes] = useState([])
     let [wrongWords, setWrongWords] = useState([])
+    let [searchWord, setSearchWord] = useState('')
+    let [filteredWords, setFilteredWords] = useState([])
 
     useEffect(() => {
         // Convert all words for all book entries into one big array of strings
@@ -135,6 +138,79 @@ function WordQuiz(props) {
         nextWord()
     }
 
+    const handleChange = (e) => {
+        let value = e.target.value
+        setSearchWord(value)
+        if (!value) {
+            setFilteredWords([])
+            return;
+        }
+        let filteredWords = wordBank.filter(w => w.slice(0, value.length).toLowerCase() === value.toLowerCase())
+        setFilteredWords(filteredWords)
+    }
+
+    const deleteWord = word => {
+        let deleting = window.confirm(`Would you like to delete ${word.toUpperCase()} from your list of interesting words?`)
+        if (!deleting) return
+        // this.props.book.user !== 'none'
+        let updatedWordBank = []
+
+        for (let i = 0; i < props.books.length; i++) {
+            let currentWordBank = props.books[i].words.split(/[.,\-\s]\s/)
+            let wordIndex;
+            for (let j = 0; j < currentWordBank.length; j++) {
+                if (currentWordBank[j].toLowerCase() === word.toLowerCase()) {
+                    wordIndex = j
+                    break;
+                }
+            }
+            if (wordIndex) {
+                currentWordBank.splice(wordIndex, 1)
+                updatedWordBank = [currentWordBank.join('. '), i, props.books[i]._id]
+                break;
+            }
+        }
+
+        console.log(updatedWordBank)
+
+        let [updatedWb, bookIndex, bookId] = updatedWordBank
+
+        const removeFromLocalWordBank = () => {
+            let idx = wordBank.findIndex(w => w.toLowerCase() === word.toLowerCase())
+            let newWordBank = [...wordBank]
+            newWordBank.splice(idx, 1)
+            setWordBank(newWordBank)
+            setFilteredWords([])
+            document.getElementById('word-input').value = ''
+        }
+
+        // update back end permanent data
+        if (props.books[0].user !== 'none') {
+            let updatedBook = {...props.books[bookIndex]}
+            updatedBook.words = updatedWb
+            console.log('UPDATE request')
+            console.log(updatedBook)
+            console.log(bookId)
+
+            axios
+              .post(`/api/memories/update/${bookId}`, {...updatedBook}).then(res => console.log(res.data))
+
+        } 
+
+        // update front end temporary data 
+        props.setWordBank(updatedWb, bookIndex)
+        removeFromLocalWordBank()
+    }
+
+    let filteredWordsList = filteredWords.map((w,i) => {
+        return (
+            <li key={i}>
+                <span className='removable-word' onClick={() => props.defineApi(w).then(def => alert(def))}>{w}</span> 
+                <span id='delete-word' onClick={() => deleteWord(w)}>X</span>
+            </li>
+        )
+    })
+
     let wrongWordDiv = wrongWords.length ? <div id='wrong-words'>{wrongWords.map((w,i) => <span key={i} className='random-color' onClick={() => seize ? props.defineApi(w).then(def => alert(def)) : null}>{w}. </span>)}</div> : ''
     let footer = (
         <div id='quiz-footer'>
@@ -143,17 +219,23 @@ function WordQuiz(props) {
         </div>
     )
 
+    let quizDef = currentDef ? currentDef : 'WORD QUIZ : Add more "Interesting Words" to your book entries!'
+    let quizDefStyle = !currentDef ? {gridColumn: '1 / span 2'} : {}
+    let quizChoiceStyle = !currentDef ? {height: '0px'} : {height: '200px'}
+
     return (
         <div id='quiz-container'>
             <h5><p id='word-count'>Word Count: {wordBank.length}</p></h5>
-            <h6 id='quiz-definition'>{currentDef ? currentDef : 'WORD QUIZ : Add more "Interesting Words" to your book entries!'}</h6>
-            <ul id='quiz-choices'>
+            <h6 id='quiz-definition' style={quizDefStyle}>{quizDef}</h6>
+            <ul id='quiz-choices' style={quizChoiceStyle}>
 {/*                <button onClick={() => console.log(currentDef)}>DAS IT</button>   */}
                 {choices.map((c,i) => <li key={i} id={`c-${i}`} onClick={() => !seize && checkAnswer(c, i)}>{c}</li>)}
             </ul>
             {currentDef ? footer : ''}
             {wrongWordDiv}
             {seize ? <div id='retry-button' onClick={retry}>RETRY</div> : ''}
+            {seize ? <input id='word-input' onChange={handleChange} placeholder='Find specific words to define or remove' /> : ''}
+            {seize ? <ul id='search-results'>{filteredWordsList}</ul> : ''}
             <div id='black-space'></div>
         </div>
     )

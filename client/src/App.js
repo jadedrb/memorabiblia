@@ -36,6 +36,7 @@ class App extends Component {
       this.handleAttention = this.handleAttention.bind(this)
       this.minimize = this.minimize.bind(this)
       this.setStreak = this.setStreak.bind(this)
+      this.setWordBank = this.setWordBank.bind(this)
   }
 
   setUser(user = 'none', email = '', creationDate) {
@@ -312,6 +313,12 @@ class App extends Component {
 
   setStreak(streak) { this.setState({streak}) }
 
+  setWordBank(updatedWb, bookIndex) {
+    let booksCopy = [...this.state.books]
+    booksCopy[bookIndex]['words'] = updatedWb
+    this.setState({books: booksCopy})
+  }
+
   componentDidMount() { console.log('v1.08') }
 
   componentDidUpdate() {
@@ -373,6 +380,7 @@ class App extends Component {
                                                     books={this.state.books}
                                                     setStreak={this.setStreak}
                                                     streak={this.state.streak}
+                                                    setWordBank={this.setWordBank}
                                                     defineApi={this.defineApi}/>}/>
             <Redirect path="/Log" to="/Profile"/>
           </Switch>
