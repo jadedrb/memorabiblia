@@ -134,7 +134,9 @@ function WordQuiz(props) {
         })
         defDiv.style.borderColor = 'black'
         defWord.style.borderColor = 'black'
+        document.getElementById('word-input').value = ''
         setSeize(false)
+        setFilteredWords([])
         nextWord()
     }
 
@@ -221,7 +223,7 @@ function WordQuiz(props) {
 
     let quizDef = currentDef ? currentDef : 'WORD QUIZ : Add more "Interesting Words" to your book entries!'
     let quizDefStyle = !currentDef ? {gridColumn: '1 / span 2'} : {}
-    let quizChoiceStyle = !currentDef ? {height: '0px'} : {height: '200px'}
+    let quizChoiceStyle = !currentDef ? {height: '0px'} : {height: `190px`}
 
     return (
         <div id='quiz-container'>
