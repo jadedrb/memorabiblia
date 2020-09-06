@@ -84,12 +84,11 @@ class Profile extends Component {
                 books.map(b => axios.delete(`/api/memories/remove/${b._id}`))
 
                 axios
-                    .get('/api/users')
-                    .then(res => {
-                        console.log(res.data)
-                        let user = res.data.filter(b => b.username === this.props.data.user)[0]._id
+                    .get('/api/users/verify')
+                    .then(response => {
+
                         axios
-                            .delete(`api/users/remove/${user}`)
+                            .delete(`api/users/remove/${response.data.user}`)
                             .then(() => {
                                 alert('Account deleted successfully.')
                                 this.props.setUser()

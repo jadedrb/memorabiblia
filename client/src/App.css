@@ -1328,3 +1328,13 @@ select {
 #delete-word:active {
   color: red;
 }
+
+.errors {
+  color: rgb(191, 51, 51);
+  margin-top: 10px;
+  font-weight: bold;
+}
+
+#loginForm label input {
+  outline-color: black;
+}

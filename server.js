@@ -1,6 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const bodyParser = require('body-parser');
+const cookieParser = require('cookie-parser');
 const cors = require('cors');
 const path = require('path');
 
@@ -9,10 +9,9 @@ const users = require('./routes/api/users');
 
 const app = express();
 
-// Bodyparser Middleware
-app.use(bodyParser.json());
-
-// CORS issues
+// Middleware
+app.use(express.json());
+app.use(cookieParser());
 app.use(cors());
 
 // DB Config

@@ -1,38 +1,20 @@
 const express = require('express');
 const router = express.Router();
 
-// User Model
-const User = require('../../models/User');
+// User controller
+const userController = require('../../controllers/userController');
 
-// GET all users
-router.get('/', (req, res) => {
-    User
-        .find()
-        .then(users => res.json(users))
-        .catch(err => res.status(400).json('Error: ' + err));
-});
+// Newer routes (for login & auth)
+router.post('/login', userController.login_post);
+router.post('/signup', userController.signup_post);
+router.get('/logout', userController.logout_get);
+router.get('/verify', userController.verify_user_get);
 
-// POST a user
-router.post('/', (req, res) => {
-    const newUser = new User({
-        username: req.body.username,
-        password: req.body.password,
-        email: req.body.email,
-        creationDate: req.body.creationDate
-    });
+router.get('/:id', userController.user_get);
 
-    newUser
-        .save()
-        .then(user => res.json(user))
-        .catch(err => res.status(404).json('Error: ' + err));
-});
-
-// DELETE a user
-router.delete('/remove/:id', (req, res) => {
-    User
-        .findById(req.params.id)
-        .then(user => user.remove().then(() => res.json({success: true})))
-        .catch(err => res.status(404).json('Error: ' + err));
-})
+// Original routes (GET, POST, & DELETE USERS)
+router.get('/', userController.users_get);
+router.post('/', userController.user_post);
+router.delete('/remove/:id', userController.user_delete)
 
 module.exports = router;

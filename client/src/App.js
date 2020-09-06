@@ -63,6 +63,8 @@ class App extends Component {
         this.loadUserBooks()
       }
     } else {
+      // remove jwt cookie after logout
+      axios.get('/api/users/logout')
       this.setState({user, email, books: []}) 
     }
   }
@@ -70,7 +72,7 @@ class App extends Component {
   loadUserBooks = () => {
     console.log('READ request')
     axios
-      .get('/api/memories')
+      .get(`/api/memories/${this.state.user}`)
       .then(res => {
 
         let { books } = this.state
@@ -81,7 +83,7 @@ class App extends Component {
         let nextId = books.length ? this.state.nextId : 0
         let deletedIds = [...this.state.deletedIds]
 
-        res.data.filter(b => b.user === this.state.user).forEach(b => {
+        res.data.forEach(b => {
           let url = b.url !== defaultUrl && b.url ? b.url : defaultUrl
 
           if (userBooks.length) !deletedIds.length ? nextId += 1 : nextId += 0
@@ -319,7 +321,20 @@ class App extends Component {
     this.setState({books: booksCopy})
   }
 
-  componentDidMount() { console.log('v1.08') }
+  componentDidMount() { 
+    console.log('v1.09')
+// Check for a JWT token and convert it into a user id
+    axios
+      .get('/api/users/verify')
+      .then(response => {
+    // Search for the user with that id and set the app state
+        axios
+          .get(`/api/users/${response.data.user}`)
+          .then(user => this.setUser(user.data.username, user.data.email, user.data.creationDate))
+          .catch(() => console.log('error!'))
+      })
+      .catch(error => console.log(error.response.data))
+   }
 
   componentDidUpdate() {
     if (this.state.isLoaded === true) {
