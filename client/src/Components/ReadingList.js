@@ -28,8 +28,6 @@ class ReadingList extends React.Component {
   }
 
   componentDidMount() {
-    console.log('readinglist mounted')
-    console.log(this.props.searchBar)
     if (this.props.switchPage) this.setState({isMounted: true, value: this.props.switchPage, screen: window.innerWidth}) 
     else this.setState({isMounted: true})
     window.addEventListener('resize', this.reportWindowSize);
