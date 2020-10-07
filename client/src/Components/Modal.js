@@ -16,9 +16,9 @@ class Modal extends React.Component {
 
   bookCoverApiRequest() {
 
-    let api = 'https://www.googleapis.com/books/v1/volumes?q='
+    let api = process.env.REACT_APP_GOOGLE_BOOKS_API
     let book = this.props.book.title
-  /*  let key = '&key=AIzaSyBayP6jaFr0KAZv_iVFGdbAsmeXiQpr9Y8' */
+ 
     let author = this.props.book.author
     this.setState({isLoading: true})
 

@@ -27,19 +27,9 @@ class App extends Component {
         nextId: 0,
         deletedIds: []
       }
-      this.setUser = this.setUser.bind(this)
-      this.onChange = this.onChange.bind(this)
-      this.randomColor = this.randomColor.bind(this)
-      this.newBook = this.newBook.bind(this)
-      this.chronological = this.chronological.bind(this)
-      this.bookBlueprint = this.bookBlueprint.bind(this)
-      this.handleAttention = this.handleAttention.bind(this)
-      this.minimize = this.minimize.bind(this)
-      this.setStreak = this.setStreak.bind(this)
-      this.setWordBank = this.setWordBank.bind(this)
   }
 
-  setUser(user = 'none', email = '', creationDate) {
+  setUser = (user = 'none', email = '', creationDate) => {
     let { books } = this.state
     if (user !== 'none') {
       this.setState({user, email, creationDate}) 
@@ -114,7 +104,7 @@ class App extends Component {
     }
   }
 
-  bookBlueprint() {
+  bookBlueprint = () => {
     class Book {
       constructor(id, title, author, genre, pages, started, finished,
                   rating, why, words, quotes, moments, color, url, published, user, _id, creationDate) {
@@ -127,7 +117,7 @@ class App extends Component {
     return Book;
   }
 
-  newBook() {
+  newBook = () => {
       let Book = this.bookBlueprint();
       let { books, user } = this.state
 
@@ -155,7 +145,7 @@ class App extends Component {
       }
   }
 
-  randomColor(initial = 'newObject') {
+  randomColor = (initial = 'newObject') => {
     let randomR = Math.floor(Math.random() * 255)
     let randomG = Math.floor(Math.random() * 255)
     let randomB = Math.floor(Math.random() * 255)
@@ -170,7 +160,7 @@ class App extends Component {
     }
   }
 
-  timeStamp() {
+  timeStamp = () => {
      let date = new Date()
      let date2 = new Date()
      date = date.toUTCString().split(' ')
@@ -189,7 +179,7 @@ class App extends Component {
      return `${month}/${day}/${year} ${hour}:${minute} ${timeOfDay}`
   }
 
-  chronological(books, organize) {
+  chronological = (books, organize) => {
     return books.slice().sort((a,b) => {
       let aYear = 0
       let bYear = 0
@@ -220,7 +210,7 @@ class App extends Component {
     })
   }
 
-  onChange(e, other, extra) {
+  onChange = (e, other, extra) => {
     let stateCopy = this.state.books.slice()
     let idNum;
     let property;
@@ -265,13 +255,13 @@ class App extends Component {
     this.setState({ books: stateCopy })
   }
 
-  handleAttention(book) { 
+  handleAttention = (book) => { 
     console.log(book)
     this.setState({switchPage: book}) 
     setTimeout(() => this.setState({switchPage: false}), 100)
   }
 
-  minimize(bar = 'searchBar') { 
+  minimize = (bar = 'searchBar') => { 
     if (bar === 'searchBar') {
       this.setState({searchBar: !this.state.searchBar}) 
     } else if (window.innerWidth < 550) {
@@ -288,10 +278,10 @@ class App extends Component {
     }
   }
 
-  defineApi(word) {
+  defineApi = (word) => {
     return new Promise((resolve, reject) => {
-      let api = `https://www.dictionaryapi.com/api/v3/references/collegiate/json/`
-      let key = '?key=2a27edfb-fe26-4c68-82e0-46e7b00348fd'
+      let api = process.env.REACT_APP_DEFINE_API
+      let key = process.env.REACT_APP_DEFINE_API_KEY
       let lastCh = word[word.length - 1].toLowerCase()
       if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
       axios.get(api + word + key)
@@ -313,16 +303,16 @@ class App extends Component {
     })
   }
 
-  setStreak(streak) { this.setState({streak}) }
+  setStreak = (streak) => { this.setState({streak}) }
 
-  setWordBank(updatedWb, bookIndex) {
+  setWordBank = (updatedWb, bookIndex) => {
     let booksCopy = [...this.state.books]
     booksCopy[bookIndex]['words'] = updatedWb
     this.setState({books: booksCopy})
   }
 
   componentDidMount() { 
-    console.log('v1.09')
+    console.log('v1.10')
 // Check for a JWT token and convert it into a user id
     axios
       .get('/api/users/verify')
