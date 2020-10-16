@@ -1,10 +1,11 @@
 import React from 'react';
-import Book from './Book'
+import Book from './Book';
+import axios from 'axios';
 
 class ReadingList extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { value: '', organize: 'chrono', defaultMsg: 'myframes', displayMsg: 'block', isMounted: false, screen: 0, resolution: 0 }
+    this.state = { value: '', defaultMsg: 'myframes', displayMsg: 'block', isMounted: false, screen: 0, resolution: 0 }
     this.handleChange = this.handleChange.bind(this)
     this.handleDropdown = this.handleDropdown.bind(this)
     this.reportWindowSize = this.reportWindowSize.bind(this)
@@ -47,7 +48,13 @@ class ReadingList extends React.Component {
 
   handleChange(e) { this.setState({ value: e.target.value }) }
 
-  handleDropdown(e) { this.setState({ organize: e.target.value }) }
+  handleDropdown(e) { 
+    this.props.setProperty('organize', e.target.value)
+    axios
+      .post(`/api/users/${this.props.user}/settings`, ['organize', e.target.value])
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+  }
 
   render() {
 
@@ -68,7 +75,7 @@ class ReadingList extends React.Component {
 
 
     if (true) {  // !document.getElementById('modal-edit-view')
-      switch(this.state.organize) {
+      switch(this.props.organize) {
         case 'chrono-date-asc':
           books = this.props.chron(books, 'asc')
           break;

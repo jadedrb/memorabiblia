@@ -118,8 +118,27 @@ module.exports.logout_get = async (req, res) => {
 module.exports.user_get = (req, res) => {
     User
         .findById(req.params.id)
-        .then(user => res.json(user))
+        .then(user => res.status(200).json(user))
         .catch(err => res.status(400).json('Error: ' + err));
+}
+
+// Update user preferences / settings 
+
+module.exports.user_update = (req, res) => {
+    User
+        .findOne({ username: req.params.user })
+        .then(user => {
+            let settings = JSON.parse(user.settings)
+            let [property, value] = req.body
+
+            settings[property] = value
+            user.settings = JSON.stringify(settings)
+
+            user.save()
+                .then(() => res.json('User updated!'))
+                .catch(err => res.status(400).json('Error: ' + err))
+        })
+        .catch(err => res.status(404).json('Error: ' + err));
 }
 
 

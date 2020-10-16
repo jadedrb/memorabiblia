@@ -7,6 +7,7 @@ import Home from './Components/Home';
 import ReadingList from './Components/ReadingList';
 import Profile from './Components/Profile';
 import WordQuiz from './Components/WordQuiz';
+import PageNotFound from './Components/PageNotFound';
 
 class App extends Component {
   constructor() {
@@ -24,6 +25,7 @@ class App extends Component {
         searchBar: true,
         hamburger: false,
         streak: 0,
+        organize: 'chrono',
         nextId: 0,
         deletedIds: []
       }
@@ -187,13 +189,13 @@ class App extends Component {
       let bMonth = 0
       let aDay = 0
       let bDay = 0
-      if (a.started !== null) {
-        aYear = Number(a.started.split('/')[2].split(' ')[0])
+      if (a.started) {
+        aYear = Number(a.started.split('/')[2]?.split(' ')[0])
         aMonth = Number(a.started.split('/')[0])
         aDay = Number(a.started.split('/')[1])
       }
-      if (b.started !== null) {
-        bYear = Number(b.started.split('/')[2].split(' ')[0])
+      if (b.started) {
+        bYear = Number(b.started.split('/')[2]?.split(' ')[0])
         bMonth = Number(b.started.split('/')[0])
         bDay = Number(b.started.split('/')[1])
       }
@@ -303,7 +305,16 @@ class App extends Component {
     })
   }
 
-  setStreak = (streak) => { this.setState({streak}) }
+  setStreak = (streak) => { 
+    axios
+      .post(`/api/users/${this.state.user}/settings`, ['streak', streak])
+      .then(res => console.log(res))
+      .catch(err => console.log(err))
+
+    this.setState({streak})
+  }
+
+  setProperty = (property, value) => { this.setState({ [property] : value }) }
 
   setWordBank = (updatedWb, bookIndex) => {
     let booksCopy = [...this.state.books]
@@ -320,8 +331,12 @@ class App extends Component {
     // Search for the user with that id and set the app state
         axios
           .get(`/api/users/${response.data.user}`)
-          .then(user => this.setUser(user.data.username, user.data.email, user.data.creationDate))
-          .catch(() => console.log('error!'))
+          .then(user => {
+            this.setUser(user.data.username, user.data.email, user.data.creationDate)
+            let settings = JSON.parse(user.data.settings)
+            Object.keys(settings).map(property => this.setState({ [property] : settings[property] }))
+          })
+          .catch(err => console.log(err))
       })
       .catch(error => console.log(error.response.data))
    }
@@ -365,6 +380,9 @@ class App extends Component {
                                                     handleAttention={this.handleAttention}/>} />
             <Route path="/MyReads" render={() => <ReadingList 
                                                     books={this.state.books} 
+                                                    user={this.state.user}
+                                                    organize={this.state.organize}
+                                                    setProperty={this.setProperty}
                                                     onChange={this.onChange} 
                                                     newBook={this.newBook} 
                                                     deleteBook={this.deleteBook} 
@@ -388,6 +406,7 @@ class App extends Component {
                                                     setWordBank={this.setWordBank}
                                                     defineApi={this.defineApi}/>}/>
             <Redirect path="/Log" to="/Profile"/>
+            <Route component={PageNotFound}/>
           </Switch>
         </Router>
       </div>

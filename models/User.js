@@ -25,6 +25,10 @@ const UserSchema = new Schema({
     },
     creationDate: { 
         type: String 
+    },
+    settings: {
+        type: String,
+        default: '{}'
     }
 });
 

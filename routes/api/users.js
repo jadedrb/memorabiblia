@@ -10,6 +10,7 @@ router.post('/signup', userController.signup_post);
 router.get('/logout', userController.logout_get);
 router.get('/verify', userController.verify_user_get);
 
+router.post('/:user/settings', userController.user_update)
 router.get('/:id', userController.user_get);
 
 // Original routes (GET, POST, & DELETE USERS)
