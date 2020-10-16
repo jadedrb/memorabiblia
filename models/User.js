@@ -45,6 +45,7 @@ UserSchema.pre('save', async function (next) {
 // static method to login user. This is used in authController.js
 UserSchema.statics.login = async function(username, password) {
     const user = await this.findOne({ username })
+
     if (user) {
         const auth = await bcrypt.compare(password, user.password)
         if (auth) {

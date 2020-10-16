@@ -132,9 +132,8 @@ module.exports.user_update = (req, res) => {
             let [property, value] = req.body
 
             settings[property] = value
-            user.settings = JSON.stringify(settings)
 
-            user.save()
+            user.update({ $set : { settings : JSON.stringify(settings) } })
                 .then(() => res.json('User updated!'))
                 .catch(err => res.status(400).json('Error: ' + err))
         })
