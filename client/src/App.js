@@ -306,12 +306,15 @@ class App extends Component {
   }
 
   setStreak = (streak) => { 
-    axios
-      .post(`/api/users/${this.state.user}/settings`, ['streak', streak])
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
-
+    let { user } = this.state
     this.setState({streak})
+
+    if (user !== 'none') {
+      axios
+        .post(`/api/users/${user}/settings`, ['streak', streak])
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
+    }
   }
 
   setProperty = (property, value) => { this.setState({ [property] : value }) }
@@ -323,7 +326,7 @@ class App extends Component {
   }
 
   componentDidMount() { 
-    console.log('v1.10')
+    console.log('v1.11')
 // Check for a JWT token and convert it into a user id
     axios
       .get('/api/users/verify')
@@ -336,9 +339,9 @@ class App extends Component {
             let settings = JSON.parse(user.data.settings)
             Object.keys(settings).map(property => this.setState({ [property] : settings[property] }))
           })
-          .catch(err => console.log(err))
+          .catch(() => 'Error: fetching user data')
       })
-      .catch(error => console.log(error.response.data))
+      .catch(() => console.log('Error: verifying user'))
    }
 
   componentDidUpdate() {

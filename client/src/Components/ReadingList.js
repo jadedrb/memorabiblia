@@ -49,11 +49,16 @@ class ReadingList extends React.Component {
   handleChange(e) { this.setState({ value: e.target.value }) }
 
   handleDropdown(e) { 
-    this.props.setProperty('organize', e.target.value)
-    axios
-      .post(`/api/users/${this.props.user}/settings`, ['organize', e.target.value])
-      .then(res => console.log(res))
-      .catch(err => console.log(err))
+    let { setProperty, user } = this.props
+    setProperty('organize', e.target.value)
+
+    if (user !== 'none') {
+      axios
+        .post(`/api/users/${
+          user}/settings`, ['organize', e.target.value])
+        .then(res => console.log(res))
+        .catch(err => console.log(err))
+    }
   }
 
   render() {
