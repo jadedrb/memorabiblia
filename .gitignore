@@ -2,4 +2,4 @@ node_modules
 .DS_Store
 /middleware
 
-/config/keys.js
+# /config/keys.js
