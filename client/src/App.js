@@ -332,7 +332,6 @@ class App extends Component {
   setProperty = (property, value) => { this.setState({ [property] : value }) }
 
   applySettings = (data) => {
-    console.log(data + ' : data')
     if (!data) return
     let settings = JSON.parse(data)
     Object.keys(settings).forEach(property => this.setState({ [property] : settings[property] }))
@@ -345,7 +344,7 @@ class App extends Component {
   }
 
   componentDidMount() { 
-    console.log('v1.12')
+    console.log('v1.13')
 // Check for a JWT token and convert it into a user id
     axios
       .get('/api/users/verify')

@@ -48,6 +48,8 @@ class ReadingList extends React.Component {
 
   handleChange(e) { this.setState({ value: e.target.value }) }
 
+  handleFocus = e => document.getElementById('user-input').setSelectionRange(0, e.target.value.length)
+
   handleDropdown(e) { 
     let { setProperty, user } = this.props
     setProperty('organize', e.target.value)
@@ -66,6 +68,7 @@ class ReadingList extends React.Component {
     let { books, newBook, bookFilter } = this.props
     let value = this.state.value
     let filteredBooks;
+    let alreadyFiltered;
 
     // filter list based on inputted value in search bar
     if (this.state.value !== '') {
@@ -76,10 +79,11 @@ class ReadingList extends React.Component {
           return bArray.some(prop => prop.toLowerCase().split('').slice(0, value.length).join('') === value.toLowerCase())
         })
         books = filteredBooks
+        alreadyFiltered = true;
     }
 
     // filter list based on read, unread, or reading
-    if (bookFilter !== 'All') {
+    if (bookFilter !== 'All' && !alreadyFiltered) {
       console.log(bookFilter)
       if (bookFilter === 'readFilter') filteredBooks = books.filter(b => typeof b.finished === 'string')
       else if (bookFilter === 'unreadFilter') filteredBooks = books.filter(b => typeof b.started !== 'string')
@@ -175,7 +179,7 @@ class ReadingList extends React.Component {
       <div>
         <div id='minimize' onClick={() => this.props.minimize()} style={searchBar}>-</div>
         <div className='options' style={inkEffect}>
-          <div><input value={this.state.value} onChange={this.handleChange}/></div>
+          <div><input id='user-input' value={this.state.value} onFocus={this.handleFocus} onChange={this.handleChange}/></div>
           <div className='category'>
             <label htmlFor="filter"></label>
             <select id="filter" value={this.props.organize} onChange={this.handleDropdown}>
