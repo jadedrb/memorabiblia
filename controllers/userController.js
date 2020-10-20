@@ -82,8 +82,8 @@ module.exports.login_post = async (req, res) => {
         res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
 
         User
-            .find({ username })
-            .then(user => res.status(200).json({ username, email: user[0].email, creationDate: user[0].creationDate }))
+            .findOne({ username })
+            .then(user => res.status(200).json({ username, email: user.email, creationDate: user.creationDate, settings: user.settings }))
             .catch(err => console.log(err))
         
     } catch (err) {
@@ -133,7 +133,7 @@ module.exports.user_update = (req, res) => {
 
             settings[property] = value
 
-            user.update({ $set : { settings : JSON.stringify(settings) } })
+            user.updateOne({ $set : { settings : JSON.stringify(settings) } })
                 .then(() => res.json('User updated!'))
                 .catch(err => res.status(400).json('Error: ' + err))
         })

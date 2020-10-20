@@ -333,7 +333,7 @@ form {
   text-align: center;
   z-index: -1;
   height: 400px;
-  margin-top: 100px;
+  margin-top: 110px;
   margin-bottom: 100px;
   justify-content: space-between;
   letter-spacing: 10px;
@@ -944,7 +944,7 @@ select {
   }
 }
 
-@media (max-width: 550px) {
+@media (max-width: 590px) {
   .extremely-friendly-div {
     display: block;
   }
@@ -1014,6 +1014,9 @@ select {
   .delete-account {
     top: 50px;
   }
+  .book-filter {
+    margin-top: 0;
+  }
 }
 
 
@@ -1042,7 +1045,9 @@ select {
     display: flex;
     justify-content: space-evenly;
     min-width: 200px;
-
+  }
+  .book-filter {
+    margin-top: 0;
   }
 }
 

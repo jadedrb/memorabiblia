@@ -45,8 +45,9 @@ const Login = (props) => {
 
         axios
           .post('/api/users/login', { userInfo })
-          .then((response) => props.setUser(response.data.username, response.data.email, response.data.creationDate))
+          .then((res) => props.setUser(res.data.username, res.data.email, res.data.creationDate, res.data.settings))
           .catch(err => {
+            console.log(err)
             console.log(err.response.data.errors)
             setErrors(err.response.data.errors)
           })

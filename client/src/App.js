@@ -27,32 +27,41 @@ class App extends Component {
         streak: 0,
         organize: 'chrono',
         nextId: 0,
-        deletedIds: []
+        deletedIds: [],
+        bookFilter: 'All'
       }
   }
 
-  setUser = (user = 'none', email = '', creationDate) => {
+  setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
     if (user !== 'none') {
       this.setState({user, email, creationDate}) 
-      if (books.length > 0) {
+      let confirmTransfer = books.length > 0 && window.confirm(`Would you like to transfer your unsaved book entries (${books.length}) to your account?`)
+      
+      if (confirmTransfer) {
+
         books.forEach((b,i) => {
           let bCopy = {...b}
           bCopy.user = user
           axios
             .post('/api/memories', bCopy)
             .then(res => {
+              console.log('this is what I think it is')
               console.log(`post ${i} done`)
               return axios
                       .post(`/api/memories/update/${res.data._id}`, bCopy)
                       .then(() => {
                         console.log(`update ${i} done`)
-                        if (i === books.length - 1) this.loadUserBooks()
+                        if (i === books.length - 1) {
+                          this.loadUserBooks()
+                          this.applySettings(settings)
+                        }
                       })
             })
         })
       } else {
         this.loadUserBooks()
+        this.applySettings(settings)
       }
     } else {
       // remove jwt cookie after logout
@@ -308,16 +317,26 @@ class App extends Component {
   setStreak = (streak) => { 
     let { user } = this.state
     this.setState({streak})
+    this.newSettings('streak', streak, user)
+  }
 
+  newSettings = (property, value, user) => {
     if (user !== 'none') {
       axios
-        .post(`/api/users/${user}/settings`, ['streak', streak])
+        .post(`/api/users/${user}/settings`, [property, value])
         .then(res => console.log(res))
         .catch(err => console.log(err))
     }
   }
 
   setProperty = (property, value) => { this.setState({ [property] : value }) }
+
+  applySettings = (data) => {
+    console.log(data + ' : data')
+    if (!data) return
+    let settings = JSON.parse(data)
+    Object.keys(settings).forEach(property => this.setState({ [property] : settings[property] }))
+  }
 
   setWordBank = (updatedWb, bookIndex) => {
     let booksCopy = [...this.state.books]
@@ -326,7 +345,7 @@ class App extends Component {
   }
 
   componentDidMount() { 
-    console.log('v1.11')
+    console.log('v1.12')
 // Check for a JWT token and convert it into a user id
     axios
       .get('/api/users/verify')
@@ -334,11 +353,7 @@ class App extends Component {
     // Search for the user with that id and set the app state
         axios
           .get(`/api/users/${response.data.user}`)
-          .then(user => {
-            this.setUser(user.data.username, user.data.email, user.data.creationDate)
-            let settings = JSON.parse(user.data.settings)
-            Object.keys(settings).map(property => this.setState({ [property] : settings[property] }))
-          })
+          .then(user => this.setUser(user.data.username, user.data.email, user.data.creationDate, user.data.settings))
           .catch(() => 'Error: fetching user data')
       })
       .catch(() => console.log('Error: verifying user'))
@@ -385,7 +400,9 @@ class App extends Component {
                                                     books={this.state.books} 
                                                     user={this.state.user}
                                                     organize={this.state.organize}
+                                                    bookFilter={this.state.bookFilter}
                                                     setProperty={this.setProperty}
+                                                    newSettings={this.newSettings}
                                                     onChange={this.onChange} 
                                                     newBook={this.newBook} 
                                                     deleteBook={this.deleteBook} 

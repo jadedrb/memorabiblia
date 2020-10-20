@@ -42,7 +42,7 @@ class ReadingList extends React.Component {
   resetScreenCheck() { this.setState({screen: true}) }
 
   reportWindowSize() {
-    console.log(window.innerWidth > 930 ? window.innerWidth + ' desktop' : window.innerWidth + ' mobile')
+   // console.log(window.innerWidth > 930 ? window.innerWidth + ' desktop' : window.innerWidth + ' mobile')
     if (window.innerWidth !== this.state.resolution) this.setState({screen: false, resolution: window.innerWidth})
   }
 
@@ -51,23 +51,23 @@ class ReadingList extends React.Component {
   handleDropdown(e) { 
     let { setProperty, user } = this.props
     setProperty('organize', e.target.value)
+    this.props.newSettings('organize', e.target.value, user)    
+  }
 
-    if (user !== 'none') {
-      axios
-        .post(`/api/users/${
-          user}/settings`, ['organize', e.target.value])
-        .then(res => console.log(res))
-        .catch(err => console.log(err))
-    }
+  handleFilter = e => {
+    let { setProperty, user } = this.props
+    console.log(e.target.value)
+    setProperty('bookFilter', e.target.value)
+    this.props.newSettings('bookFilter', e.target.value, user)  
   }
 
   render() {
 
-    let books = this.props.books
-    let newBook = this.props.newBook
+    let { books, newBook, bookFilter } = this.props
     let value = this.state.value
     let filteredBooks;
 
+    // filter list based on inputted value in search bar
     if (this.state.value !== '') {
         filteredBooks = books.filter(b => {
           let checkLn;
@@ -78,6 +78,20 @@ class ReadingList extends React.Component {
         books = filteredBooks
     }
 
+    // filter list based on read, unread, or reading
+    if (bookFilter !== 'All') {
+      console.log(bookFilter)
+      if (bookFilter === 'readFilter') filteredBooks = books.filter(b => typeof b.finished === 'string')
+      else if (bookFilter === 'unreadFilter') filteredBooks = books.filter(b => typeof b.started !== 'string')
+      else if (bookFilter === 'readingFilter') filteredBooks = books.filter(b => typeof b.started === 'string' && typeof b.finished !== 'string')
+      books = filteredBooks
+    }
+
+    // display numbers of each filtered category
+    let allNum = this.props.bookFilter === 'All' ? `(${books.length})` : ''
+    let readNum = this.props.bookFilter === 'readFilter' ? `(${books.length})` : ''
+    let unreadNum = this.props.bookFilter === 'unreadFilter' ? `(${books.length})` : ''
+    let readingNum = this.props.bookFilter === 'readingFilter' ? `(${books.length})` : ''
 
     if (true) {  // !document.getElementById('modal-edit-view')
       switch(this.props.organize) {
@@ -136,7 +150,7 @@ class ReadingList extends React.Component {
 
     let searchBar;
 
-    if (window.innerWidth > 550) {
+    if (window.innerWidth > 590) {
       searchBar = {
         position: this.props.searchBar ? 'absolute' : 'relative',
         top: this.props.searchBar ? '55px' : '0',
@@ -157,7 +171,6 @@ class ReadingList extends React.Component {
       }
     }
     
-    
     return (
       <div>
         <div id='minimize' onClick={() => this.props.minimize()} style={searchBar}>-</div>
@@ -165,7 +178,7 @@ class ReadingList extends React.Component {
           <div><input value={this.state.value} onChange={this.handleChange}/></div>
           <div className='category'>
             <label htmlFor="filter"></label>
-            <select id="filter" onChange={this.handleDropdown}>
+            <select id="filter" value={this.props.organize} onChange={this.handleDropdown}>
               <option>Organize:</option>
               <option value="chrono-date-asc">New Reads (Start Date)</option>
               <option value="chrono-date-desc">Old Reads (Start Date)</option>
@@ -181,6 +194,17 @@ class ReadingList extends React.Component {
               <option value="least-pages">Least Pages</option>
             </select>
           </div>
+
+          <div className='category book-filter'>
+            <select value={this.props.bookFilter} onChange={this.handleFilter}>
+              <option value="All">All {allNum}</option>
+              <option value="readFilter">Read {readNum}</option>
+              <option value="unreadFilter">Unread {unreadNum}</option>
+              <option value="readingFilter">Reading {readingNum}</option>
+            </select>
+          </div>
+
+
           <div className='new-book' onClick={newBook}>New Book</div>
         </div>
         {books.map(book => <Book 
