@@ -18,7 +18,7 @@ app.use(cors());
 const db = require('./config/keys').mongoURI;
 
 // env Config
-require('dotenv').config()
+// require('dotenv').config()
 
 // Connect to Mongo
 mongoose
