@@ -1,3 +1,5 @@
+require('dotenv').config()
+
 const keys_dev = process.env.GBOOKS_API || require('./keys_dev')
 
 module.exports = {
