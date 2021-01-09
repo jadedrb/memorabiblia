@@ -237,10 +237,17 @@ class App extends Component {
         book.finished = this.timeStamp()
         this.setState({ finished: book })
       } else {
-        book.started = null
-        book.finished = null
-        if (this.state.current !== null && book.id === this.state.current.id) { this.setState({ current: null }) }
-        if (this.state.finished !== null && book.id === this.state.finished.id) { this.setState({ finished: null }) }
+        
+        let confirmChoice = window.confirm('Are you sure you want to reset your start and finish dates?')
+        
+        // Reset start and finish timestamps for book entry only if user confirms first
+        if (confirmChoice) {
+          book.started = null
+          book.finished = null
+          if (this.state.current !== null && book.id === this.state.current.id) { this.setState({ current: null }) }
+          if (this.state.finished !== null && book.id === this.state.finished.id) { this.setState({ finished: null }) }
+        }
+        
       }
     } else if (e !== 'api') {
       idNum = Number(e.target.name.split('-')[1])

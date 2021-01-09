@@ -1,6 +1,5 @@
 import React from 'react';
 import Book from './Book';
-import axios from 'axios';
 
 class ReadingList extends React.Component {
   constructor(props) {
