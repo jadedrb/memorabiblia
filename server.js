@@ -17,9 +17,6 @@ app.use(cors());
 // DB Config
 const db = require('./config/keys').mongoURI;
 
-// env Config
-// require('dotenv').config()
-
 // Connect to Mongo
 mongoose
     .connect(db, { useUnifiedTopology: true, useNewUrlParser: true })

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import { BrowserRouter as Router, Route, Link, Switch, Redirect } from 'react-router-dom';
+import { Route, Link, Switch, Redirect } from 'react-router-dom';
 import axios from 'axios';
 
 import Home from './Components/Home';
@@ -8,6 +8,8 @@ import ReadingList from './Components/ReadingList';
 import Profile from './Components/Profile';
 import WordQuiz from './Components/WordQuiz';
 import PageNotFound from './Components/PageNotFound';
+
+const keys_dev = require('./config/keys')
 
 class App extends Component {
   constructor() {
@@ -298,13 +300,15 @@ class App extends Component {
 
   defineApi = (word) => {
     return new Promise((resolve, reject) => {
-      let api = process.env.REACT_APP_DEFINE_API
-      let key = process.env.REACT_APP_DEFINE_API_KEY
+
+      let api = keys_dev.defineApi
+      let key = keys_dev.defineApiKey
+
       let lastCh = word[word.length - 1].toLowerCase()
       if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
+
       axios.get(api + word + key)
         .then(res => {
-          console.log('here2')
           let concatDefs = ''
           let shortdef = res.data[0].shortdef
           if (shortdef) {
@@ -351,7 +355,7 @@ class App extends Component {
   }
 
   componentDidMount() { 
-    console.log('v1.17 (1/9/20)')
+    console.log('v1.18 (1/9/20)')
 // Check for a JWT token and convert it into a user id
     axios
       .get('/api/users/verify')
@@ -376,7 +380,6 @@ class App extends Component {
     let { user, switchPage } = this.state
     return (
       <div id='grandpa'>
-        <Router>
           <nav>
             <div className='menu-btn' onClick={() => this.minimize('hamburger')}><div className='menu-btn_burger'></div></div>
             <ul className='nav-list'>
@@ -434,7 +437,6 @@ class App extends Component {
             <Redirect path="/Log" to="/Profile"/>
             <Route component={PageNotFound}/>
           </Switch>
-        </Router>
       </div>
     )
   }

@@ -3,6 +3,7 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 
 const modal = document.getElementById('modal-root')
+const keys_dev = require('../config/keys')
 
 class Modal extends React.Component {
   constructor(props) {
@@ -16,7 +17,7 @@ class Modal extends React.Component {
 
   bookCoverApiRequest() {
 
-    let api = process.env.REACT_APP_GOOGLE_BOOKS_API
+    let api = keys_dev.gBooksApi
     let book = this.props.book.title
  
     let author = this.props.book.author
