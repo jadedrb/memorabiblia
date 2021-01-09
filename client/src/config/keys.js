@@ -1,4 +1,4 @@
-const keys_dev = process.env.MONGO_URI || require('./keys_dev')
+const keys_dev = process.env.GBOOKS_API || require('./keys_dev')
 
 module.exports = {
     gBooksApi: process.env.GBOOKS_API || keys_dev.DEV_GBOOKS_API,

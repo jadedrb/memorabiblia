@@ -14,8 +14,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
-// DB Config
+// Config
 const db = require('./config/keys').mongoURI;
+require('dotenv').config()
 
 // Connect to Mongo
 mongoose
