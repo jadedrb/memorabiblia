@@ -7,6 +7,9 @@ const path = require('path');
 const memories = require('./routes/api/memories');
 const users = require('./routes/api/users');
 
+// Config
+const keys_dev = require('./config/keys');
+
 const app = express();
 
 // Middleware
@@ -14,13 +17,9 @@ app.use(express.json());
 app.use(cookieParser());
 app.use(cors());
 
-// Config
-const db = require('./config/keys').mongoURI;
-require('dotenv').config()
-
 // Connect to Mongo
 mongoose
-    .connect(db, { useUnifiedTopology: true, useNewUrlParser: true })
+    .connect(keys_dev.mongoURI, { useUnifiedTopology: true, useNewUrlParser: true })
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 

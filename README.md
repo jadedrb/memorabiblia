@@ -4,4 +4,4 @@ Never forget why you read a book or what you loved about it again. Keep track of
 
 ### ------------
 
-Give [memorabiblia](https://salty-ridge-00278.herokuapp.com/) a try!
+Give [memorabiblia](https://memora-biblia.herokuapp.com/) a try!

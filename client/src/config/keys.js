@@ -1,10 +1,6 @@
-require('dotenv').config()
-
-const keys_dev = process.env.GBOOKS_API || require('./keys_dev')
-
 module.exports = {
-    gBooksApi: process.env.GBOOKS_API || keys_dev.DEV_GBOOKS_API,
-    defineApi: process.env.DEFINE_API || keys_dev.DEV_DEFINE_API,
-    gBooksApiKey: process.env.GBOOKS_API_KEY || keys_dev.DEV_GBOOKS_API_KEY,
-    defineApiKey: process.env.DEFINE_API_KEY || keys_dev.DEV_DEFINE_API_KEY
+    gBooksApi: "https://www.googleapis.com/books/v1/volumes?q=",
+    defineApi: "https://www.dictionaryapi.com/api/v3/references/collegiate/json/",
+    gBooksApiKey: "&key=AIzaSyBayP6jaFr0KAZv_iVFGdbAsmeXiQpr9Y8",
+    defineApiKey: "?key=2a27edfb-fe26-4c68-82e0-46e7b00348fd"
 }
