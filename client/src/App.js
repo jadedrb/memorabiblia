@@ -355,7 +355,7 @@ class App extends Component {
   }
 
   componentDidMount() { 
-    console.log('v1.18 (1/9/20)')
+    console.log('v1.19 (1/9/20)')
 // Check for a JWT token and convert it into a user id
     axios
       .get('/api/users/verify')
