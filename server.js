@@ -28,18 +28,11 @@ app.use('/api/memories', memories);
 app.use('/api/users', users);
 
 // Test Route for Heroku env variables
-app.get('/heroku-env', (req, res) => {
-    let GBOOKS2 = process.env.GBOOKS_API 
-    let DEFINE2 = process.env.DEFINE_API
-    let NODE_ENV2 = process.env.NODE_ENV
-    res.status(200).json({
-        GBOOKS1: process.env.GBOOKS_API,
-        GBOOKS2,
-        DEFINE1: process.env.DEFINE_API,
-        DEFINE2,
-        NODE_ENV: process.env.NODE_ENV === undefined ? 'undefined' : process.env.NODE_ENV,
-        NODE_ENV2
-    })
+app.post('/heroku-env', (req, res) => {
+    const { gBooksApi, gBooksApiKey, defineApi, defineApiKey } = keys_dev
+    const hVarPackage = { gBooksApi, gBooksApiKey, defineApi, defineApiKey }
+    if (req.body.hVarAuth === 'PAJAMA') res.status(200).json(hVarPackage)
+    else res.status(400).json({ error: 'Nothing to see here...'})
 })
 
 // Serve static assets if in production

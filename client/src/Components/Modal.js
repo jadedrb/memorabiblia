@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import axios from 'axios';
 
 const modal = document.getElementById('modal-root')
-const keys_dev = require('../config/keys')
 
 class Modal extends React.Component {
   constructor(props) {
@@ -15,16 +14,19 @@ class Modal extends React.Component {
 
   el = document.createElement('div')
 
-  bookCoverApiRequest() {
+  async bookCoverApiRequest() {
 
-    let api = keys_dev.gBooksApi
-    let book = this.props.book.title
- 
-    let author = this.props.book.author
-    this.setState({isLoading: true})
+    try {
 
-    axios.get(api + book)
-      .then((response) => {
+        let hVars = await axios.post('/heroku-env', { hVarAuth: 'PAJAMA' })
+        let api = hVars.data.gBooksApi
+        let book = this.props.book.title
+    
+        let author = this.props.book.author
+        this.setState({isLoading: true})
+
+        let response = await axios.get(api + book)
+      
         let booksApi = response.data.items
         let infoArr = []
         booksApi.forEach(b => {
@@ -88,7 +90,8 @@ class Modal extends React.Component {
         console.log(firstFilter)
         console.log(secondFilter)
         this.setState({isLoading: 'done'})
-      })
+
+    } catch (err) { console.log(err) }
   }
 
   definitions() { this.setState({definitions: !this.state.definitions}) }

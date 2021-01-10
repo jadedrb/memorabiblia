@@ -9,8 +9,6 @@ import Profile from './Components/Profile';
 import WordQuiz from './Components/WordQuiz';
 import PageNotFound from './Components/PageNotFound';
 
-const keys_dev = require('./config/keys')
-
 class App extends Component {
   constructor() {
     super()
@@ -298,31 +296,34 @@ class App extends Component {
     }
   }
 
-  defineApi = (word) => {
-    return new Promise((resolve, reject) => {
+  defineApi = async (word) => {
+   
+      try {
 
-      let api = keys_dev.defineApi
-      let key = keys_dev.defineApiKey
+        let hVars = await axios.post('/heroku-env', { hVarAuth: 'PAJAMA' })
+        let api = hVars.data.defineApi
+        let key = hVars.data.defineApiKey
 
-      let lastCh = word[word.length - 1].toLowerCase()
-      if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
+        let lastCh = word[word.length - 1].toLowerCase()
+        if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
 
-      axios.get(api + word + key)
-        .then(res => {
-          let concatDefs = ''
-          let shortdef = res.data[0].shortdef
-          if (shortdef) {
-            shortdef.forEach((def,i) => {
-              i++
-              def += '\n\n'
-              concatDefs += i + '. ' + def
-            })
-            resolve(`${word.toUpperCase()}\n\n${concatDefs}`)
-          } else {
-            reject('No definition (API please!)')
-          }
-        })
-    })
+        let res = await axios.get(api + word + key)
+        let concatDefs = ''
+        let shortdef = res.data[0].shortdef
+        
+        if (shortdef) {
+          shortdef.forEach((def,i) => {
+          i++
+          def += '\n\n'
+          concatDefs += i + '. ' + def
+          })
+          return `${word.toUpperCase()}\n\n${concatDefs}`
+        } else {
+          return 'No definition (API please!)'
+        }
+      } 
+      catch (err) { console.log('err') }
+
   }
 
   setStreak = (streak) => { 
@@ -355,7 +356,7 @@ class App extends Component {
   }
 
   componentDidMount() { 
-    console.log('v1.19 (1/9/20)')
+    console.log('v1.20 (1/10/20)')
 // Check for a JWT token and convert it into a user id
     axios
       .get('/api/users/verify')
