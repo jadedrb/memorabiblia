@@ -10,7 +10,6 @@ function WordQuiz(props) {
     let [score, setScore] = useState([0,0])
     let [otherBoxes, setOtherBoxes] = useState([])
     let [wrongWords, setWrongWords] = useState([])
-    let [searchWord, setSearchWord] = useState('')
     let [filteredWords, setFilteredWords] = useState([])
 
     useEffect(() => {
@@ -142,7 +141,6 @@ function WordQuiz(props) {
 
     const handleChange = (e) => {
         let value = e.target.value
-        setSearchWord(value)
         if (!value) {
             setFilteredWords([])
             return;

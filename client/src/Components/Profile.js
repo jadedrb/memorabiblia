@@ -75,27 +75,29 @@ class Profile extends Component {
         this.setState({totalPages, pagesRead, booksRead, totalBooks, inNeedOfAttention, choices, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs})
     }
 
-    deleteAccount() {
-        let deleting = window.confirm('Are you sure you want to delete your account? This will remove all saved entries and user information permanently.')
-        if (deleting) {
-            let confirm = prompt(`Please confirm your action by typing: "Yes I, ${this.props.data.user}, would like to delete my account"`)
-            if (confirm === `Yes I, ${this.props.data.user}, would like to delete my account`) {
-                let books = this.props.data.books
-                books.map(b => axios.delete(`/api/memories/remove/${b._id}`))
+    async deleteAccount() {
 
-                axios
-                    .get('/api/users/verify')
-                    .then(response => {
+        try {
+            
+            let verifiedUser = await axios.get('/api/users/verify')
+            let deleting = window.confirm('Are you sure you want to delete your account? This will remove all saved entries and user information permanently.')
+            
+            if (deleting) {
 
-                        axios
-                            .delete(`api/users/remove/${response.data.user}`)
-                            .then(() => {
-                                alert('Account deleted successfully.')
-                                this.props.setUser()
-                            })
-                    })
+                let confirm = prompt(`Please confirm your action by typing: "Yes I, ${this.props.data.user}, would like to delete my account"`)
+                
+                if (confirm === `Yes I, ${this.props.data.user}, would like to delete my account`) {
+                    
+                    let books = this.props.data.books
+                    books.map(b => axios.delete(`/api/memories/remove/${b._id}`))
+
+                    await axios.delete(`api/users/remove/${verifiedUser.data.user}`)
+                    alert('Account deleted successfully.')
+                    this.props.setUser()
+                }
             }
-        }
+
+        } catch (err) { console.log(err) }
     }
 
     changeTheme() {
