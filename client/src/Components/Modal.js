@@ -7,7 +7,7 @@ const modal = document.getElementById('modal-root')
 class Modal extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { covers: null, index: 0, isLoading: false, define: false}
+    this.state = { covers: null, index: 0, isLoading: false, define: false, book: this.props.book}
     this.bookCoverApiRequest = this.bookCoverApiRequest.bind(this)
     this.definitions = this.definitions.bind(this)
   }

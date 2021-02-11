@@ -17,7 +17,7 @@ function WordQuiz(props) {
         let bank = ''
         props.books.forEach(b => bank += b.words + '. ')
         let tempBank = bank.split(/[.,\-\s]\s/).filter(w => w.toLowerCase() !== 'words')
-        console.log(tempBank)
+
         if (tempBank.length > 4) {
             let tempChoices = determineChoices([...tempBank])
             let tempCurrentWord = tempChoices.length ? tempChoices[randomIndex(tempChoices)] : 'test'
