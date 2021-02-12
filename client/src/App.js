@@ -32,6 +32,8 @@ class App extends Component {
       }
   }
 
+  currentAppVersion = "1.22"
+
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
     if (user !== 'none') {
@@ -94,8 +96,6 @@ class App extends Component {
           userBooks.push({...currentBook});
         })
         this.setState({isLoaded: true, books: userBooks, deletedIds, nextId})
-        console.log(userBooks)
-        console.log('^userBooks')
       });
   }
 
@@ -347,6 +347,7 @@ class App extends Component {
     if (!data) return
     let settings = JSON.parse(data)
     Object.keys(settings).forEach(property => this.setState({ [property] : settings[property] }))
+    this.changeVersionNumber(settings)
   }
 
   setWordBank = (updatedWb, bookIndex) => {
@@ -355,8 +356,32 @@ class App extends Component {
     this.setState({books: booksCopy})
   }
 
+  changeVersionNumber = (settings) => {
+    if ('version' in settings && this.currentAppVersion === settings.version) return
+    else {
+      if (this.state.user && this.state.user !== 'none') this.newSettings('version', this.currentAppVersion, this.state.user)
+      if ('version' in settings) this.newVersionDisplay()
+    }
+  }
+
+  newVersionDisplay = () => {
+    let div = document.getElementById('n-v')
+
+    if (!div.classList.contains('new-version')) {
+      div.classList.add('new-version')
+
+      setTimeout(() => {
+        div.classList.add('new-version-d')
+        setTimeout(() => div.classList.remove('new-version'), 900)
+      }, 6000)
+
+    } else {
+      div.classList.add('new-version-d')
+      setTimeout(() => div.classList.remove('new-version'), 900)
+    }
+  }
+
   componentDidMount() { 
-    console.log('v1.21 (1/16/20)')
 // Check for a JWT token and convert it into a user id
     axios
       .get('/api/users/verify')
@@ -381,6 +406,13 @@ class App extends Component {
     let { user, switchPage } = this.state
     return (
       <div id='grandpa'>
+
+          <div className='n-v' id='n-v' onClick={this.newVersionDisplay}>
+            <h2>NEW VERSION</h2>
+            <h4>{this.currentAppVersion}</h4>
+            <p>this message is just to let you know there was an update recently</p>
+          </div>
+
           <nav>
             <div className='menu-btn' onClick={() => this.minimize('hamburger')}><div className='menu-btn_burger'></div></div>
             <ul className='nav-list'>

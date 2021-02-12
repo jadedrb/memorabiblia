@@ -37,17 +37,17 @@ validator version 13.1.1 or higher
 
 ### Install
 
-If you want your own local version of this project: 
+For your own local version of this project: 
 
 ```
 open up your Terminal
-jump into your Desktop folder: **cd desktop**
-download the files: **git clone https://github.com/jadedrb/memorabiblia.git**
-jump into the project folder: **cd memorabiblia**
-install the backend dependencies: **npm install**
-jump into client (frontend) folder: **cd client**
-install the frontend dependencies: **npm install**
-run the app: **npm run client** to run without database OR **npm run dev** for database
+go to your Desktop: cd desktop
+download the files: git clone https://github.com/jadedrb/memorabiblia.git
+jump into the project folder: cd memorabiblia
+install backend dependencies: npm install
+go to the client folder: cd client
+install frontend dependencies: npm install
+run the app: npm run client OR npm run dev
 ```
 
 ## Built With

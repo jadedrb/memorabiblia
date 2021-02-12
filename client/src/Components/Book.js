@@ -27,7 +27,6 @@ class Book extends React.Component {
   }
 
   switchTab(tab) { 
-    alert('switch tab: ' + tab)
     this.props.minimize('collapse')
     this.setState({tab}) 
   }
