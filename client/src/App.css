@@ -306,6 +306,7 @@ form {
   color: grey;
 }
 #login {
+  position: relative;
   align-self: center;
   width: 500px;
   box-shadow: 0 30px 40px rgba(0,0,0,.2);
@@ -688,6 +689,31 @@ select {
 
 .new-version-d {
   animation: version-update-d 1s ease-in-out 1 normal; 
+}
+
+.loading {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgb(212, 195, 195);
+  opacity: .9;
+  width: 100%;
+  height: 100%;
+}
+
+.loader {
+  border: 5px solid #645959; /* Light grey */
+  border-top: 10px solid rgb(70, 69, 69); /* Blue */
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  animation: spin .5s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
 }
 
 

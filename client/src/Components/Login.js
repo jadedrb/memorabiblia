@@ -10,6 +10,7 @@ const Login = (props) => {
     const [email, setEmail] = useState('')
     const [userView, setUserView] = useState(true)
     const [errors, setErrors] = useState({})
+    const [loading, setLoading] = useState(false)
 
     const handleChange = e => {
       const { value, name } = e.target
@@ -41,16 +42,15 @@ const Login = (props) => {
         creationDate: creationDateStamp()
       }
 
+      setLoading(true)
+
       if (userView) {
 
         axios
           .post('/api/users/login', { userInfo })
           .then((res) => props.setUser(res.data.username, res.data.email, res.data.creationDate, res.data.settings))
-          .catch(err => {
-            console.log(err)
-            console.log(err.response.data.errors)
-            setErrors(err.response.data.errors)
-          })
+          .catch(err => setErrors(err.response.data.errors))
+          .finally(() => setLoading(false))
       } 
       else {
 
@@ -58,6 +58,7 @@ const Login = (props) => {
           .post('/api/users/signup', { userInfo })
           .then(() => props.setUser(username, email, userInfo.creationDate))
           .catch(err => setErrors(err.response.data.errors))
+          .finally(() => setLoading(false))
         
       }
     }
@@ -92,6 +93,7 @@ const Login = (props) => {
 
     return (
       <div id="login">
+        {loading ? <div className='loading'><div className='loader'></div></div> : ''}
         <form id='loginForm' onSubmit={handleSubmit} name=''>
           {emailInput} 
           <label style={usernameStyle}>
