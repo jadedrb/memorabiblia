@@ -32,7 +32,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.23"
+  currentAppVersion = "1.24"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
@@ -372,12 +372,18 @@ class App extends Component {
 
       setTimeout(() => {
         div.classList.add('new-version-d')
-        setTimeout(() => div.classList.remove('new-version'), 900)
+        setTimeout(() => {
+          div.classList.remove('new-version')
+          div.classList.remove('new-version-d')
+        }, 900)
       }, 6000)
 
     } else {
       div.classList.add('new-version-d')
-      setTimeout(() => div.classList.remove('new-version'), 900)
+      setTimeout(() => {
+        div.classList.remove('new-version')
+        div.classList.remove('new-version-d')
+      }, 900)
     }
   }
 

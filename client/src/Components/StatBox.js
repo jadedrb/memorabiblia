@@ -48,7 +48,7 @@ class StatBox extends Component {
                     let [ days, hours, b1 ] = other
                     defaultImg = b1.url
                     title = b1.title
-                    result = `${days} days or ${hours} hours`
+                    result = `${Math.round(days)} days or ${hours} hours`
                     break;
                 case 'Was the quickest read':
                     this.props.books.forEach((b,i) => {
@@ -62,7 +62,7 @@ class StatBox extends Component {
                     let [ dayz, hourz, b2 ] = other
                     defaultImg = b2.url
                     title = b2.title
-                    result = `${dayz} days or ${hourz} hours`  
+                    result = `${Math.round(dayz)} days or ${hourz} hours`  
                     break;
                 case 'Longest page count':
                     let longest = this.props.books.filter(b => b.pages !== '').sort((a, b) => b.pages - a.pages)[0]
@@ -89,7 +89,7 @@ class StatBox extends Component {
                     let [ dayzz, hourzz, b3 ] = other
                     defaultImg = b3.url
                     title = b3.title
-                    result = `As of ${dayzz} days or ${hourzz} hours ago`  
+                    result = `As of ${Math.round(dayzz)} days or ${hourzz} hours ago`  
                     break;
                 case 'Recently finished':
                     this.props.books.forEach((b,i) => {
@@ -104,7 +104,7 @@ class StatBox extends Component {
                     let [ dayzzz, hourzzz, b4 ] = other
                     defaultImg = b4.url
                     title = b4.title
-                    result = `As of ${dayzzz} days or ${hourzzz} hours ago`
+                    result = `As of ${Math.round(dayzzz)} days or ${hourzzz} hours ago`
                     break;
                 case 'A favorite book':
                     let favoriteBooks = this.props.books.filter(b => b.rating !== '').sort((a, b) => b.rating - a.rating).filter(b => b.rating === this.props.books[0].rating)
