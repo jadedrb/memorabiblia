@@ -37,7 +37,7 @@ class StatBox extends Component {
         if (this.props.books.length > 0) {
             let amount;
             switch(header) {
-                case 'Took the longest to read':
+                case 'Took the longest to read': {  // curly brackets used here variables (days, hours, b) can be used in other case blocks
                     this.props.books.forEach((b,i) => {
                         if (b.finished === null) return 
                         let [ date1, date2 ] = grabDates(i)
@@ -45,12 +45,13 @@ class StatBox extends Component {
                         if (Number(other[0]) < Number(days)) setLowestOrHighest(days, hours, b)
                         else if (Number(other[0]) === Number(days) && Number(other[1]) < Number(hours)) setLowestOrHighest(days, hours, b)
                     })
-                    let [ days, hours, b1 ] = other
-                    defaultImg = b1.url
-                    title = b1.title
+                    let [ days, hours, b ] = other
+                    defaultImg = b.url
+                    title = b.title
                     result = `${Math.round(days)} days or ${hours} hours`
                     break;
-                case 'Was the quickest read':
+                }
+                case 'Was the quickest read': {
                     this.props.books.forEach((b,i) => {
                         if (b.finished === null) return 
                         let [ date1, date2 ] = grabDates(i)
@@ -59,11 +60,12 @@ class StatBox extends Component {
                         if (days > -1 && Number(other[0]) > Number(days)) setLowestOrHighest(days, hours, b)
                         else if (days > -1 && Number(other[0]) === Number(days) && Number(other[1]) > Number(hours)) setLowestOrHighest(days, hours, b)
                     })
-                    let [ dayz, hourz, b2 ] = other
-                    defaultImg = b2.url
-                    title = b2.title
-                    result = `${Math.round(dayz)} days or ${hourz} hours`  
+                    let [ days, hours, b ] = other
+                    defaultImg = b.url
+                    title = b.title
+                    result = `${Math.round(days)} days or ${hours} hours`  
                     break;
+                }
                 case 'Longest page count':
                     let longest = this.props.books.filter(b => b.pages !== '').sort((a, b) => b.pages - a.pages)[0]
                     result = longest && longest.pages
@@ -76,7 +78,7 @@ class StatBox extends Component {
                     defaultImg = shortest && shortest.url
                     title = shortest && shortest.title
                     break;
-                case 'Currently reading':
+                case 'Currently reading': {
                     this.props.books.forEach((b,i) => {
                         if (b.finished !== null || b.started === null) return 
                         let [ date1 ] = grabDates(i)
@@ -86,12 +88,13 @@ class StatBox extends Component {
                         if (days > -1 && Number(other[0]) > Number(days)) setLowestOrHighest(days, hours, b)
                         else if (days > -1 && Number(other[0]) === Number(days) && Number(other[1]) > Number(hours)) setLowestOrHighest(days, hours, b)
                     })
-                    let [ dayzz, hourzz, b3 ] = other
-                    defaultImg = b3.url
-                    title = b3.title
-                    result = `As of ${Math.round(dayzz)} days or ${hourzz} hours ago`  
+                    let [ days, hours, b ] = other
+                    defaultImg = b.url
+                    title = b.title
+                    result = `As of ${Math.round(days)} days or ${hours} hours ago`  
                     break;
-                case 'Recently finished':
+                }
+                case 'Recently finished': {
                     this.props.books.forEach((b,i) => {
                         if (b.finished === null) return 
                         let [ , date1 ] = grabDates(i)
@@ -101,13 +104,15 @@ class StatBox extends Component {
                         if (days > -1 && Number(other[0]) > Number(days)) setLowestOrHighest(days, hours, b)
                         else if (days > -1 && Number(other[0]) === Number(days) && Number(other[1]) > Number(hours)) setLowestOrHighest(days, hours, b)
                     })
-                    let [ dayzzz, hourzzz, b4 ] = other
-                    defaultImg = b4.url
-                    title = b4.title
-                    result = `As of ${Math.round(dayzzz)} days or ${hourzzz} hours ago`
+                    let [ days, hours, b ] = other
+                    defaultImg = b.url
+                    title = b.title
+                    result = `As of ${Math.round(days)} days or ${hours} hours ago`
                     break;
+                }
                 case 'A favorite book':
                     let favoriteBooks = this.props.books.filter(b => b.rating !== '').sort((a, b) => b.rating - a.rating).filter(b => b.rating === this.props.books[0].rating)
+                    console.log(favoriteBooks)
                     let chosenBook = favoriteBooks[Math.floor(Math.random() * favoriteBooks.length)]
                     result = chosenBook && chosenBook.rating
                     defaultImg = chosenBook && chosenBook.url
@@ -178,7 +183,7 @@ class StatBox extends Component {
                     defaultImg = quotable && quotable.url
                     title = quotable && quotable.title
                     break;
-                case 'A book from a favored genre':
+                case 'A book from a favored genre': 
                     let genreObj = {}
                     this.props.books.forEach(b => {
                         if (genreObj.hasOwnProperty(b.genre)) genreObj[b.genre].push(b)
@@ -204,7 +209,7 @@ class StatBox extends Component {
                     title = randomBook1 && randomBook1.title
                     defaultImg = randomBook1 && randomBook1.url
                     break;
-                case 'Most efficient read':
+                case 'Most efficient read': {
                     this.props.books.forEach((b,i) => {
                         if (b.finished === null || !b.pages || isNaN(b.pages)) return 
                         let [ date1, date2 ] = grabDates(i)
@@ -212,11 +217,12 @@ class StatBox extends Component {
                         let efficiency = Math.round(b.pages / days)
                         if (Number(other[0]) < Number(efficiency)) setLowestOrHighest(efficiency, hours, b)
                     })
-                    let [ efish, , b5 ] = other
-                    defaultImg = b5.url
-                    title = b5.title
+                    let [ efish, , b ] = other
+                    defaultImg = b.url
+                    title = b.title
                     result = `${efish} pages a day`
                     break;
+                }
                 default:
                     break;
             }

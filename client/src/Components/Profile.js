@@ -146,38 +146,18 @@ class Profile extends Component {
         if (!books.length || !choices.length) {
             statBoxes = <div id='profile-stats'></div>
         } else {
+            let statBoxArr = [0,1,2,3,4,5];
             statBoxes = (
                 <div id='profile-stats'>
-                    <StatBox 
-                        header={choices.splice(choices.indexOf(choices[random(choices)]), 1)} 
-                        books={books} 
-                        timeStamp={this.props.timeStamp}
-                        handleAttention={this.props.handleAttention}/>
-                    <StatBox 
-                        header={choices.splice(choices.indexOf(choices[random(choices)]), 1)} 
-                        books={books} 
-                        timeStamp={this.props.timeStamp}
-                        handleAttention={this.props.handleAttention}/>
-                    <StatBox 
-                        header={choices.splice(choices.indexOf(choices[random(choices)]), 1)} 
-                        books={books} 
-                        timeStamp={this.props.timeStamp}
-                        handleAttention={this.props.handleAttention}/>
-                    <StatBox 
-                        header={choices.splice(choices.indexOf(choices[random(choices)]), 1)} 
-                        books={books} 
-                        timeStamp={this.props.timeStamp}
-                        handleAttention={this.props.handleAttention}/>
-                    <StatBox 
-                        header={choices.splice(choices.indexOf(choices[random(choices)]), 1)} 
-                        books={books} 
-                        timeStamp={this.props.timeStamp}
-                        handleAttention={this.props.handleAttention}/>
-                    <StatBox 
-                        header={choices.splice(choices.indexOf(choices[random(choices)]), 1)} 
-                        books={books} 
-                        timeStamp={this.props.timeStamp}
-                        handleAttention={this.props.handleAttention}/>
+                    {statBoxArr.map(id => 
+                        <StatBox 
+                            key={id}
+                            header={choices.splice(choices.indexOf(choices[random(choices)]), 1)} 
+                            books={books} 
+                            timeStamp={this.props.timeStamp}
+                            handleAttention={this.props.handleAttention}
+                        />
+                    )}
                 </div>
             )
         }
