@@ -3,12 +3,18 @@ import React, { Component } from 'react';
 class StatBox extends Component {
     constructor(props) {
         super(props)
-        this.state = {header: '', result: '', defaultImg: '', title: ''}
+        this.state = {
+            header: '', 
+            result: '', 
+            defaultImg: '', 
+            title: '',
+            statMore: []
+        }
     }
 
     componentDidMount() {
    
-        let result, title;
+        let result, title, statMore;
         let other = [-1,-1,-1];
         let originalDefaultImg = 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png'
         let defaultImg = originalDefaultImg
@@ -170,7 +176,9 @@ class StatBox extends Component {
                     title = vocabulary && vocabulary.title
                     break;
                 case 'Momentous':
-                    let momentous = this.props.books.filter(b => b.moments !== 'that one time when').sort((a, b) => b.moments.split(' ').length - a.moments.split(' ').length)[0]
+                    let momentous = this.props.books.filter(b => b.moments !== 'that one time when').sort((a, b) => b.moments.split(' ').length - a.moments.split(' ').length)
+                    statMore = momentous
+                    momentous = momentous[0]
                     amount = momentous && momentous.moments.split(' ').length
                     result = momentous && `With ${amount} word${amount > 1 ? 's' : ''} worth of moments`
                     defaultImg = momentous && momentous.url
@@ -229,17 +237,18 @@ class StatBox extends Component {
         }
 
         if (!defaultImg) defaultImg = originalDefaultImg
+        if (!statMore) statMore = this.state.statMore
 
-        this.setState({header, result, defaultImg, title})
+        this.setState({header, result, defaultImg, title, statMore})
     }
 
     render() {
 
-        let { result, header, defaultImg, title } = this.state
+        let { result, header, defaultImg, title, statMore } = this.state
 
         return(
             <div className='stat-box'>
-                {result && !String(result).includes('-1') ? <div className='stat-head'>{header} <br/><span className='lil-stat'>({result}{header && header.includes('favorite') ? '/10' : ''})</span></div> : ''}
+                {result && !String(result).includes('-1') ? <div className='stat-head' onClick={(e) => this.props.statBoxMoreToggle(e, statMore)}>{header} <br/><span className='lil-stat'>({result}{header && header.includes('favorite') ? '/10' : ''})</span></div> : ''}
                 <div><img className='profile-book' src={defaultImg} onClick={() => this.props.handleAttention(title)} alt=''></img></div>
             </div>
         )

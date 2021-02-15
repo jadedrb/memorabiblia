@@ -711,13 +711,37 @@ select {
   animation: spin .5s linear infinite;
 }
 
+.m-stat {
+  background-color: rgb(197, 167, 167);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  align-self: center;
+  height: 20%;
+  width: 100%;
+  overflow-y: scroll;
+}
+
+.m-stat img {
+  height: 70px;
+  width: 50px;
+}
+
+.m-stat span {
+  height: 100%;
+}
+
+.m-stat li {
+  display: flex;
+}
+
+/* Keyframe Animations */
+
 @keyframes spin {
   0% { transform: rotate(0deg); }
   100% { transform: rotate(360deg); }
 }
 
-
-/* Keyframe Animations */
 
 @keyframes version-update-d {
   0% {

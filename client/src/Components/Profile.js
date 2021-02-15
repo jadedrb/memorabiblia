@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import Login from './Login';
 import StatBox from './StatBox';
 import axios from 'axios';
+import GeneralModal from './GeneralModal';
 
 class Profile extends Component {
     constructor(props) {
@@ -18,7 +19,8 @@ class Profile extends Component {
             inNeedOfAttention: [], 
             choices: [],
             noStressMsgs: '',
-            theme: 'light'
+            theme: 'light',
+            statBoxMore: false
         }
         this.deleteAccount = this.deleteAccount.bind(this)
         this.changeTheme = this.changeTheme.bind(this)
@@ -114,6 +116,15 @@ class Profile extends Component {
         }
     }
 
+    statBoxMoreToggle = (event, stats) => {
+        console.log(event.target.className)
+        console.log(typeof event.target.className)
+        if (event.target.className === 'm-stat') return
+        if (!this.state.statBoxMore) this.setState({ statBoxMore: stats })
+        else this.setState({ statBoxMore: false })
+        console.log(stats)
+    }
+
     render() {
         let { user, books, email, creationDate } = this.props.data
         let { pagesRead, totalPages, booksRead, totalBooks, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs } = this.state
@@ -156,6 +167,8 @@ class Profile extends Component {
                             books={books} 
                             timeStamp={this.props.timeStamp}
                             handleAttention={this.props.handleAttention}
+                            statBoxMore={this.state.statBoxMore}
+                            statBoxMoreToggle={this.statBoxMoreToggle}
                         />
                     )}
                 </div>
@@ -190,6 +203,25 @@ class Profile extends Component {
         )
         return (
             <div id='profile'>
+
+                {this.state.statBoxMore !== false ? 
+                <GeneralModal>
+                    <div className='modal' onClick={this.statBoxMoreToggle}>
+                        <div className='m-stat' onClick={this.statBoxMoreToggle}>
+                            <ul>
+                                {this.state.statBoxMore.map((b,i) => 
+                                    <li key={b.id}>
+                                        <span>{i+1}</span>
+                                        <img src={b.url} />
+                                    </li>
+                                )}
+                            </ul>
+                        </div>
+                    </div>
+                </GeneralModal>
+                : ''}
+
+
                 {user === 'none' ? <Login setUser={this.props.setUser}/> : <div id='userInfo'><h1> Welcome <span id='user-name'>{user}</span><span id='profile-dot'>.</span></h1>{userInfo}</div>}
                 {user === 'none' ? '' : profileStats}
                 {user === 'none' ? '' : <div className='delete delete-account' onClick={this.deleteAccount}>X</div>}
