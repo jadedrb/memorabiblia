@@ -129,6 +129,7 @@ class Profile extends Component {
         let { user, books, email, creationDate } = this.props.data
         let { pagesRead, totalPages, booksRead, totalBooks, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs } = this.state
         let [ properties, bookNeed ] = this.state.inNeedOfAttention
+        let { statMore, header, title } = this.state.statBoxMore 
 
         let attention = (
             <div id='attention'>
@@ -157,7 +158,7 @@ class Profile extends Component {
         if (!books.length || !choices.length) {
             statBoxes = <div id='profile-stats'></div>
         } else {
-            let statBoxArr = [0,1,2,3,4,5];
+            let statBoxArr = [1,2,3,4,5];
             statBoxes = (
                 <div id='profile-stats'>
                     {statBoxArr.map(id => 
@@ -201,6 +202,7 @@ class Profile extends Component {
                 <li>Account Created: {creationDate}</li>
             </ul>
         )
+
         return (
             <div id='profile'>
 
@@ -209,10 +211,11 @@ class Profile extends Component {
                     <div className='modal' onClick={this.statBoxMoreToggle}>
                         <div className='m-stat' onClick={this.statBoxMoreToggle}>
                             <ul>
-                                {this.state.statBoxMore.map((b,i) => 
+                                <h6>{header}</h6>
+                                {statMore.slice(0,5).map((b,i) => 
                                     <li key={b.id}>
                                         <span>{i+1}</span>
-                                        <img src={b.url} />
+                                        <img className='profile-book' src={b.url} onClick={() => this.props.handleAttention(b.title)} />
                                     </li>
                                 )}
                             </ul>

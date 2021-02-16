@@ -717,22 +717,34 @@ select {
   justify-content: center;
   align-items: center;
   align-self: center;
-  height: 20%;
-  width: 100%;
+
+  width: 100vw;
   overflow-y: scroll;
 }
 
 .m-stat img {
   height: 70px;
-  width: 50px;
+
+}
+
+.m-stat h6 {
+  position: absolute;
+  top: -30px;
 }
 
 .m-stat span {
   height: 100%;
+  width: 25px;
 }
 
 .m-stat li {
   display: flex;
+  width: initial;
+}
+
+.m-stat ul {
+  padding: 0;
+  width: initial;
 }
 
 /* Keyframe Animations */
@@ -1246,6 +1258,8 @@ select {
   display: grid;
   width: 100vw;
   overflow: auto;
+  overscroll-behavior: contain;
+  border: 3px solid black;
   text-align: center;
 }
 /*
