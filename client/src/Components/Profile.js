@@ -210,8 +210,8 @@ class Profile extends Component {
                 <GeneralModal>
                     <div className='modal' onClick={this.statBoxMoreToggle}>
                         <div className='m-stat' onClick={this.statBoxMoreToggle}>
+                            <h6>{header}</h6>
                             <ul>
-                                <h6>{header}</h6>
                                 {statMore.slice(0,5).map((b,i) => 
                                     <li key={b.id}>
                                         <span>{i+1}</span>

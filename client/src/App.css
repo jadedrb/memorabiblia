@@ -1060,7 +1060,7 @@ select {
   }
 }
 
-@media (max-width: 590px) {
+@media (max-width: 590px) {    
   .extremely-friendly-div {
     display: block;
   }
@@ -1137,6 +1137,7 @@ select {
 
 
 @media (max-width: 450px) {
+  
   #read-to-remember {
     font-size: 30pt;
     max-height: 500px;
@@ -1196,6 +1197,21 @@ select {
 }
 
 @media (max-width: 345px) {
+  .m-stat {
+    border: 3px solid black;
+    overscroll-behavior: contain;
+    padding: 0;
+    margin: 0;
+  }
+  .m-stat h6 {
+    font-size: 20px;
+  }
+  .m-stat ul { 
+    gap: 20px;
+    height: 100%;
+    display: grid;
+    grid-template: 1fr / 1fr 1fr;
+  }
   .book-memory {
     font-size: 30px;
   }

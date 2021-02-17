@@ -18,6 +18,7 @@ class StatBox extends Component {
         let other = [-1,-1,-1];
         let originalDefaultImg = 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png'
         let defaultImg = originalDefaultImg
+        let values = {}
         let [ header ] = this.props.header 
 
         const compareDates = (dOne, dTwo) => {
@@ -73,13 +74,29 @@ class StatBox extends Component {
                     break;
                 }
                 case 'Longest page count':
-                    let longest = this.props.books.filter(b => b.pages !== '').sort((a, b) => b.pages - a.pages)[0]
+                    let longest = this.props.books.filter(b => b.pages !== '').sort((a, b) => {
+                        let firstValue = b.pages
+                        let secondValue = a.pages
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = longest
+                    longest = longest && longest[0]
                     result = longest && longest.pages
                     defaultImg = longest && longest.url
                     title = longest && longest.title
                     break;  
                 case 'Shortest page count': 
-                    let shortest = this.props.books.filter(b => b.pages !== '').sort((a, b) => a.pages - b.pages)[0]
+                    let shortest = this.props.books.filter(b => b.pages !== '').sort((a, b) => {
+                        let firstValue = a.pages
+                        let secondValue = b.pages
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = shortest
+                    shortest = shortest && shortest[0]
                     result = shortest && shortest.pages
                     defaultImg = shortest && shortest.url
                     title = shortest && shortest.title
@@ -117,111 +134,227 @@ class StatBox extends Component {
                     break;
                 }
                 case 'A favorite book':
-                    let favoriteBooks = this.props.books.filter(b => b.rating !== '').sort((a, b) => b.rating - a.rating).filter(b => b.rating === this.props.books[0].rating)
-                    console.log(favoriteBooks)
+                    let favoriteBooks = this.props.books.filter(b => b.rating !== '').sort((a, b) => {
+                        let firstValue = b.rating
+                        let secondValue = a.rating
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = favoriteBooks
+                    favoriteBooks = favoriteBooks.filter(b => b.rating === this.props.books[0].rating)
                     let chosenBook = favoriteBooks[Math.floor(Math.random() * favoriteBooks.length)]
                     result = chosenBook && chosenBook.rating
                     defaultImg = chosenBook && chosenBook.url
                     title = chosenBook && chosenBook.title
                     break;
                 case 'A least favorite book':
-                    let leastFavoriteBooks = this.props.books.filter(b => b.rating !== '').sort((a, b) => a.rating - b.rating).filter(b => b.rating === this.props.books[0].rating)
+                    let leastFavoriteBooks = this.props.books.filter(b => b.rating !== '').sort((a, b) => {
+                        let firstValue = a.rating
+                        let secondValue = b.rating
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = leastFavoriteBooks
+                    leastFavoriteBooks = leastFavoriteBooks.filter(b => b.rating === this.props.books[0].rating)
                     let chosenBook1 = leastFavoriteBooks[Math.floor(Math.random() * leastFavoriteBooks.length)]
                     result = chosenBook1 && chosenBook1.rating
                     defaultImg = chosenBook1 && chosenBook1.url
                     title = chosenBook1 && chosenBook1.title
                     break;
-                case 'Oldest book':
-                    let oldestBook = this.props.books.filter(b => b.published !== '').sort((a, b) => a.published - b.published)[0]
+                case 'Oldest book': {
+                    let oldestBook = this.props.books.filter(b => b.published !== '').sort((a, b) => {
+                        let firstValue = a.published 
+                        let secondValue = b.published
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = oldestBook
+                    oldestBook = oldestBook && oldestBook[0]
                     result = oldestBook && oldestBook.published
                     defaultImg = oldestBook && oldestBook.url
                     title = oldestBook && oldestBook.title
                     break;
-                case 'Newest book':
-                    let newestBook = this.props.books.filter(b => b.published !== '').sort((a, b) => b.published - a.published)[0]
+                }
+                case 'Newest book': {
+                    let newestBook = this.props.books.filter(b => b.published !== '').sort((a, b) => {
+                        let firstValue = b.published
+                        let secondValue = a.published
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = newestBook
+                    newestBook = newestBook && newestBook[0]
                     result = newestBook && newestBook.published
                     defaultImg = newestBook && newestBook.url
                     title = newestBook && newestBook.title
                     break;
-                case 'Longest title':
-                    let longestTitle = this.props.books.filter(b => b.title !== '').sort((a, b) => b.title.length - a.title.length)[0]
+                }
+                case 'Longest title': {
+                    let longestTitle = this.props.books.filter(b => b.title !== '').sort((a, b) => {
+                        let firstValue = b.title.length
+                        let secondValue = a.title.length
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = longestTitle
+                    longestTitle = longestTitle && longestTitle[0]
                     result = longestTitle && `${longestTitle.title.split(' ').join('').length} letters long`
                     defaultImg = longestTitle && longestTitle.url
                     title = longestTitle && longestTitle.title
                     break;
-                case 'Shortest title':
-                    let shortestTitle = this.props.books.filter(b => b.title !== '').sort((a, b) => a.title.length - b.title.length)[0]
+                }
+                case 'Shortest title': {
+                    let shortestTitle = this.props.books.filter(b => b.title !== '').sort((a, b) => {
+                        let firstValue = a.title.length
+                        let secondValue = b.title.length
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = shortestTitle
+                    shortestTitle = shortestTitle && shortestTitle[0]
                     result = shortestTitle && `${shortestTitle.title.split(' ').join('').length} letters long`
                     defaultImg = shortestTitle && shortestTitle.url
                     title = shortestTitle && shortestTitle.title
                     break;
-                case 'Strongest memory':
-                    let strongMem = this.props.books.filter(b => b.words !== 'words' || b.why !== 'because' || b.moments !== 'that one time when' || b.quotes !== 'to be or not to be').sort((a, b) => (b.why.length + b.quotes.length + b.words.length + b.moments.length) - (a.why.length + a.quotes.length + a.words.length + a.moments.length))[0]
+                }
+                case 'Strongest memory': {
+                    let strongMem = this.props.books.filter(b => b.words !== 'words' || b.why !== 'because' || b.moments !== 'that one time when' || b.quotes !== 'to be or not to be').sort((a, b) => {
+                        let firstValue = (b.why.length + b.quotes.length + b.words.length + b.moments.length)
+                        let secondValue = (a.why.length + a.quotes.length + a.words.length + a.moments.length)
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = strongMem
+                    strongMem = strongMem && strongMem[0]
                     result = strongMem && `With ${strongMem.why.length + strongMem.quotes.length + strongMem.words.length + strongMem.moments.length} characters of description`
                     defaultImg = strongMem && strongMem.url
                     title = strongMem && strongMem.title
                     break;
-                case 'Motive':
-                    let motive = this.props.books.filter(b => b.why !== 'because').sort((a, b) => b.why.split(' ').length - a.why.split(' ').length)[0]
+                }
+                case 'Motive': {
+                    let motive = this.props.books.filter(b => b.why !== 'because').sort((a, b) => {
+                        let firstValue = b.why.split(' ').length
+                        let secondValue = a.why.split(' ').length
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = motive
+                    motive = motive && motive[0]
                     amount = motive && motive.why.split(' ').length
                     result = motive && `With ${amount} word${amount > 1 ? 's' : ''} for why`
                     defaultImg = motive && motive.url
                     title = motive && motive.title
                     break;
-                case 'Vocabulary':
-                    let vocabulary = this.props.books.filter(b => b.words !== 'words').sort((a, b) => b.words.split(' ').length - a.words.split(' ').length)[0]
+                }
+                case 'Vocabulary': {
+                    let vocabulary = this.props.books.filter(b => b.words !== 'words').sort((a, b) => {
+                        let firstValue = b.words.split(' ').length
+                        let secondValue = a.words.split(' ').length
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = vocabulary
+                    vocabulary = vocabulary && vocabulary[0]
                     amount = vocabulary && vocabulary.words.split(' ').length
                     result = vocabulary && `With ${amount} word${amount > 1 ? 's' : ''} of interest`
                     defaultImg = vocabulary && vocabulary.url
                     title = vocabulary && vocabulary.title
                     break;
-                case 'Momentous':
-                    let momentous = this.props.books.filter(b => b.moments !== 'that one time when').sort((a, b) => b.moments.split(' ').length - a.moments.split(' ').length)
+                }
+                case 'Momentous': {
+                    let momentous = this.props.books.filter(b => b.moments !== 'that one time when').sort((a, b) => {
+                        let firstValue = b.moments.split(' ').length
+                        let secondValue = a.moments.split(' ').length
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
                     statMore = momentous
-                    momentous = momentous[0]
+                    momentous = momentous && momentous[0]
                     amount = momentous && momentous.moments.split(' ').length
                     result = momentous && `With ${amount} word${amount > 1 ? 's' : ''} worth of moments`
                     defaultImg = momentous && momentous.url
                     title = momentous && momentous.title
                     break;
-                case 'Quotable':
-                    let quotable = this.props.books.filter(b => b.quotes !== 'to be or not to be').sort((a, b) => b.quotes.split(' ').length - a.quotes.split(' ').length)[0]
+                }
+                case 'Quotable': {
+                    let quotable = this.props.books.filter(b => b.quotes !== 'to be or not to be').sort((a, b) => {
+                        let firstValue = b.quotes.split(' ').length
+                        let secondValue = a.quotes.split(' ').length
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    statMore = quotable
+                    quotable = quotable && quotable[0]
                     amount = quotable && quotable.quotes.split(' ').length
                     result = quotable && `With ${amount} word${amount > 1 ? 's' : ''} worth of quotes`
                     defaultImg = quotable && quotable.url
                     title = quotable && quotable.title
                     break;
-                case 'A book from a favored genre': 
+                }
+                case 'A book from a favored genre': {
                     let genreObj = {}
                     this.props.books.forEach(b => {
                         if (genreObj.hasOwnProperty(b.genre)) genreObj[b.genre].push(b)
                         else if (b.genre) genreObj[b.genre] = [b]
                     })
-                    let topGenre = Object.entries(genreObj).sort((a,b) => b[1].length - a[1].length)[0]
+                    let topGenre = Object.entries(genreObj).sort((a,b) => {
+                        let firstValue = b[1].length
+                        let secondValue = a[1].length
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    topGenre = topGenre && topGenre[0]
                     topGenre = topGenre && topGenre[1]
+                    statMore = topGenre
+                    console.log(statMore)
                     let randomBook = topGenre && topGenre[Math.floor(Math.random() * topGenre.length)]
                     result = randomBook && `${randomBook.genre}`
                     title = randomBook && randomBook.title
                     defaultImg = randomBook && randomBook.url
                     break;
-                case 'A book from a favored author':
+                }
+                case 'A book from a favored author': {
                     let authorObj = {}
                     this.props.books.forEach(b => {
                         if (authorObj.hasOwnProperty(b.author)) authorObj[b.author].push(b)
                         else if (b.author) authorObj[b.author] = [b]
                     })
-                    let topauthor = Object.entries(authorObj).sort((a,b) => b[1].length - a[1].length)[0]
+                    let topauthor = Object.entries(authorObj).sort((a,b) => {
+                        let firstValue = b[1].length
+                        let secondValue = a[1].length
+                        values[b.title] = firstValue
+                        values[a.title] = secondValue
+                        return firstValue - secondValue
+                    })
+                    topauthor = topauthor && topauthor[0]
                     topauthor = topauthor && topauthor[1]
+                    statMore = topauthor
+                    console.log(statMore)
                     let randomBook1 = topauthor && topauthor[Math.floor(Math.random() * topauthor.length)]
                     result = randomBook1 && `${randomBook1.author}`
                     title = randomBook1 && randomBook1.title
                     defaultImg = randomBook1 && randomBook1.url
                     break;
+                }
                 case 'Most efficient read': {
                     this.props.books.forEach((b,i) => {
                         if (b.finished === null || !b.pages || isNaN(b.pages)) return 
                         let [ date1, date2 ] = grabDates(i)
+                        console.log(grabDates(i))
                         let [ days, hours ] = compareDates(date1, date2)
+                        console.log(compareDates(date1, date2))
                         let efficiency = Math.round(b.pages / days)
                         if (Number(other[0]) < Number(efficiency)) setLowestOrHighest(efficiency, hours, b)
                     })
