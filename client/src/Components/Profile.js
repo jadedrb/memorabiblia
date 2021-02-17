@@ -158,7 +158,7 @@ class Profile extends Component {
         if (!books.length || !choices.length) {
             statBoxes = <div id='profile-stats'></div>
         } else {
-            let statBoxArr = [1,2,3,4,5];
+            let statBoxArr = [1,2,3,4,5,6];
             statBoxes = (
                 <div id='profile-stats'>
                     {statBoxArr.map(id => 

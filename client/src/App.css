@@ -408,6 +408,13 @@ form {
   color: white;
   padding: 10px;
 }
+.stat-head:hover {
+  cursor: pointer;
+  color: grey;
+}
+.stat-head:active {
+  color: lime;
+}
 #profile-parent {
   display: grid;
   grid-gap: 30px;
@@ -735,6 +742,7 @@ select {
 .m-stat span {
   height: 100%;
   width: 25px;
+  font-size: 18pt;
 }
 
 .m-stat li {
@@ -743,6 +751,7 @@ select {
 }
 
 .m-stat ul {
+  gap: 20px;
   padding: 0;
   width: initial;
 }
