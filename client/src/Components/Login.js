@@ -50,7 +50,7 @@ const Login = (props) => {
           .post('/api/users/login', { userInfo })
           .then((res) => props.setUser(res.data.username, res.data.email, res.data.creationDate, res.data.settings))
           .catch(err => setErrors(err.response.data.errors))
-          .finally(() => setLoading(false))
+          
       } 
       else {
 
@@ -58,8 +58,7 @@ const Login = (props) => {
           .post('/api/users/signup', { userInfo })
           .then(() => props.setUser(username, email, userInfo.creationDate))
           .catch(err => setErrors(err.response.data.errors))
-          .finally(() => setLoading(false))
-        
+
       }
     }
 

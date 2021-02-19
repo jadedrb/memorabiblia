@@ -41,6 +41,9 @@ class StatBox extends Component {
             other[1] = hours
             other[2] = book
         }
+
+        const random = (arr) => Math.floor(Math.random() * arr.length)
+
         if (this.props.books.length > 0) {
             let amount;
             switch(header) {
@@ -315,14 +318,23 @@ class StatBox extends Component {
                         values[a.title] = secondValue
                         return firstValue - secondValue
                     })
-                    topGenre = topGenre && topGenre[0]
-                    topGenre = topGenre && topGenre[1]
-                    statMore = topGenre
-                    console.log(statMore)
-                    let randomBook = topGenre && topGenre[Math.floor(Math.random() * topGenre.length)]
-                    result = randomBook && `${randomBook.genre}`
-                    title = randomBook && randomBook.title
-                    defaultImg = randomBook && randomBook.url
+                    if (!topGenre.length) return 
+
+                    // DATA LOOKS LIKE : [ [ 'Author', [ {...1stBookByAuthor}, {...2ndBookByAuthor} ] ],  [ 'Author', [ {...1stBookByAuthor}, {...2ndBookByAuthor} ] ] ]
+                    if (topGenre.length > 1 && topGenre[0][1].length === topGenre[1][1].length) 
+                        topGenre = topGenre.filter((b, i, arr) => b[1].length === arr[0].length)
+                    else topGenre = [topGenre[0]]
+
+                    // Select a random favored author if there's more than one
+                    topGenre = topGenre[random(topGenre)]
+                    // Ignore the String in index 0 and grab the array of objects in index 1
+                    statMore = topGenre[1]
+                    // Select a random book from the favored author
+                    topGenre = statMore[random(statMore)]
+                    
+                    result = `${topGenre.genre}`
+                    title = topGenre.title
+                    defaultImg = topGenre.url
                     break;
                 }
                 case 'A book from a favored author': {
@@ -338,30 +350,52 @@ class StatBox extends Component {
                         values[a.title] = secondValue
                         return firstValue - secondValue
                     })
-                    topauthor = topauthor && topauthor[0]
-                    topauthor = topauthor && topauthor[1]
-                    statMore = topauthor
-                    console.log(statMore)
-                    let randomBook1 = topauthor && topauthor[Math.floor(Math.random() * topauthor.length)]
-                    result = randomBook1 && `${randomBook1.author}`
-                    title = randomBook1 && randomBook1.title
-                    defaultImg = randomBook1 && randomBook1.url
+                    if (!topauthor.length) return 
+
+                    // DATA LOOKS LIKE : [ [ 'Author', [ {...1stBookByAuthor}, {...2ndBookByAuthor} ] ],  [ 'Author', [ {...1stBookByAuthor}, {...2ndBookByAuthor} ] ] ]
+                    if (topauthor.length > 1 && topauthor[0][1].length === topauthor[1][1].length) 
+                        topauthor = topauthor.filter((b, i, arr) => b[1].length === arr[0].length)
+                    else topauthor = [topauthor[0]]
+                   
+                    // Select a random favored author if there's more than one
+                    topauthor = topauthor[random(topauthor)]
+                    // Ignore the String in index 0 and grab the array of objects in index 1
+                    statMore = topauthor[1]
+                    // Select a random book from the favored author
+                    topauthor = statMore[random(statMore)]
+                    
+                    result = `${topauthor.author}`
+                    title = topauthor.title
+                    defaultImg = topauthor.url
                     break;
                 }
                 case 'Most efficient read': {
+                    let dateArray = []
                     this.props.books.forEach((b,i) => {
+                        let bCopy = {...b}
                         if (b.finished === null || !b.pages || isNaN(b.pages)) return 
                         let [ date1, date2 ] = grabDates(i)
-                        console.log(grabDates(i))
                         let [ days, hours ] = compareDates(date1, date2)
-                        console.log(compareDates(date1, date2))
                         let efficiency = Math.round(b.pages / days)
-                        if (Number(other[0]) < Number(efficiency)) setLowestOrHighest(efficiency, hours, b)
+                        bCopy['efficiency'] = efficiency
+                        bCopy['hours'] = hours
+                        dateArray.push(bCopy)
                     })
-                    let [ efish, , b ] = other
-                    defaultImg = b.url
-                    title = b.title
-                    result = `${efish} pages a day`
+
+                    dateArray = dateArray.sort((a, b) => b.efficiency - a.efficiency)
+                    statMore = dateArray
+                    if (!dateArray.length) return
+                    let topBook = dateArray[0]
+
+                    // Check if there are multiple books tied for best efficiency
+                    if (dateArray.length > 1 && dateArray[0].efficiency === dateArray[1].efficiency) {
+                        dateArray = dateArray.filter((b, i, arr) => b.efficiency === arr[0].efficiency)
+                        topBook = dateArray[random(dateArray)]
+                    }
+                    
+                    defaultImg = topBook.url
+                    title = topBook.title
+                    result = `${topBook.efficiency} pages a day`
                     break;
                 }
                 default:
