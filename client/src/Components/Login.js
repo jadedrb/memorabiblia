@@ -49,7 +49,10 @@ const Login = (props) => {
         axios
           .post('/api/users/login', { userInfo })
           .then((res) => props.setUser(res.data.username, res.data.email, res.data.creationDate, res.data.settings))
-          .catch(err => setErrors(err.response.data.errors))
+          .catch(err => {
+            setErrors(err.response.data.errors)
+            setLoading(false)
+          })
           
       } 
       else {
@@ -57,7 +60,10 @@ const Login = (props) => {
         axios
           .post('/api/users/signup', { userInfo })
           .then(() => props.setUser(username, email, userInfo.creationDate))
-          .catch(err => setErrors(err.response.data.errors))
+          .catch(err => {
+            setErrors(err.response.data.errors)
+            setLoading(false)
+          })
 
       }
     }

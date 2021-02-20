@@ -51,8 +51,8 @@ class Profile extends Component {
         let bookInNeed = books[index]
         inNeedOfAttention = [missingProps, bookInNeed]
 
-        // let boxes = ['A book from a favored author', 'A book from a favored genre', 'Took the longest to read', 'Was the quickest read', 'Longest page count', 'Shortest page count', 'Currently reading', 'Recently finished', 'A favorite book', 'A least favorite book', 'Oldest book', 'Newest book', 'Strongest memory', 'Longest title', 'Shortest title', 'Momentous', 'Quotable', 'Motive', 'Vocabulary', 'Most efficient read']
-        let boxes = ['A book from a favored author', 'A book from a favored author', 'A book from a favored author', 'A book from a favored author', 'A book from a favored author', 'A book from a favored author']
+        let boxes = ['A book from a favored author', 'A book from a favored genre', 'Took the longest to read', 'Was the quickest read', 'Longest page count', 'Shortest page count', 'Currently reading', 'Recently finished', 'A favorite book', 'A least favorite book', 'Oldest book', 'Newest book', 'Strongest memory', 'Longest title', 'Shortest title', 'Momentous', 'Quotable', 'Motive', 'Vocabulary', 'Most efficient read']
+        // let boxes = ['Was the quickest read', 'Was the quickest read', 'Was the quickest read', 'Was the quickest read', 'Was the quickest read', 'Was the quickest read']
 
         let choices = []
 
@@ -131,7 +131,7 @@ class Profile extends Component {
         let { user, books, email, creationDate } = this.props.data
         let { pagesRead, totalPages, booksRead, totalBooks, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs } = this.state
         let [ properties, bookNeed ] = this.state.inNeedOfAttention
-        let { statMore, header, title } = this.state.statBoxMore 
+        let { statMore, header } = this.state.statBoxMore 
 
         let attention = (
             <div id='attention'>
@@ -217,7 +217,7 @@ class Profile extends Component {
                                 {statMore.slice(0,5).map((b,i) => 
                                     <li key={b.id}>
                                         <span>{i+1}</span>
-                                        <img className='profile-book' src={b.url} onClick={() => this.props.handleAttention(b.title)} />
+                                        <img alt={b.title} className='profile-book' src={b.url} onClick={() => this.props.handleAttention(b.title)} />
                                     </li>
                                 )}
                             </ul>
