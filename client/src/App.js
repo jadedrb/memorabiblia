@@ -141,18 +141,20 @@ class App extends Component {
       creationDate = creationDate.toString()
       let newBook = new Book(actualId, '', '', '', '', null, null, '',
                             'because', 'words', 'to be or not to be', 'that one time when', this.randomColor(), 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png', '', user, '', creationDate)
+      
+      let organize = 'Organize:'
+      let bookFilter = 'All'
+
       if (user !== 'none') {
         console.log('POST request')
         axios
           .post('/api/memories', newBook)
           .then(res => {
             newBook._id = res.data._id
-            this.setState({books: [...books, newBook], nextId, deletedIds})
-            console.log(this.state)
-            console.log('state^')
+            this.setState({books: [...books, newBook], nextId, deletedIds, organize, bookFilter})
           })
       } else {
-        this.setState({books: [...books, newBook], nextId, deletedIds})
+        this.setState({books: [...books, newBook], nextId, deletedIds, organize, bookFilter})
       }
   }
 

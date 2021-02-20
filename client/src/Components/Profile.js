@@ -52,7 +52,7 @@ class Profile extends Component {
         inNeedOfAttention = [missingProps, bookInNeed]
 
         let boxes = ['A book from a favored author', 'A book from a favored genre', 'Took the longest to read', 'Was the quickest read', 'Longest page count', 'Shortest page count', 'Currently reading', 'Recently finished', 'A favorite book', 'A least favorite book', 'Oldest book', 'Newest book', 'Strongest memory', 'Longest title', 'Shortest title', 'Momentous', 'Quotable', 'Motive', 'Vocabulary', 'Most efficient read']
-        // let boxes = ['Was the quickest read', 'Was the quickest read', 'Was the quickest read', 'Was the quickest read', 'Was the quickest read', 'Was the quickest read']
+        //let boxes = ['Recently finished', 'Recently finished', 'Recently finished', 'Recently finished', 'Recently finished', 'Recently finished']
 
         let choices = []
 

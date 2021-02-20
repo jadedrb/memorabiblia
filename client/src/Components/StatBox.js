@@ -177,7 +177,7 @@ class StatBox extends Component {
                         dateArray.push(bCopy)
                     })
 
-                    dateArray = dateArray.sort((a, b) => b.days - a.days)
+                    dateArray = dateArray.sort((a, b) => a.days - b.days)
                     statMore = dateArray
                     if (!dateArray.length) return
                     let topBook = dateArray[0]
