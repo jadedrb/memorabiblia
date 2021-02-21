@@ -62,9 +62,14 @@ class ReadingList extends React.Component {
     this.props.newSettings('bookFilter', e.target.value, user)  
   }
 
+  handleNewBook = () => {
+    this.setState({ value: '' })
+    this.props.newBook()
+  }
+
   render() {
 
-    let { books, newBook, bookFilter } = this.props
+    let { books, bookFilter } = this.props
     let value = this.state.value
     let filteredBooks;
     let alreadyFiltered;
@@ -208,7 +213,7 @@ class ReadingList extends React.Component {
           </div>
 
 
-          <div className='new-book' onClick={newBook}>New Book</div>
+          <div className='new-book' onClick={() => this.handleNewBook()}>New Book</div>
         </div>
         {books.map(book => <Book 
                               book={book} 

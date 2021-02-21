@@ -20,7 +20,8 @@ class Profile extends Component {
             choices: [],
             noStressMsgs: '',
             theme: 'light',
-            statBoxMore: false
+            statBoxMore: false,
+            rememberOrKnow: 'Remember'
         }
         this.deleteAccount = this.deleteAccount.bind(this)
         this.changeTheme = this.changeTheme.bind(this)
@@ -33,6 +34,8 @@ class Profile extends Component {
         let totalPages = 0;
         let defaultImg = 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png'
         let bookPropStore = {}
+        let tempHighStore = {}
+        let indexReadStore = []
         let inNeedOfAttention = [0, 0];
 
         let noStressMsgs = ['All entries filled', 'Nothing to worry about', 'Dutiful. Well done', 'Your memory is strong', 'Maybe add more books']
@@ -43,8 +46,26 @@ class Profile extends Component {
             if (b.finished !== null && typeof(Number(b.pages)) === 'number') pagesRead += Number(b.pages)
             if (b.finished !== null) booksRead++
             bookPropStore[i] = Object.keys(b).filter(p => (p !== 'id' && p !== '_id' && p !== 'started' && p !== 'finished' && b[p] === '') || b[p] === 'because' || b[p] === 'words' || b[p] === 'to be or not to be' || b[p] === 'that one time when' || b[p] === defaultImg)
-            if (bookPropStore[i].length > inNeedOfAttention[1]) inNeedOfAttention = [i, bookPropStore[i].length] 
+            let fieldToFill = bookPropStore[i].length
+            tempHighStore[fieldToFill] = tempHighStore[fieldToFill] ? tempHighStore[fieldToFill] = [...tempHighStore[fieldToFill], i] : tempHighStore[fieldToFill] = [i]
+            if (b.started && fieldToFill) indexReadStore.push(i)
+            if (fieldToFill > inNeedOfAttention[1]) inNeedOfAttention = [i, fieldToFill] 
         })
+
+        const random = arr => Math.floor(Math.random() * arr.length)
+
+        let rememberOrKnow = indexReadStore.length
+
+        // Prioritize books that are being or have been read
+        if (rememberOrKnow) {
+            let inx = indexReadStore[random(indexReadStore)]
+            inNeedOfAttention = [inx, bookPropStore[inx].length]
+        // Otherwise select an unread book with the most fields to fill, randomize if more than one 
+        } else if (Object.keys(tempHighStore).length && tempHighStore[inNeedOfAttention[1]].length > 1) {
+            let arrAttentionBooks = tempHighStore[inNeedOfAttention[1]]
+            let test = [arrAttentionBooks[random(arrAttentionBooks)], inNeedOfAttention[1]]
+            inNeedOfAttention = test
+        }
 
         let [ index ] = inNeedOfAttention
         let missingProps = bookPropStore[index]
@@ -52,11 +73,9 @@ class Profile extends Component {
         inNeedOfAttention = [missingProps, bookInNeed]
 
         let boxes = ['A book from a favored author', 'A book from a favored genre', 'Took the longest to read', 'Was the quickest read', 'Longest page count', 'Shortest page count', 'Currently reading', 'Recently finished', 'A favorite book', 'A least favorite book', 'Oldest book', 'Newest book', 'Strongest memory', 'Longest title', 'Shortest title', 'Momentous', 'Quotable', 'Motive', 'Vocabulary', 'Most efficient read']
-        //let boxes = ['Recently finished', 'Recently finished', 'Recently finished', 'Recently finished', 'Recently finished', 'Recently finished']
+        // let boxes = ['A book from a favored genre', 'A book from a favored genre', 'A book from a favored genre', 'A book from a favored genre', 'A book from a favored genre', 'A book from a favored genre']
 
         let choices = []
-
-        const random = arr => Math.floor(Math.random() * arr.length)
 
         while (choices.length < 6) {
             let pick = boxes.splice(random(boxes), 1)
@@ -76,7 +95,7 @@ class Profile extends Component {
 
         let [ whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece ] = userTextPieces
 
-        this.setState({totalPages, pagesRead, booksRead, totalBooks, inNeedOfAttention, choices, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs})
+        this.setState({totalPages, pagesRead, booksRead, totalBooks, inNeedOfAttention, choices, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs, rememberOrKnow})
     }
 
     async deleteAccount() {
@@ -132,13 +151,14 @@ class Profile extends Component {
         let { pagesRead, totalPages, booksRead, totalBooks, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs } = this.state
         let [ properties, bookNeed ] = this.state.inNeedOfAttention
         let { statMore, header } = this.state.statBoxMore 
+        let { rememberOrKnow } = this.state
 
         let attention = (
             <div id='attention'>
-                <div id='attention-title'><span><i>{bookNeed && bookNeed.title ? bookNeed.title : 'Untitled'}</i> needs your attention.</span><br/> Remember anything else about this book?</div>
+                <div id='attention-title'><span><i>{bookNeed && bookNeed.title ? bookNeed.title : 'Untitled'}</i> needs your attention.</span><br/> {rememberOrKnow ? 'Remember' : 'Know'} anything else about this book?</div>
                 <img className='profile-book' src={bookNeed && bookNeed.url} onClick={() => this.props.handleAttention(bookNeed.title)} alt={''}></img>
                 <ul>
-                    <li id='missing'>Missing...</li>
+                    <li id='missing' style={{ color: rememberOrKnow ? 'red' : 'maroon' }}>Missing...</li>
                     {properties && properties.map((p,i) => <li key={i} style={i % 2 === 0 ? {color: '#505050'} : {color: 'black'}}>{p === 'url' ? 'cover' : p}</li>)}
                 </ul>
             </div>

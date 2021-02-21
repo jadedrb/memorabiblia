@@ -181,7 +181,7 @@ class StatBox extends Component {
                     statMore = dateArray
                     if (!dateArray.length) return
                     let topBook = dateArray[0]
-                    
+
                     defaultImg = topBook.url
                     title = topBook.title
                     result = `As of ${Math.round(topBook.days)} days or ${topBook.hours} hours ago`
@@ -467,12 +467,13 @@ class StatBox extends Component {
                         return firstValue - secondValue
                     })
                     if (!topGenre.length) return 
-
+console.log(topGenre)
                     if (topGenre.length > 1 && topGenre[0][1].length === topGenre[1][1].length) 
-                        topGenre = topGenre.filter((b, i, arr) => b[1].length === arr[0].length)
+                        topGenre = topGenre.filter((b, i, arr) => b[1].length === arr[0][1].length)
                     else topGenre = [topGenre[0]]
-
+                    console.log(topGenre)
                     topGenre = topGenre[random(topGenre)]
+                    console.log(topGenre)
                     statMore = topGenre[1]
                     topGenre = statMore[random(statMore)]
                     
@@ -495,14 +496,15 @@ class StatBox extends Component {
                         return firstValue - secondValue
                     })
                     if (!topauthor.length) return 
-
+  
                     // DATA LOOKS LIKE : [ [ 'Author', [ {...1stBookByAuthor}, {...2ndBookByAuthor} ] ],  [ 'Author', [ {...1stBookByAuthor}, {...2ndBookByAuthor} ] ] ]
                     if (topauthor.length > 1 && topauthor[0][1].length === topauthor[1][1].length) 
-                        topauthor = topauthor.filter((b, i, arr) => b[1].length === arr[0].length)
+                        topauthor = topauthor.filter((b, i, arr) => b[1].length === arr[0][1].length)
                     else topauthor = [topauthor[0]]
-                   
+ 
                     // Select a random favored author if there's more than one
                     topauthor = topauthor[random(topauthor)]
+  
                     // Ignore the String in index 0 and grab the array of objects in index 1
                     statMore = topauthor[1]
                     // Select a random book from the favored author
