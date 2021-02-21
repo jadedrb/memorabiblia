@@ -760,7 +760,7 @@ select {
 
 .nav-block {
   display: none;
-  position: absolute;
+  position: fixed;
   background-color: black;
   z-index: 3;
   opacity: .5;

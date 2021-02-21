@@ -39,161 +39,66 @@ class StatBox extends Component {
 
         if (this.props.books.length > 0) {
             switch(header) {
+                case 'Was the quickest read':
+                case 'Currently reading':
+                case 'Recently finished':
                 case 'Took the longest to read': {  // curly brackets used here variables (days, hours, b) can be used in other case blocks
                     let dateArray = []
+
+                    let condition = header === 'Recently finished' || header === 'Currently reading'
+                    let condition2 = header === 'Currently reading' || header === 'Took the longest to read'
+                    let condition3 = header === 'Recently finished'
+
                     this.props.books.forEach((b,i) => {
-                        if (b.finished === null) return 
+                        if ((condition && !condition3) && (b.finished !== null || b.started === null)) return 
+                        else if ((condition3 || !condition) && b.finished === null) return
+
                         let bCopy = {...b}
                         let [ date1, date2 ] = grabDates(i)
+
+                        if (condition3) date1 = date2
+                        if (condition) date2 = this.props.timeStamp().split(' ')[0]
+                        
                         let [ days, hours ] = compareDates(date1, date2)
                         bCopy['days'] = days
                         bCopy['hours'] = hours
                         dateArray.push(bCopy)
                     })
 
-                    dateArray = dateArray.sort((a, b) => b.days - a.days)
+                    dateArray = dateArray.sort((a, b) => condition2 ? b.days - a.days : a.days - b.days)
                     statMore = dateArray
                     if (!dateArray.length) return
                     let topBook = dateArray[0]
 
-                    if (dateArray.length > 1 && dateArray[0].days === dateArray[1].days) {
+                    if (!condition && dateArray.length > 1 && dateArray[0].days === dateArray[1].days) {
                         dateArray = dateArray.filter((b, i, arr) => b.days === arr[0].days)
                         topBook = dateArray[random(dateArray)]
                     }
  
                     defaultImg = topBook.url
                     title = topBook.title
-                    result = `${Math.round(topBook.days)} days or ${topBook.hours} hours`
+                    result = `${condition ? 'As of ' : ''}${Math.round(topBook.days)} days or ${topBook.hours} hours${condition ? ' ago' : ''}`
                     break;
                 }
-                case 'Was the quickest read': {
-                    let dateArray = []
-                    this.props.books.forEach((b,i) => {
-                        if (b.finished === null) return 
-                        let bCopy = {...b}
-                        let [ date1, date2 ] = grabDates(i)
-                        let [ days, hours ] = compareDates(date1, date2)
-                        bCopy['days'] = days
-                        bCopy['hours'] = hours
-                        dateArray.push(bCopy)
-                    })
-                 
-                    dateArray = dateArray.sort((a, b) => a.days - b.days)
-                    statMore = dateArray
-                    if (!dateArray.length) return
-                    let topBook = dateArray[0]
-
-                    if (dateArray.length > 1 && dateArray[0].days === dateArray[1].days) {
-                        dateArray = dateArray.filter((b, i, arr) => b.days === arr[0].days)
-                        topBook = dateArray[random(dateArray)]
-                    }
- 
-                    defaultImg = topBook.url
-                    title = topBook.title
-                    result = `${Math.round(topBook.days)} days or ${topBook.hours} hours`
-                    break;
-                }
-                case 'Longest page count': {
-                    let longest = this.props.books.filter(b => b.pages !== '').sort((a, b) => {
-                        let firstValue = b.pages
-                        let secondValue = a.pages
-                        values[b.title] = firstValue
-                        values[a.title] = secondValue
-                        return firstValue - secondValue
-                    })
-                    if (!longest.length) return 
-
-                    statMore = longest
-
-                    if (longest.length > 1 && values[longest[0].title] === values[longest[1].title]) 
-                        longest = longest.filter((b, i, arr) => values[b.title] === values[arr[0].title])
-                    else longest = [longest[0]]
-
-                    longest = longest[random(longest)]
-                    let amount = values[longest.title] ? values[longest.title] : longest.pages
-
-                    result = `${amount}`
-                    title = longest.title
-                    defaultImg = longest.url
-                    break;  
-                }
-                case 'Shortest page count': { 
-                    let shortest = this.props.books.filter(b => b.pages !== '').sort((a, b) => {
-                        let firstValue = a.pages
-                        let secondValue = b.pages
-                        values[a.title] = firstValue
-                        values[b.title] = secondValue
-                        return firstValue - secondValue
-                    })
-                    if (!shortest.length) return 
-
-                    statMore = shortest
-
-                    if (shortest.length > 1 && values[shortest[0].title] === values[shortest[1].title]) 
-                        shortest = shortest.filter((b, i, arr) => values[b.title] === values[arr[0].title])
-                    else shortest = [shortest[0]]
-
-                    shortest = shortest[random(shortest)]
-                    let amount = values[shortest.title] ? values[shortest.title] : shortest.pages
-
-                    result = `${amount}`
-                    title = shortest.title
-                    defaultImg = shortest.url
-                    break;
-                }
-                case 'Currently reading': {
-                    let dateArray = []
-                    this.props.books.forEach((b,i) => {
-                        let bCopy = {...b}
-                        if (b.finished !== null || b.started === null) return 
-                        let [ date1 ] = grabDates(i)
-                        let date2 = this.props.timeStamp().split(' ')[0]
-                        let [ days, hours ] = compareDates(date1, date2)
-                        bCopy['days'] = days
-                        bCopy['hours'] = hours
-                        dateArray.push(bCopy)
-                    })
-
-                    dateArray = dateArray.sort((a, b) => b.days - a.days)
-                    statMore = dateArray
-                    if (!dateArray.length) return
-                    let topBook = dateArray[0]
-                    
-                    defaultImg = topBook.url
-                    title = topBook.title
-                    result = `As of ${Math.round(topBook.days)} days or ${topBook.hours} hours ago`
-                    break;
-                }
-                case 'Recently finished': {
-                    let dateArray = []
-                    this.props.books.forEach((b,i) => {
-                        let bCopy = {...b}
-                        if (b.finished === null) return 
-                        let [ , date1 ] = grabDates(i)
-                        let date2 = this.props.timeStamp().split(' ')[0]
-                        let [ days, hours ] = compareDates(date1, date2)
-                        bCopy['days'] = days
-                        bCopy['hours'] = hours
-                        dateArray.push(bCopy)
-                    })
-
-                    dateArray = dateArray.sort((a, b) => a.days - b.days)
-                    statMore = dateArray
-                    if (!dateArray.length) return
-                    let topBook = dateArray[0]
-
-                    defaultImg = topBook.url
-                    title = topBook.title
-                    result = `As of ${Math.round(topBook.days)} days or ${topBook.hours} hours ago`
-                    break;
-                }
+                case 'Shortest page count':
+                case 'Longest page count':
+                case 'Newest book':
+                case 'Oldest book':
+                case 'A least favorite book':
                 case 'A favorite book': {
-                    let favoriteBooks = this.props.books.filter(b => b.rating !== '').sort((a, b) => {
-                        let firstValue = b.rating
-                        let secondValue = a.rating
+                    let property;
+
+                    if (header === 'Newest book' || header === 'Oldest book') property = 'published'
+                    else if (header ==='Shortest page count' || header === 'Longest page count') property = 'pages'
+                    else property = 'rating'
+
+                    let favoriteBooks = this.props.books.filter(b => b[property] !== '').sort((a, b) => {
+                        let firstValue = b[property]
+                        let secondValue = a[property]
                         values[b.title] = firstValue
                         values[a.title] = secondValue
-                        return firstValue - secondValue
+                        let condition = header === 'A favorite book' || header === 'Newest book' || header === 'Longest page count'
+                        return condition ? firstValue - secondValue : secondValue - firstValue
                     })
                     if (!favoriteBooks.length) return 
 
@@ -204,92 +109,22 @@ class StatBox extends Component {
                     else favoriteBooks = [favoriteBooks[0]]
 
                     favoriteBooks = favoriteBooks[random(favoriteBooks)]
-                    let amount = values[favoriteBooks.title] ? values[favoriteBooks.title] : favoriteBooks.rating
+                    let amount = values[favoriteBooks.title] ? values[favoriteBooks.title] : favoriteBooks[property]
 
                     result = `${amount}`
                     title = favoriteBooks.title
                     defaultImg = favoriteBooks.url
                     break;
                 }
-                case 'A least favorite book': {
-                    let leastFavoriteBooks = this.props.books.filter(b => b.rating !== '').sort((a, b) => {
-                        let firstValue = a.rating
-                        let secondValue = b.rating
-                        values[a.title] = firstValue
-                        values[b.title] = secondValue
-                        return firstValue - secondValue
-                    })
-                    if (!leastFavoriteBooks.length) return 
 
-                    statMore = leastFavoriteBooks
-
-                    if (leastFavoriteBooks.length > 1 && values[leastFavoriteBooks[0].title] === values[leastFavoriteBooks[1].title]) 
-                        leastFavoriteBooks = leastFavoriteBooks.filter((b, i, arr) => values[b.title] === values[arr[0].title])
-                    else leastFavoriteBooks = [leastFavoriteBooks[0]]
-
-                    leastFavoriteBooks = leastFavoriteBooks[random(leastFavoriteBooks)]
-                    let amount = values[leastFavoriteBooks.title] ? values[leastFavoriteBooks.title] : leastFavoriteBooks.rating
-
-                    result = `${amount}`
-                    title = leastFavoriteBooks.title
-                    defaultImg = leastFavoriteBooks.url
-                    break;
-                }
-                case 'Oldest book': {
-                    let oldestBook = this.props.books.filter(b => b.published !== '').sort((a, b) => {
-                        let firstValue = a.published 
-                        let secondValue = b.published
-                        values[a.title] = firstValue
-                        values[b.title] = secondValue
-                        return firstValue - secondValue
-                    })
-                    if (!oldestBook.length) return 
-
-                    statMore = oldestBook
-
-                    if (oldestBook.length > 1 && values[oldestBook[0].title] === values[oldestBook[1].title]) 
-                        oldestBook = oldestBook.filter((b, i, arr) => values[b.title] === values[arr[0].title])
-                    else oldestBook = [oldestBook[0]]
-
-                    oldestBook = oldestBook[random(oldestBook)]
-                    let amount = values[oldestBook.title] ? values[oldestBook.title] : oldestBook.published
-
-                    result = `${amount}`
-                    title = oldestBook.title
-                    defaultImg = oldestBook.url
-                    break;
-                }
-                case 'Newest book': {
-                    let newestBook = this.props.books.filter(b => b.published !== '').sort((a, b) => {
-                        let firstValue = b.published
-                        let secondValue = a.published
-                        values[b.title] = firstValue
-                        values[a.title] = secondValue
-                        return firstValue - secondValue
-                    })
-                    if (!newestBook.length) return 
-
-                    statMore = newestBook
-
-                    if (newestBook.length > 1 && values[newestBook[0].title] === values[newestBook[1].title]) 
-                        newestBook = newestBook.filter((b, i, arr) => values[b.title] === values[arr[0].title])
-                    else newestBook = [newestBook[0]]
-
-                    newestBook = newestBook[random(newestBook)]
-                    let amount = values[newestBook.title] ? values[newestBook.title] : newestBook.published
-
-                    result = `${amount}`
-                    title = newestBook.title
-                    defaultImg = newestBook.url
-                    break;
-                }
+                case 'Shortest title':
                 case 'Longest title': {
                     let longestTitle = this.props.books.filter(b => b.title !== '').sort((a, b) => {
                         let firstValue = b.title.split(' ').join('').length
                         let secondValue = a.title.split(' ').join('').length
                         values[b.title] = firstValue
                         values[a.title] = secondValue
-                        return firstValue - secondValue
+                        return header === 'Longest title' ? firstValue - secondValue : secondValue - firstValue
                     })
                     if (!longestTitle.length) return 
 
@@ -305,30 +140,6 @@ class StatBox extends Component {
                     result = `${amount} letters long`
                     title = longestTitle.title
                     defaultImg = longestTitle.url
-                    break;
-                }
-                case 'Shortest title': {
-                    let shortestTitle = this.props.books.filter(b => b.title !== '').sort((a, b) => {
-                        let firstValue = a.title.split(' ').join('').length
-                        let secondValue = b.title.split(' ').join('').length
-                        values[a.title] = firstValue
-                        values[b.title] = secondValue
-                        return firstValue - secondValue
-                    })
-                    if (!shortestTitle.length) return 
-
-                    statMore = shortestTitle
-
-                    if (shortestTitle.length > 1 && values[shortestTitle[0].title] === values[shortestTitle[1].title]) 
-                        shortestTitle = shortestTitle.filter((b, i, arr) => values[b.title] === values[arr[0].title])
-                    else shortestTitle = [shortestTitle[0]]
-
-                    shortestTitle = shortestTitle[random(shortestTitle)]
-                    let amount = values[shortestTitle.title] ? values[shortestTitle.title] : shortestTitle.title.split(' ').join('').length
-
-                    result = `${amount} letters long`
-                    title = shortestTitle.title
-                    defaultImg = shortestTitle.url
                     break;
                 }
                 case 'Strongest memory': {
@@ -355,10 +166,20 @@ class StatBox extends Component {
                     defaultImg = strongMem.url
                     break;
                 }
+                case 'Momentous':
+                case 'Vocabulary':
+                case 'Quotable':
                 case 'Motive': {
-                    let motive = this.props.books.filter(b => b.why !== 'because').sort((a, b) => {
-                        let firstValue = b.why.split(' ').length
-                        let secondValue = a.why.split(' ').length
+                    let property, customResult;
+
+                    if (header === 'Motive') property = 'why'
+                    if (header === 'Quotable') property = 'quotes'
+                    if (header === 'Vocabulary') property = 'words'
+                    if (header === 'Momentous') property = 'moments'
+ 
+                    let motive = this.props.books.filter(b => b[property] !== 'because').sort((a, b) => {
+                        let firstValue = b[property].split(' ').length
+                        let secondValue = a[property].split(' ').length
                         values[b.title] = firstValue
                         values[a.title] = secondValue
                         return firstValue - secondValue
@@ -372,121 +193,25 @@ class StatBox extends Component {
                     else motive = [motive[0]]
 
                     motive = motive[random(motive)]
-                    let amount = values[motive.title] ? values[motive.title] : motive.why.split(' ').length
+
+                    let amount = values[motive.title] ? values[motive.title] : motive[property].split(' ').length
+
+                    if (header === 'Motive') customResult = `With ${amount} word${amount > 1 ? 's' : ''} for why`
+                    if (header === 'Quotable' || header === 'Momentous') customResult = `With ${amount} word${amount > 1 ? 's' : ''} worth of ${property}`
+                    if (header === 'Vocabulary') customResult = `With ${amount} word${amount > 1 ? 's' : ''} of interest`
                    
-                    result = `With ${amount} word${amount > 1 ? 's' : ''} for why`
+                    result = customResult
                     title = motive.title
                     defaultImg = motive.url
                     break;
                 }
-                case 'Vocabulary': {
-                    let vocabulary = this.props.books.filter(b => b.words !== 'words').sort((a, b) => {
-                        let firstValue = b.words.split(' ').length
-                        let secondValue = a.words.split(' ').length
-                        values[b.title] = firstValue
-                        values[a.title] = secondValue
-                        return firstValue - secondValue
-                    })
-                    if (!vocabulary.length) return 
-
-                    statMore = vocabulary
-
-                    if (vocabulary.length > 1 && values[vocabulary[0].title] === values[vocabulary[1].title]) 
-                        vocabulary = vocabulary.filter((b, i, arr) => values[b.title] === values[arr[0].title])
-                    else vocabulary = [vocabulary[0]]
-
-                    vocabulary = vocabulary[random(vocabulary)]
-                    let amount = values[vocabulary.title] ? values[vocabulary.title] : vocabulary.words.split(' ').length 
-                   
-                    result = `With ${amount} word${amount > 1 ? 's' : ''} of interest`
-                    title = vocabulary.title
-                    defaultImg = vocabulary.url
-                    break;
-                }
-                case 'Momentous': {
-                    let momentous = this.props.books.filter(b => b.moments !== 'that one time when').sort((a, b) => {
-                        let firstValue = b.moments.split(' ').length
-                        let secondValue = a.moments.split(' ').length
-                        values[b.title] = firstValue
-                        values[a.title] = secondValue
-                        return firstValue - secondValue
-                    })
-
-                    if (!momentous.length) return 
-
-                    statMore = momentous
-
-                    if (momentous.length > 1 && values[momentous[0].title] === values[momentous[1].title]) 
-                        momentous = momentous.filter((b, i, arr) => values[b.title] === values[arr[0].title])
-                    else momentous = [momentous[0]]
-
-                    momentous = momentous[random(momentous)]
-                    let amount = values[momentous.title] ? values[momentous.title] : momentous.moments.split(' ').length
-                   
-                    result = `With ${amount} word${amount > 1 ? 's' : ''} worth of moments`
-                    title = momentous.title
-                    defaultImg = momentous.url
-                    break;
-                }
-                case 'Quotable': {
-                    let quotable = this.props.books.filter(b => b.quotes !== 'to be or not to be').sort((a, b) => {
-                        let firstValue = b.quotes.split(' ').length
-                        let secondValue = a.quotes.split(' ').length
-                        values[b.title] = firstValue
-                        values[a.title] = secondValue
-                        return firstValue - secondValue
-                    })
-
-                    if (!quotable.length) return 
-
-                    statMore = quotable
-
-                    if (quotable.length > 1 && values[quotable[0].title] === values[quotable[1].title]) 
-                        quotable = quotable.filter((b, i, arr) => values[b.title] === values[arr[0].title])
-                    else quotable = [quotable[0]]
-
-                    quotable = quotable[random(quotable)]
-                    let amount = values[quotable.title] ? values[quotable.title] : quotable.quotes.split(' ').length
-                   
-                    result = `With ${amount} word${amount > 1 ? 's' : ''} worth of quotes`
-                    title = quotable.title
-                    defaultImg = quotable.url
-                    break;
-                }
-                case 'A book from a favored genre': {
-                    let genreObj = {}
-                    this.props.books.forEach(b => {
-                        if (genreObj.hasOwnProperty(b.genre)) genreObj[b.genre].push(b)
-                        else if (b.genre) genreObj[b.genre] = [b]
-                    })
-                    let topGenre = Object.entries(genreObj).sort((a,b) => {
-                        let firstValue = b[1].length
-                        let secondValue = a[1].length
-                        values[b.title] = firstValue
-                        values[a.title] = secondValue
-                        return firstValue - secondValue
-                    })
-                    if (!topGenre.length) return 
-console.log(topGenre)
-                    if (topGenre.length > 1 && topGenre[0][1].length === topGenre[1][1].length) 
-                        topGenre = topGenre.filter((b, i, arr) => b[1].length === arr[0][1].length)
-                    else topGenre = [topGenre[0]]
-                    console.log(topGenre)
-                    topGenre = topGenre[random(topGenre)]
-                    console.log(topGenre)
-                    statMore = topGenre[1]
-                    topGenre = statMore[random(statMore)]
-                    
-                    result = `${topGenre.genre}`
-                    title = topGenre.title
-                    defaultImg = topGenre.url
-                    break;
-                }
+                case 'A book from a favored genre': 
                 case 'A book from a favored author': {
                     let authorObj = {}
+                    let property = header === 'A book from a favored author' ? 'author' : 'genre'
                     this.props.books.forEach(b => {
-                        if (authorObj.hasOwnProperty(b.author)) authorObj[b.author].push(b)
-                        else if (b.author) authorObj[b.author] = [b]
+                        if (authorObj.hasOwnProperty(b[property])) authorObj[b[property]].push(b)
+                        else if (b[property]) authorObj[b[property]] = [b]
                     })
                     let topauthor = Object.entries(authorObj).sort((a,b) => {
                         let firstValue = b[1].length
@@ -510,12 +235,13 @@ console.log(topGenre)
                     // Select a random book from the favored author
                     topauthor = statMore[random(statMore)]
                     
-                    result = `${topauthor.author}`
+                    result = `${topauthor[property]}`
                     title = topauthor.title
                     defaultImg = topauthor.url
                     break;
                 }
-                case 'Most efficient read': {
+                case 'Most efficient read': 
+                case 'Least efficient read': {
                     let dateArray = []
                     this.props.books.forEach((b,i) => {
                         let bCopy = {...b}
@@ -528,7 +254,8 @@ console.log(topGenre)
                         dateArray.push(bCopy)
                     })
 
-                    dateArray = dateArray.sort((a, b) => b.efficiency - a.efficiency)
+                    dateArray = dateArray.sort((a, b) => header === 'Most efficient read' ? b.efficiency - a.efficiency : a.efficiency - b.efficiency)
+                
                     statMore = dateArray
                     if (!dateArray.length) return
                     let topBook = dateArray[0]
