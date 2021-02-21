@@ -5,6 +5,8 @@ body {
   position: relative;
 }
 nav {
+  position: relative;
+  z-index: 4;
   background-color: papayawhip;
   margin-top: 0;
   height: 50px;
@@ -756,6 +758,17 @@ select {
   width: initial;
 }
 
+.nav-block {
+  display: none;
+  position: absolute;
+  background-color: black;
+  z-index: 3;
+  opacity: .5;
+  height: 100%;
+  width: 100vw;
+  border: 1px solid black;
+}
+
 /* Keyframe Animations */
 
 @keyframes spin {
@@ -1047,6 +1060,7 @@ select {
 }
 
 @media (max-width: 680px) {
+  
   .current-reading {
     display: flex;
     flex-direction: column;
@@ -1069,7 +1083,10 @@ select {
   }
 }
 
-@media (max-width: 590px) {    
+@media (max-width: 590px) {  
+  .nav-block-show {
+    display: block;
+  }  
   .extremely-friendly-div {
     display: block;
   }

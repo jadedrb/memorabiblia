@@ -32,7 +32,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.30"
+  currentAppVersion = "1.31"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
@@ -287,12 +287,15 @@ class App extends Component {
     } else if (window.innerWidth < 550) {
       let menuBtn = document.querySelector('.menu-btn')
       let navList = document.querySelector('.nav-list')
+      let navBlock = document.querySelector('.nav-block')
       if (this.state.hamburger) {
         navList.classList.remove('block-list')
         menuBtn.classList.remove('open')
+        navBlock.classList.remove('nav-block-show')
       } else if (bar !== 'collapse') {
         navList.classList.add('block-list')
         menuBtn.classList.add('open')
+        navBlock.classList.add('nav-block-show')
       }
       this.setState({hamburger: !this.state.hamburger}) 
     }
@@ -420,6 +423,8 @@ class App extends Component {
             <h4>{this.currentAppVersion}</h4>
             <p>this message is just to let you know there was an update recently</p>
           </div>
+
+          <div className='nav-block' onClick={() => this.minimize('hamburger')}>nav block</div>
 
           <nav>
             <div className='menu-btn' onClick={() => this.minimize('hamburger')}><div className='menu-btn_burger'></div></div>
