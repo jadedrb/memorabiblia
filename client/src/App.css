@@ -131,6 +131,7 @@ img {
   display: flex;
   flex-direction: row;
   justify-content: center;
+  z-index: 4;
 }
 form {
   display: flex;
