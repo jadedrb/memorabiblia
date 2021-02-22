@@ -503,6 +503,10 @@ form {
 .hl-blue {
   color: #3577CB;
 }
+.hl-blue:hover {
+  cursor: pointer;
+  color: #122947;
+}
 #basic-stats li:not(:nth-child(-n+2)) {
   margin: 6px;
 }

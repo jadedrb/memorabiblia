@@ -21,7 +21,8 @@ class Profile extends Component {
             noStressMsgs: '',
             theme: 'light',
             statBoxMore: false,
-            rememberOrKnow: 'Remember'
+            rememberOrKnow: 'Remember',
+            userBookShowcase: {}
         }
         this.deleteAccount = this.deleteAccount.bind(this)
         this.changeTheme = this.changeTheme.bind(this)
@@ -84,18 +85,21 @@ class Profile extends Component {
 
         let userTextProps = ['why', 'words', 'quotes', 'moments']
         let userTextPieces = []
+        let userBookShowcase = {}
 
         while (books.length > 0 && userTextProps.length > 0) {
             let property = userTextProps.shift()
-            let stringValue = books[Math.floor(Math.random() * books.length)][property]
-            let slicePoint = Math.floor(Math.random() * stringValue.length)
+            let randomChoice = random(books)
+            userBookShowcase[property] = books[randomChoice]
+            let stringValue = books[randomChoice][property]
+            let slicePoint = random(stringValue)
             let textPiece = stringValue.slice(slicePoint).length > 140 ? stringValue.slice(slicePoint, slicePoint + 140) : stringValue.slice(0,140)
             userTextPieces.push(textPiece)
         }
 
         let [ whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece ] = userTextPieces
 
-        this.setState({totalPages, pagesRead, booksRead, totalBooks, inNeedOfAttention, choices, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs, rememberOrKnow})
+        this.setState({totalPages, pagesRead, booksRead, totalBooks, inNeedOfAttention, choices, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs, rememberOrKnow, userBookShowcase})
     }
 
     async deleteAccount() {
@@ -151,7 +155,7 @@ class Profile extends Component {
         let { pagesRead, totalPages, booksRead, totalBooks, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs } = this.state
         let [ properties, bookNeed ] = this.state.inNeedOfAttention
         let { statMore, header } = this.state.statBoxMore 
-        let { rememberOrKnow } = this.state
+        let { rememberOrKnow, userBookShowcase } = this.state
 
         let attention = (
             <div id='attention'>
@@ -206,10 +210,10 @@ class Profile extends Component {
                 <ul id='basic-stats'>
                     <li>You have read <span style={booksReadC}>{booksRead}</span> out of <span className='hl-blue'>{totalBooks}</span> book{totalBooks === 1 ? '' : 's'}</li>
                     <li>That's <span style={pagesReadC}>{pagesRead}</span> out of <span className='hl-blue'>{totalPages}</span> pages</li><br/>
-                    {whyTextPiece && whyTextPiece !== 'because' ? <li><span className='hl-blue'>Why</span><br/> <span className='u-dots'>...</span> {whyTextPiece} <span className='u-dots'>...</span></li> : ''}
-                    {wordTextPiece && wordTextPiece !== 'words' ? <li><span className='hl-blue'>Word</span><br/> <span className='u-dots'>...</span> {wordTextPiece.split(splitCriteria).map((w,i) => <span key={i} className='profile-words' onClick={() => this.props.defineApi(w).then(def => alert(def))}>{w} </span>)} <span className='u-dots'>...</span></li> : ''}
-                    {quoteTextPiece && quoteTextPiece !== 'to be or not to be' ? <li><span className='hl-blue'>Quote</span><br/> <span className='u-dots'>...</span> {quoteTextPiece} <span className='u-dots'>...</span></li> : ''}
-                    {momentTextPiece && momentTextPiece !== 'that one time when' ? <li><span className='hl-blue'>Moment</span><br/> <span className='u-dots'>...</span> {momentTextPiece} <span className='u-dots'>...</span></li> : ''}
+                    {whyTextPiece && whyTextPiece !== 'because' ? <li><span className='hl-blue' onClick={() => this.props.handleAttention(userBookShowcase.why.title)}>Why</span><br/> <span className='u-dots'>...</span> {whyTextPiece} <span className='u-dots'>...</span></li> : ''}
+                    {wordTextPiece && wordTextPiece !== 'words' ? <li><span className='hl-blue' onClick={() => this.props.handleAttention(userBookShowcase.words.title)}>Word</span><br/> <span className='u-dots'>...</span> {wordTextPiece.split(splitCriteria).map((w,i) => <span key={i} className='profile-words' onClick={() => this.props.defineApi(w).then(def => alert(def))}>{w} </span>)} <span className='u-dots'>...</span></li> : ''}
+                    {quoteTextPiece && quoteTextPiece !== 'to be or not to be' ? <li><span className='hl-blue' onClick={() => this.props.handleAttention(userBookShowcase.quotes.title)}>Quote</span><br/> <span className='u-dots'>...</span> {quoteTextPiece} <span className='u-dots'>...</span></li> : ''}
+                    {momentTextPiece && momentTextPiece !== 'that one time when' ? <li><span className='hl-blue' onClick={() => this.props.handleAttention(userBookShowcase.moments.title)}>Moment</span><br/> <span className='u-dots'>...</span> {momentTextPiece} <span className='u-dots'>...</span></li> : ''}
                 </ul>
                 <div id='just-a-border'></div>
                 <div id='dot-barrier'><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span><span>.</span></div>
