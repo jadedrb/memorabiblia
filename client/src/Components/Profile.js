@@ -22,7 +22,8 @@ class Profile extends Component {
             theme: 'light',
             statBoxMore: false,
             rememberOrKnow: 'Remember',
-            userBookShowcase: {}
+            userBookShowcase: {},
+            previewValue: false
         }
         this.deleteAccount = this.deleteAccount.bind(this)
         this.changeTheme = this.changeTheme.bind(this)
@@ -150,12 +151,14 @@ class Profile extends Component {
         console.log(stats)
     }
 
+    handleMouseOvers = (title) => typeof title === 'string' ? this.setState({ previewValue: title }) : this.setState({ previewValue: false })
+
     render() {
         let { user, books, email, creationDate } = this.props.data
         let { pagesRead, totalPages, booksRead, totalBooks, whyTextPiece, wordTextPiece, quoteTextPiece, momentTextPiece, noStressMsgs } = this.state
         let [ properties, bookNeed ] = this.state.inNeedOfAttention
-        let { statMore, header } = this.state.statBoxMore 
-        let { rememberOrKnow, userBookShowcase } = this.state
+        let { statMore, header, values } = this.state.statBoxMore 
+        let { rememberOrKnow, userBookShowcase, previewValue } = this.state
 
         let attention = (
             <div id='attention'>
@@ -196,6 +199,8 @@ class Profile extends Component {
                             handleAttention={this.props.handleAttention}
                             statBoxMore={this.state.statBoxMore}
                             statBoxMoreToggle={this.statBoxMoreToggle}
+                            onClick={() => console.log('yeyeye')}
+                            onMouseOver={() => console.log('blopblop')}
                         />
                     )}
                 </div>
@@ -228,7 +233,7 @@ class Profile extends Component {
                 <li>Account Created: {creationDate}</li>
             </ul>
         )
-
+        
         return (
             <div id='profile'>
 
@@ -241,7 +246,15 @@ class Profile extends Component {
                                 {statMore.slice(0,5).map((b,i) => 
                                     <li key={b.id}>
                                         <span>{i+1}</span>
-                                        <img alt={b.title} className='profile-book' src={b.url} onClick={() => this.props.handleAttention(b.title)} />
+                                        {previewValue === b.title && <span className='p-value'>{values[b.title]}</span>}
+                                        <img 
+                                            alt={b.title} 
+                                            className='profile-book' 
+                                            src={b.url} 
+                                            onClick={() => this.props.handleAttention(b.title)} 
+                                            onMouseOver={() => this.handleMouseOvers(b.title)} 
+                                            onMouseLeave={this.handleMouseOvers}
+                                        />
                                     </li>
                                 )}
                             </ul>

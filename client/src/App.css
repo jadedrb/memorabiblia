@@ -746,10 +746,20 @@ select {
   top: -30px;
 }
 
-.m-stat span {
-  height: 100%;
-  width: 25px;
+.m-stat span:nth-child(1) {
   font-size: 18pt;
+  width: 25px;
+}
+
+.p-value {
+  position: absolute;
+  margin-top: 85px;
+  font-size: 10pt;
+  height: inherit;
+  width: 100px;
+  color: black;
+  text-align: center;
+  line-height: 12px;
 }
 
 .m-stat li {
@@ -1182,6 +1192,9 @@ select {
     height: 100%;
     display: grid;
     grid-template: 1fr / 1fr 1fr;
+  }
+  .p-value {
+    margin-top: 75px;
   }
   #read-to-remember {
     font-size: 30pt;

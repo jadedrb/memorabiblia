@@ -62,6 +62,7 @@ class StatBox extends Component {
                         let [ days, hours ] = compareDates(date1, date2)
                         bCopy['days'] = days
                         bCopy['hours'] = hours
+                        values[b.title] = Math.round(days)
                         dateArray.push(bCopy)
                     })
 
@@ -212,12 +213,11 @@ class StatBox extends Component {
                     this.props.books.forEach(b => {
                         if (authorObj.hasOwnProperty(b[property])) authorObj[b[property]].push(b)
                         else if (b[property]) authorObj[b[property]] = [b]
+                        values[b.title] = b[property]
                     })
                     let topauthor = Object.entries(authorObj).sort((a,b) => {
                         let firstValue = b[1].length
                         let secondValue = a[1].length
-                        values[b.title] = firstValue
-                        values[a.title] = secondValue
                         return firstValue - secondValue
                     })
                     if (!topauthor.length) return 
@@ -251,6 +251,7 @@ class StatBox extends Component {
                         let efficiency = Math.round(b.pages / days)
                         bCopy['efficiency'] = efficiency
                         bCopy['hours'] = hours
+                        values[b.title] = efficiency
                         dateArray.push(bCopy)
                     })
 
@@ -279,16 +280,16 @@ class StatBox extends Component {
         if (!defaultImg) defaultImg = originalDefaultImg
         if (!statMore) statMore = this.state.statMore
 
-        this.setState({header, result, defaultImg, title, statMore})
+        this.setState({header, result, defaultImg, title, statMore, values})
     }
 
     render() {
 
-        let { result, header, defaultImg, title, statMore } = this.state
+        let { result, header, defaultImg, title, statMore, values } = this.state
 
         return(
             <div className='stat-box'>
-                {result && !String(result).includes('-1') ? <div className='stat-head' onClick={(e) => this.props.statBoxMoreToggle(e, { statMore, header })}>{header} <br/><span className='lil-stat'>({result}{header && header.includes('favorite') ? '/10' : ''})</span></div> : ''}
+                {result && !String(result).includes('-1') ? <div className='stat-head' onClick={(e) => this.props.statBoxMoreToggle(e, { statMore, header, values })}>{header} <br/><span className='lil-stat'>({result}{header && header.includes('favorite') ? '/10' : ''})</span></div> : ''}
                 <div><img className='profile-book' src={defaultImg} onClick={() => this.props.handleAttention(title)} alt=''></img></div>
             </div>
         )
