@@ -143,14 +143,16 @@ class Profile extends Component {
     }
 
     statBoxMoreToggle = (event, stats) => {
-        if (event.target.className !== 'modal' && event.target.className !== 'stat-head') return
+        let cn = event.target.className
+        if (cn !== 'modal' && cn !== 'stat-head') return
         if (!this.state.statBoxMore) this.setState({ statBoxMore: stats })
-        else this.setState({ statBoxMore: false })
+        else this.setState({ statBoxMore: false, previewValue: false })
     }
 
     miniStatClick = (title) => {
         let wh = window.innerHeight
         let ww = window.innerWidth
+        alert('width: ' + ww + ', height: ' + wh)
 
         if (ww <= 800 && wh <= 600) {
             if (this.state.previewValue === title) 
