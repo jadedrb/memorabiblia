@@ -143,15 +143,34 @@ class Profile extends Component {
     }
 
     statBoxMoreToggle = (event, stats) => {
-        console.log(event.target.className)
-        console.log(typeof event.target.className)
-        if (event.target.className === 'm-stat') return
+        if (event.target.className !== 'modal' && event.target.className !== 'stat-head') return
         if (!this.state.statBoxMore) this.setState({ statBoxMore: stats })
         else this.setState({ statBoxMore: false })
-        console.log(stats)
     }
 
-    handleMouseOvers = (title) => typeof title === 'string' ? this.setState({ previewValue: title }) : this.setState({ previewValue: false })
+    miniStatClick = (title) => {
+        let wh = window.innerHeight
+        let ww = window.innerWidth
+
+        if (ww <= 800 && wh <= 600) {
+            if (this.state.previewValue === title) 
+                this.props.handleAttention(title)
+
+            this.setState({ previewValue: title })
+        } 
+        else 
+            this.props.handleAttention(title)
+    }
+
+    handleMouseOvers = (title) => {
+        let wh = window.innerHeight
+        let ww = window.innerWidth
+
+        if (ww > 800 || wh > 600) 
+            typeof title === 'string' ? this.setState({ previewValue: title }) : this.setState({ previewValue: false })
+        else 
+            return
+    }
 
     render() {
         let { user, books, email, creationDate } = this.props.data
@@ -199,8 +218,6 @@ class Profile extends Component {
                             handleAttention={this.props.handleAttention}
                             statBoxMore={this.state.statBoxMore}
                             statBoxMoreToggle={this.statBoxMoreToggle}
-                            onClick={() => console.log('yeyeye')}
-                            onMouseOver={() => console.log('blopblop')}
                         />
                     )}
                 </div>
@@ -251,7 +268,7 @@ class Profile extends Component {
                                             alt={b.title} 
                                             className='profile-book' 
                                             src={b.url} 
-                                            onClick={() => this.props.handleAttention(b.title)} 
+                                            onClick={() => this.miniStatClick(b.title)} 
                                             onMouseOver={() => this.handleMouseOvers(b.title)} 
                                             onMouseLeave={this.handleMouseOvers}
                                         />
