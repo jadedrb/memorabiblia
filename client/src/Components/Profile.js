@@ -152,9 +152,8 @@ class Profile extends Component {
     miniStatClick = (title) => {
         let wh = window.innerHeight
         let ww = window.innerWidth
-        alert('width: ' + ww + ', height: ' + wh)
 
-        if (ww <= 800 && wh <= 600) {
+        if (ww <= 800 && wh <= 800) {
             if (this.state.previewValue === title) 
                 this.props.handleAttention(title)
 
@@ -168,7 +167,7 @@ class Profile extends Component {
         let wh = window.innerHeight
         let ww = window.innerWidth
 
-        if (ww > 800 || wh > 600) 
+        if (ww > 800 || wh > 800) 
             typeof title === 'string' ? this.setState({ previewValue: title }) : this.setState({ previewValue: false })
         else 
             return
