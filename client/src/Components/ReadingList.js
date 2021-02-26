@@ -88,10 +88,10 @@ class ReadingList extends React.Component {
 
     // filter list based on read, unread, or reading
     if (bookFilter !== 'All' && !alreadyFiltered) {
-      console.log(bookFilter)
       if (bookFilter === 'readFilter') filteredBooks = books.filter(b => typeof b.finished === 'string')
       else if (bookFilter === 'unreadFilter') filteredBooks = books.filter(b => typeof b.started !== 'string')
       else if (bookFilter === 'readingFilter') filteredBooks = books.filter(b => typeof b.started === 'string' && typeof b.finished !== 'string')
+      console.log(filteredBooks)
       books = filteredBooks
     }
 

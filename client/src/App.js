@@ -32,7 +32,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.34"
+  currentAppVersion = "1.35"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
@@ -225,29 +225,42 @@ class App extends Component {
 
   onChange = (e, other, extra) => {
     let stateCopy = this.state.books.slice()
-    let idNum;
-    let property;
-    let book;
+    let idNum, property, book, organize, bookFilter;
+
 
     if (e === 'start') {
       idNum = other
       book = stateCopy.filter(b => b.id === idNum)[0]
       if (book.started === null) {
         book.started = this.timeStamp()
-        this.setState({ current: book })
+        organize = 'chrono-date-asc'
+        bookFilter = 'readingFilter'
+        this.setState({ current: book, organize, bookFilter })
       } else if (book.finished === null) {
         book.finished = this.timeStamp()
-        this.setState({ finished: book })
+        organize = 'chrono-date-asc'
+        bookFilter = 'readFilter'
+        this.setState({ finished: book, organize, bookFilter })
       } else {
         
         let confirmChoice = window.confirm('Are you sure you want to reset your start and finish dates?')
         
         // Reset start and finish timestamps for book entry only if user confirms first
         if (confirmChoice) {
+          let setAtLeastOnce = 0
           book.started = null
           book.finished = null
-          if (this.state.current !== null && book.id === this.state.current.id) { this.setState({ current: null }) }
-          if (this.state.finished !== null && book.id === this.state.finished.id) { this.setState({ finished: null }) }
+          organize = 'Organize:'
+          bookFilter = 'All'
+          if (this.state.current !== null && book.id === this.state.current.id) { 
+            setAtLeastOnce++
+            this.setState({ current: null, organize, bookFilter })
+          }
+          if (this.state.finished !== null && book.id === this.state.finished.id) { 
+            setAtLeastOnce++
+            this.setState({ finished: null, organize, bookFilter })
+          }
+          if (!setAtLeastOnce) this.setState({ organize, bookFilter })
         }
         
       }
