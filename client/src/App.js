@@ -34,7 +34,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.35"
+  currentAppVersion = "1.36"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
@@ -436,7 +436,7 @@ class App extends Component {
   }
 
   render() {
-    let { user, switchPage } = this.state
+    let { switchPage } = this.state
     return (
       <div id='grandpa'>
 

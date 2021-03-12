@@ -4,6 +4,8 @@ import StatBox from './StatBox';
 import axios from 'axios';
 import GeneralModal from './GeneralModal';
 
+import auth from '../auth'
+
 class Profile extends Component {
     constructor(props) {
         super(props)
@@ -282,10 +284,10 @@ class Profile extends Component {
                 : ''}
 
 
-                {user === 'none' ? <Login setUser={this.props.setUser}/> : <div id='userInfo'><h1> Welcome <span id='user-name'>{user}</span><span id='profile-dot'>.</span></h1>{userInfo}</div>}
-                {user === 'none' ? '' : profileStats}
-                {user === 'none' ? '' : <div className='delete delete-account' onClick={this.deleteAccount}>X</div>}
-                {user === 'none' ? '' : <div className='theme' onClick={this.changeTheme} style={{display: 'none'}}>Theme</div>}
+                {!auth.isAuthenticated() ? <Login setUser={this.props.setUser}/> : <div id='userInfo'><h1> Welcome <span id='user-name'>{user}</span><span id='profile-dot'>.</span></h1>{userInfo}</div>}
+                {!auth.isAuthenticated() ? '' : profileStats}
+                {!auth.isAuthenticated() ? '' : <div className='delete delete-account' onClick={this.deleteAccount}>X</div>}
+                {!auth.isAuthenticated() ? '' : <div className='theme' onClick={this.changeTheme} style={{display: 'none'}}>Theme</div>}
             </div>
         )
     }
