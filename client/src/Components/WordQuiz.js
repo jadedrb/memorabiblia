@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
+import auth from '../auth'
+
 function WordQuiz(props) {
     let [wordBank, setWordBank] = useState([])
     let [choices, setChoices] = useState([])
@@ -185,7 +187,7 @@ function WordQuiz(props) {
         }
 
         // update back end permanent data
-        if (props.books[0].user !== 'none') {
+        if (auth.isAuthenticated()) {
             let updatedBook = {...props.books[bookIndex]}
             updatedBook.words = updatedWb
             console.log('UPDATE request')

@@ -9,6 +9,8 @@ import Profile from './Components/Profile';
 import WordQuiz from './Components/WordQuiz';
 import PageNotFound from './Components/PageNotFound';
 
+import auth from './auth'
+
 class App extends Component {
   constructor() {
     super()
@@ -37,6 +39,8 @@ class App extends Component {
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
     if (user !== 'none') {
+      auth.login(() => console.log('logged in - setUser'))
+      console.log(auth.isAuthenticated())
       this.setState({user, email, creationDate}) 
       let confirmTransfer = books.length > 0 && window.confirm(`Would you like to transfer your unsaved book entries (${books.length}) to your account?`)
       
@@ -67,8 +71,13 @@ class App extends Component {
       }
     } else {
       // remove jwt cookie after logout
-      axios.get('/api/users/logout')
-      this.setState({user, email, books: []}) 
+      axios
+        .get('/api/users/logout')
+        .then(() => {
+          auth.logout(() => console.log('logged out - setUser'))
+          console.log(auth.isAuthenticated())
+          this.setState({user, email, books: []}) 
+        })
     }
   }
 
@@ -107,7 +116,7 @@ class App extends Component {
       let onesLessBook = [...this.state.books].filter(b => b.id !== id)
       let deletedIds = onesLessBook.length ? [...this.state.deletedIds, id] : []
       this.setState({books: onesLessBook, deletedIds})
-      if (this.state.user !== 'none') {
+      if (auth.isAuthenticated()) {
         axios
           .delete(`/api/memories/remove/${_id}`)
           .then(() => console.log('Book entry deleted.'))
@@ -145,7 +154,7 @@ class App extends Component {
       let organize = 'Organize:'
       let bookFilter = 'All'
 
-      if (user !== 'none') {
+      if (auth.isAuthenticated()) {
         console.log('POST request')
         axios
           .post('/api/memories', newBook)
@@ -377,7 +386,7 @@ class App extends Component {
   changeVersionNumber = (settings) => {
     if ('version' in settings && this.currentAppVersion === settings.version) return
     else {
-      if (this.state.user && this.state.user !== 'none') this.newSettings('version', this.currentAppVersion, this.state.user)
+      if (this.state.user && auth.isAuthenticated()) this.newSettings('version', this.currentAppVersion, this.state.user)
       if ('version' in settings) this.newVersionDisplay()
     }
   }
@@ -444,15 +453,15 @@ class App extends Component {
             <ul className='nav-list'>
               <li><Link to="/" className='link' onClick={() => this.minimize('hamburger')}>HOME</Link></li>
               <li><Link to="/MyReads" className='link' onClick={() => this.minimize('hamburger')}>MY READS</Link></li>
-              {user !== 'none' && <li><Link to="/Profile" className='link' onClick={() => this.minimize('hamburger')}>PROFILE</Link></li>}
+              {auth.isAuthenticated() && <li><Link to="/Profile" className='link' onClick={() => this.minimize('hamburger')}>PROFILE</Link></li>}
               <li><Link to='WordQuiz' className='link' onClick={() => this.minimize('hamburger')}>WORD QUIZ</Link></li>
               <li>
                 <Link 
                     onClick={() => {
-                                user !== 'none' && this.setUser()
+                                auth.isAuthenticated() && this.setUser()
                                 this.minimize('hamburger')}} 
                     to="/Log" 
-                    className='link'>{user === 'none' ? 'LOGIN' : 'LOGOUT'}
+                    className='link'>{!auth.isAuthenticated() ? 'LOGIN' : 'LOGOUT'}
                 </Link>
               </li>
             </ul>

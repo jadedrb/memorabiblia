@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import axios from 'axios';
 
+import auth from '../auth'
+
 const modal = document.getElementById('modal-root')
 
 class Modal extends React.Component {
@@ -113,7 +115,7 @@ class Modal extends React.Component {
 
   componentWillUnmount() {
     modal.removeChild(this.el)
-    if (this.props.book.user !== 'none') {
+    if (auth.isAuthenticated()) {
       let _id = this.props.book._id
       let Book = this.props.bookBlueprint()
       let b = this.props.book
