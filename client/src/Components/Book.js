@@ -13,7 +13,7 @@ class Book extends React.Component {
     if (window.innerWidth <= 550) this.setState({tab: 'image'})
     else this.setState({tab: 'info'})
   }
-
+/*
   componentDidUpdate() {
     if (!this.props.screen) {
       if (window.innerWidth <= 550 && this.state.tab !== 'image') this.setState({tab: 'image'})
@@ -21,6 +21,7 @@ class Book extends React.Component {
       this.props.resetScreenCheck()
     }
   }
+  */
 
   handleClick(modalNum) {
     this.state.message ? this.setState({message: 0}) : this.setState({message: modalNum})

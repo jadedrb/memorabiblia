@@ -34,7 +34,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.36"
+  currentAppVersion = "1.37"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
@@ -319,7 +319,7 @@ class App extends Component {
         menuBtn.classList.add('open')
         navBlock.classList.add('nav-block-show')
       }
-      this.setState({hamburger: !this.state.hamburger}) 
+      if (bar !== 'collapse') this.setState({hamburger: !this.state.hamburger}) 
     }
   }
 
