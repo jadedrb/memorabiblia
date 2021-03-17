@@ -54,7 +54,7 @@ run the app: npm run client OR npm run dev
 
 * React (library)
 * Node.js (runtime environment)
-* NPM (Node Package Manger)
+* NPM (package manager)
 * HTML, CSS, and JavaScript
 
 
