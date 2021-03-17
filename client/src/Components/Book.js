@@ -69,12 +69,35 @@ class Book extends React.Component {
       bakColorTwo = { border: '10px solid palegreen', backgroundColor: 'aliceblue' }
     }
 
+    const buttonColor = (tab) => this.state.tab === tab ? { backgroundColor: '#483535', color: 'white' } : {}
+
     return (
       <div style={everyOther ? bakColorOne : bakColorTwo} className='book'>
         <div className='mobile-friendly'> 
-          <div className='div-info' onClick={() => this.switchTab('info')}><p className='flip-text'>INFO</p></div> 
-          <div className='div-memory' onClick={() => this.switchTab('memory')}><p className='flip-text'>MEMORY</p></div> 
-          <div className='extremely-friendly-div div-image' onClick={() => this.switchTab('image')}><p className='flip-text'>COVER</p></div> 
+
+          <div 
+            className='div-info' 
+            onClick={() => this.switchTab('info')} 
+            style={buttonColor('info')}
+          >
+              <p className='flip-text'>INFO</p>
+          </div> 
+
+          <div 
+            className='div-memory' 
+            onClick={() => this.switchTab('memory')}
+            style={buttonColor('memory')}
+          >
+            <p className='flip-text'>MEMORY</p>
+          </div> 
+
+          <div 
+            className='extremely-friendly-div div-image' 
+            onClick={() => this.switchTab('image')}
+            style={buttonColor('image')}
+          >
+              <p className='flip-text'>COVER</p>
+          </div> 
         </div>
         {image}
         <div className='book-info' onClick={() => this.handleClick(2)} style={{display: window.innerWidth < 931 && this.state.tab !== 'info' ? 'none' : 'block'}}>
