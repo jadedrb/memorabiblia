@@ -647,9 +647,11 @@ select {
 }
 .flip-text {
   display: flex;
+  align-items: center;
   position: absolute;
-  left: -34px;
-  margin-top: 70px;
+  left: -63px;
+ 
+  padding-left: 56px;
   width: 100px;
   font-weight: bold;
   opacity: .2;
@@ -945,9 +947,6 @@ select {
   .subtext-boxes {
     margin-top: -50px;
   }
-  .mobile-friendly {
-    display: block;
-  }
   .extremely-friendly-div {
     display: none;
   }
@@ -975,13 +974,15 @@ select {
     margin-left: 35px;
   }
   .mobile-friendly {
+    display: grid;
     position: absolute;
     left: 0;
     width: 35px;
     height: 100%;
   }
   .mobile-friendly div {
-    height: 49.9%;
+    display: flex;
+    align-items: center;
     border-right: 1px solid black;
     border-top: 1px dotted black;
     background-color: #615148;
@@ -1109,7 +1110,7 @@ select {
     width: 35px;
   }
   .mobile-friendly div {
-    height: 33%;
+    
     border-right: 1px solid black;
     border-top: 1px dotted black;
     background-color: #615148;
@@ -1158,16 +1159,7 @@ select {
   .link {
     cursor: pointer;
   }
-  .flip-text {
-    display: flex;
-    position: absolute;
-    left: -9px;
-    margin-top: 40px;
-    width: 50px;
-    font-weight: bold;
-    opacity: .2;
-    transform: rotate(-90deg);
-  }
+
   .delete-account {
     top: 50px;
   }
