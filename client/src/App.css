@@ -649,10 +649,6 @@ select {
   display: flex;
   align-items: center;
   position: absolute;
-  left: -63px;
- 
-  padding-left: 56px;
-  width: 100px;
   font-weight: bold;
   opacity: .2;
   transform: rotate(-90deg);
@@ -986,6 +982,15 @@ select {
     border-right: 1px solid black;
     border-top: 1px dotted black;
     background-color: #615148;
+  }
+  .div-memory p {
+    left: -7px;
+  }
+  .div-info p {
+    left: 1px;
+  }
+  .div-image p {
+    left: -2px;
   }
   .mobile-friendly div:hover {
     background-color: black;
