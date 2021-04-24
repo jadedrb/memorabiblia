@@ -34,7 +34,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.38"
+  currentAppVersion = "1.39"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
@@ -327,18 +327,22 @@ class App extends Component {
    
       try {
 
-        let hVars = await axios.post('/heroku-env', { hVarAuth: 'PAJAMA' })
+        alert('inside defineApi function')
+        let hVars = await axios.post('/heroku-envvv', { hVarAuth: 'PAJAMA' }).catch((err) => alert('PROMISE (failed) : ' + err))
+  
         let api = hVars.data.defineApi
         let key = hVars.data.defineApiKey
 
         let lastCh = word[word.length - 1].toLowerCase()
         if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
-
-        let res = await axios.get(api + word + key)
+        alert('awaiting word api')
+        let res = await axios.get(api + word + key).catch((err) => alert('PROMISE (failed) : ' + err))
+        
         let concatDefs = ''
         let shortdef = res.data[0].shortdef
         
         if (shortdef) {
+          alert('inside shortdef if statement')
           shortdef.forEach((def,i) => {
           i++
           def += '\n\n'
