@@ -34,7 +34,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.39"
+  currentAppVersion = "1.40"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
@@ -328,7 +328,7 @@ class App extends Component {
       try {
 
         alert('inside defineApi function')
-        let hVars = await axios.post('/heroku-envvv', { hVarAuth: 'PAJAMA' }).catch((err) => alert('PROMISE (failed) : ' + err))
+        let hVars = await axios.post('/heroku-env', { hVarAuth: 'PAJAMA' }).catch((err) => alert('PROMISE1 (failed) : ' + err))
   
         let api = hVars.data.defineApi
         let key = hVars.data.defineApiKey
@@ -336,7 +336,7 @@ class App extends Component {
         let lastCh = word[word.length - 1].toLowerCase()
         if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
         alert('awaiting word api')
-        let res = await axios.get(api + word + key).catch((err) => alert('PROMISE (failed) : ' + err))
+        let res = await axios.get(api + word + key).catch((err) => alert('PROMISE2 (failed) : ' + err))
         
         let concatDefs = ''
         let shortdef = res.data[0].shortdef
@@ -353,7 +353,10 @@ class App extends Component {
           return 'No definition (API please!)'
         }
       } 
-      catch (err) { console.log('err') }
+      catch (err) { 
+        alert('exiting try catch')
+        return `Hmmm... something's wrong here`
+      }
 
   }
 
