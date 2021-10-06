@@ -782,6 +782,21 @@ select {
   border: 1px solid black;
 }
 
+.year {
+  background-image: linear-gradient(120deg, rgb(88, 68, 68) 0%, rgb(131, 55, 55) 100%);
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  font-size: 15pt;
+  background-color: rgb(88, 68, 68);
+  padding: 5px;
+}
+
+.year :nth-child(2) {
+  font-size: 10pt;
+  color: grey;
+}
+
 /* Keyframe Animations */
 
 @keyframes spin {

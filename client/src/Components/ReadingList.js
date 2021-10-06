@@ -1,5 +1,6 @@
 import React from 'react';
 import Book from './Book';
+import Year from './Year';
 
 class ReadingList extends React.Component {
   constructor(props) {
@@ -9,6 +10,7 @@ class ReadingList extends React.Component {
     this.handleDropdown = this.handleDropdown.bind(this)
     this.reportWindowSize = this.reportWindowSize.bind(this)
     this.resetScreenCheck = this.resetScreenCheck.bind(this)
+    this.booksReadThatYear = React.createRef()
   }
 
   componentDidUpdate() {
@@ -215,8 +217,19 @@ class ReadingList extends React.Component {
 
           <div className='new-book' onClick={() => this.handleNewBook()}>New Book</div>
         </div>
-        {books.map(book => <Book 
+        {books.map((book, index, arr) => 
+                      <React.Fragment key={book.id}>
+                          {this.props.bookFilter === 'readFilter' && 
+                            <Year 
                               book={book} 
+                              index={index} 
+                              arr={arr} 
+                              organize={this.props.organize}
+                            />
+                          }
+                          <Book 
+                              book={book} 
+                              index={index}
                               key={book.id} 
                               onChange={this.props.onChange} 
                               deleteBook={this.props.deleteBook} 
@@ -225,7 +238,10 @@ class ReadingList extends React.Component {
                               screen={this.state.screen}
                               resetScreenCheck={this.resetScreenCheck}
                               minimize={this.props.minimize}
-                              defineApi={this.props.defineApi}/>)}
+                              defineApi={this.props.defineApi}
+                          />
+                      </React.Fragment>
+        )}
         <div id='r-t-r-wrapper'><div id='read-to-remember' style={defaultMsg}><div>Read</div>.<div>Rememeber</div>.<div>Relish</div></div></div>
       </div>
     )
