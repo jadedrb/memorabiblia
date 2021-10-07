@@ -6,7 +6,6 @@ const modal = document.getElementById('modal-root')
 class GeneralModal extends React.Component {
 
   el = document.createElement('div')
-
   
   componentDidMount() {
     modal.appendChild(this.el)
@@ -17,7 +16,16 @@ class GeneralModal extends React.Component {
   }
 
   render() {
-    return ReactDOM.createPortal(this.props.children, this.el)
+
+    let portalStuff = (
+
+      <div className='modal' onClick={this.props.toggle}>
+        {this.props.children}
+      </div>
+
+    )
+
+    return ReactDOM.createPortal(portalStuff, this.el)
   }
 }
 

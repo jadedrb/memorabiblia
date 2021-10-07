@@ -723,6 +723,30 @@ select {
   animation: spin .5s linear infinite;
 }
 
+.m-settings {
+  border: 1px solid black;
+  background-color: rgb(172, 166, 166);
+  margin: 40px;
+  width: 70%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+}
+
+.m-settings h6 {
+  border-bottom: 3px solid black;
+  text-align: center;
+  width: 50%;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+.m-settings div {
+  font-size: 12pt;
+  margin-bottom: 50px;
+}
+
 .m-stat {
   background-color: rgb(197, 167, 167);
   display: flex;
@@ -783,7 +807,8 @@ select {
 }
 
 .year {
-  background-image: linear-gradient(120deg, rgb(88, 68, 68) 0%, rgb(131, 55, 55) 100%);
+  /* background-image: linear-gradient(120deg, rgb(88, 68, 68) 0%, rgb(131, 55, 55) 100%); */
+  background-image: linear-gradient(120deg, rgb(207, 191, 191) 0%, rgb(131, 112, 112) 100%);
   display: flex;
   align-items: center;
   flex-direction: column;
@@ -794,7 +819,7 @@ select {
 
 .year :nth-child(2) {
   font-size: 10pt;
-  color: grey;
+  color: rgb(97, 97, 97);
 }
 
 /* Keyframe Animations */

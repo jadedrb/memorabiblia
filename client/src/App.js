@@ -34,7 +34,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.43"
+  currentAppVersion = "1.44"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
