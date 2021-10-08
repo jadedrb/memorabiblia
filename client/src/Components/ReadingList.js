@@ -219,8 +219,9 @@ class ReadingList extends React.Component {
         </div>
         {books.map((book, index, arr) => 
                       <React.Fragment key={book.id}>
-                          {this.props.bookFilter === 'readFilter' && 
+                          {this.props.bookFilter === 'readFilter' && !value &&
                             <Year 
+                              value={value}
                               book={book} 
                               index={index} 
                               arr={arr} 

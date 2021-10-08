@@ -124,6 +124,7 @@ class Profile extends Component {
 
                     await axios.delete(`api/users/remove/${verifiedUser.data.user}`)
                     alert('Account deleted successfully.')
+                    this.handleToggleSettings()
                     this.props.setUser()
                 }
             }
@@ -146,9 +147,6 @@ class Profile extends Component {
     }
 
     statBoxMoreToggle = (event, stats) => {
-        let cn = event.target.className
-        console.log(event.target)
-        if (cn !== 'modal' && cn !== 'stat-head') return
         if (!this.state.statBoxMore) this.setState({ statBoxMore: stats })
         else this.setState({ statBoxMore: false, previewValue: false })
     }
@@ -178,9 +176,9 @@ class Profile extends Component {
     }
 
     handleToggleSettings = (e) => {
-        let cn = e.target.className
-        console.log(cn)
-        if (this.state.settingsModal && cn === 'm-settings') return
+        // let cn = e.target.className
+        // console.log(cn)
+        // if (this.state.settingsModal && cn === 'm-settings') return
         this.setState({ settingsModal: !this.state.settingsModal })
     }
 
@@ -272,9 +270,9 @@ class Profile extends Component {
         return (
             <div id='profile'>
 
-                {this.state.statBoxMore !== false && 
+                {this.state.statBoxMore && 
                     <GeneralModal toggle={this.statBoxMoreToggle}>
-                            <div className='m-stat' onClick={this.statBoxMoreToggle}>
+                            <div className='m-stat'>
                                 <h6>{header}</h6>
                                 <ul>
                                     {statMore.slice(0,5).map((b,i) => 
@@ -296,12 +294,15 @@ class Profile extends Component {
                     </GeneralModal>
                 }
 
-                {this.state.settingsModal !== false &&
+                {this.state.settingsModal &&
                     <GeneralModal toggle={this.handleToggleSettings}>
                             <div className="m-settings">
                                 <h6>General Settings</h6>
                                 <div>Show year and total books finished in timespan (My Reads)</div>
-                                <div>Delete my account and all data associated with it</div>
+                                <div>
+                                    <span>Delete my account and all data associated with it</span>
+                                    <button onClick={this.deleteAccount}>DELETE</button>
+                                </div>
                             </div>
                     </GeneralModal>
                 }

@@ -18,11 +18,10 @@ class GeneralModal extends React.Component {
   render() {
 
     let portalStuff = (
-
-      <div className='modal' onClick={this.props.toggle}>
+      <div className='g-modal'>
         {this.props.children}
+        <div className='modal-cloud' onClick={this.props.toggle}></div>
       </div>
-
     )
 
     return ReactDOM.createPortal(portalStuff, this.el)

@@ -723,15 +723,38 @@ select {
   animation: spin .5s linear infinite;
 }
 
+.g-modal {
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 0;
+  height: 100%;
+  width: 100vw;
+}
+
+.modal-cloud {
+  position: absolute;
+  top: 0;
+  background-color: white;
+  z-index: 4;
+  height: 100%;
+  width: 100vw;
+  opacity: .8;
+}
+
 .m-settings {
-  border: 1px solid black;
-  background-color: rgb(172, 166, 166);
-  margin: 40px;
-  width: 70%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  position: relative;
+  top: 0;
+  border: 10px solid black;
+  width: 70%;
+  margin: 40px;
   padding: 20px;
+  background-color: rgb(172, 166, 166);
+  z-index: 5;
+  opacity: .9;
 }
 
 .m-settings h6 {
@@ -740,11 +763,33 @@ select {
   width: 50%;
   margin-top: 20px;
   padding-bottom: 20px;
+  font-size: 20pt;
 }
 
 .m-settings div {
   font-size: 12pt;
   margin-bottom: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.m-settings div button {
+  width: 100px;
+  background-color: rgb(85, 78, 78);
+  border: none;
+  padding: 5px;
+  border-radius: 5px;
+  margin: 10px;
+  cursor: pointer;
+}
+
+.m-settings div button:hover {
+  background-color: white;
+}
+
+.m-settings div button:active {
+  background-color: red;
 }
 
 .m-stat {
@@ -753,19 +798,25 @@ select {
   justify-content: center;
   align-items: center;
   align-self: center;
-
+  z-index: 5;
   width: 100vw;
   overflow-y: scroll;
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  padding: 40px;
 }
 
 .m-stat img {
   height: 70px;
-
 }
 
 .m-stat h6 {
-  position: absolute;
-  top: -30px;
+  position: fixed;
+  font-size: 18pt;
+  top: -50px;
+  opacity: .2;
 }
 
 .m-stat span:nth-child(1) {
@@ -1206,7 +1257,7 @@ select {
   }
 
   .delete-account {
-    top: 50px;
+    top: 55px;
   }
   .book-filter {
     margin-top: 0;
