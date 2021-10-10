@@ -298,7 +298,9 @@ class Profile extends Component {
                     <GeneralModal toggle={this.handleToggleSettings}>
                             <div className="m-settings">
                                 <h6>General Settings</h6>
+                                <div className="delete delete-account" id="e-prof" onClick={this.handleToggleSettings}>X</div>
                                 <div>Show year and total books finished in timespan (My Reads)</div>
+                                <div>Copy all of my current notes and back them up somewhere</div>
                                 <div>
                                     <span>Delete my account and all data associated with it</span>
                                     <button onClick={this.deleteAccount}>DELETE</button>

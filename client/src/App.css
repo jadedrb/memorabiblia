@@ -751,6 +751,7 @@ select {
   border: 10px solid black;
   width: 70%;
   margin: 40px;
+  height: max-content;
   padding: 20px;
   background-color: rgb(172, 166, 166);
   z-index: 5;
@@ -871,6 +872,13 @@ select {
 .year :nth-child(2) {
   font-size: 10pt;
   color: rgb(97, 97, 97);
+}
+
+#e-prof {
+  position: absolute;
+  top: 20px;
+  opacity: .2;
+  font-size: 25pt;
 }
 
 /* Keyframe Animations */
@@ -1274,6 +1282,9 @@ select {
   }
   .m-stat h6 {
     font-size: 20px;
+    top: 170px;
+    left: 250px;
+    width: min-content;
   }
   .m-stat ul { 
     gap: 20px;
