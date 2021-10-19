@@ -20,6 +20,9 @@ class StatBox extends Component {
         let values = {}
         let [ header ] = this.props.header 
 
+        // delete later
+        // header = 'Longest break after reading'
+
         const compareDates = (dOne, dTwo) => {
             let date1 = new Date(dOne)
             let date2 = new Date(dTwo)
@@ -271,6 +274,85 @@ class StatBox extends Component {
                     title = topBook.title
                     result = `${topBook.efficiency} pages a day`
                     break;
+                }
+                case 'Longest break after reading': {
+   
+                    const findThatIndex = (b) => b ? this.props.books.findIndex(item => item._id == b._id) : 0
+                    
+                    let dateArray = []
+
+                    this.props.books.forEach((b,i) => {
+                        if (!b.started) return
+                        let bCopy = {...b}
+                        let [ date1, date2 ] = grabDates(i)
+                        date2 = this.props.timeStamp().split(' ')[0]
+                        
+                        let [ days, hours ] = compareDates(date1, date2)
+                        bCopy['days'] = days
+                        bCopy['hours'] = hours
+                        values[b.title] = Math.round(days)
+                        dateArray.push(bCopy)
+                    })
+
+                    dateArray = dateArray.sort((a, b) => a.days - b.days)
+                    
+                    let dateArray2 = []
+                    let cr = 0
+
+                    dateArray.forEach((b,i) => {
+         
+                        if (!i && b.started && !b.finished) cr = b
+                        if (!b.started || !b.finished) return
+                        if (typeof cr === 'number') cr++
+                
+                        let bCopy = {...b}
+
+                        // start date of previous book in timeline
+                        let [ date2 ] = grabDates(findThatIndex(dateArray[i-1]))
+
+                        // finish date of current book in iteration
+                        let [ , date1 ] = grabDates(findThatIndex(b))
+
+                        if (cr === 1) {
+                            console.log('comparing last finished book with current date:')
+                            date1 = grabDates(findThatIndex(b))[1]
+                            date2 = this.props.timeStamp().split(' ')[0]
+                        }
+
+                        //console.log(i, b.title)
+                        
+                        if (typeof cr === 'object') {
+                            console.log('comparing current reading with last finished:')
+                            date2 = grabDates(findThatIndex(cr))[0]
+                            date1 = grabDates(findThatIndex(b))[1]
+                            cr = false
+                        }
+                        
+                        //console.log(date1, date2)
+                        let [ days, hours ] = compareDates(date1, date2)
+                        // console.log(days)
+                        bCopy['break'] = days
+                        values[b.title] = Math.round(days)
+                        dateArray2.push(bCopy)
+                    })
+                    //console.log('hmmmm:', dateArray)
+                    // console.log('sorted by start date:', dateArray2)
+                    dateArray2 = dateArray2.sort((a, b) => b.break - a.break)
+                    //console.log(dateArray2)
+
+                    console.log('values:', values)
+                    statMore = dateArray2
+                    if (!dateArray2.length) return
+                    let topBook = dateArray2[0]
+
+                    if (dateArray2.length > 1 && dateArray2[0].break === dateArray2[1].break) {
+                        dateArray2 = dateArray2.filter((b, i, arr) => b.break === arr[0].break)
+                        topBook = dateArray2[random(dateArray2)]
+                    }
+
+                    defaultImg = topBook.url
+                    title = topBook.title
+                    result = `A lapse of ${Math.round(topBook.break)} days`
                 }
                 default:
                     break;
