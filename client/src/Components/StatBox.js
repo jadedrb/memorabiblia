@@ -21,7 +21,7 @@ class StatBox extends Component {
         let [ header ] = this.props.header 
 
         // delete later
-        header = 'Longest break after reading'
+        // header = 'A book from a prolific month'
 
         const compareDates = (dOne, dTwo) => {
             let date1 = new Date(dOne)
@@ -210,10 +210,20 @@ class StatBox extends Component {
                     break;
                 }
                 case 'A book from a favored genre': 
+                case 'A book from a prolific month':
                 case 'A book from a favored author': {
                     let authorObj = {}
                     let property = header === 'A book from a favored author' ? 'author' : 'genre'
+                    property = header === 'A book from a prolific month' ? 'month' : property
+
                     this.props.books.forEach(b => {
+                        let months;
+                        if(property === 'month') {
+                            if (!b.started) return
+                            console.log(b.started, new Date(b.started).getMonth() + 1)
+                            months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+                            b[property] = months[new Date(b.started).getMonth() + 1]
+                        }
                         if (authorObj.hasOwnProperty(b[property])) authorObj[b[property]].push(b)
                         else if (b[property]) authorObj[b[property]] = [b]
                         values[b.title] = b[property]
@@ -281,6 +291,11 @@ class StatBox extends Component {
                     
                     let dateArray = []
 
+                    /*
+                        First filter out books that haven't been started.
+                        For those that have, assign a new property that reflects
+                        how many days have passed since it was started
+                    */
                     this.props.books.forEach((b,i) => {
                         if (!b.started) return
                         let bCopy = {...b}
@@ -296,11 +311,21 @@ class StatBox extends Component {
                         dateArray.push(bCopy)
                     })
 
+                    /*
+                        Use that new days property to sort them by start date.
+                        More recently started are higher up (or closer to 0 index)
+                    */
                     dateArray = dateArray.sort((a, b) => a.days - b.days)
                     
                     let dateArray2 = []
                     let cr = 0
 
+                    /*
+                        Now that they're sorted, compare the start date of the 
+                        previous book (index - 1) with the finish date of the 
+                        current book (index), taking into account edge cases.
+                        Assign the days between to a new property for each book.
+                    */
                     dateArray.forEach((b,i) => {
          
                         if (!i && b.started && !b.finished) cr = b
@@ -345,7 +370,7 @@ class StatBox extends Component {
                     dateArray2 = dateArray2.sort((a, b) => b.break - a.break)
                     //console.log(dateArray2)
 
-                    console.log('values:', values)
+                    //console.log('values:', values)
                     statMore = dateArray2
                     if (!dateArray2.length) return
                     let topBook = dateArray2[0]
