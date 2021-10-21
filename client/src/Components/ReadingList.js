@@ -19,11 +19,11 @@ class ReadingList extends React.Component {
       this.setState({displayMsg: 'block', defaultMsg: 'myframes'})
     }
     if (this.props.books.length > 0 && this.state.defaultMsg === 'myframes') { 
-      console.log('dissappear animation')
+ 
       this.setState({defaultMsg: 'dissappear'})
       setTimeout(() => this.state.isMounted && this.setState({displayMsg: 'none', defaultMsg: 'stop'}), 1000)
     } else if (this.props.books.length === 0 && this.state.defaultMsg === 'stop') {
-      console.log('appear animation')
+
       this.setState({displayMsg: 'block', defaultMsg: 'appear'})
       setTimeout(() => this.state.isMounted && this.setState({defaultMsg: 'appear'}), 1000)
     }

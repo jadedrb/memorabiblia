@@ -21,7 +21,7 @@ class StatBox extends Component {
         let [ header ] = this.props.header 
 
         // delete later
-        // header = 'Longest break after reading'
+        header = 'Longest break after reading'
 
         const compareDates = (dOne, dTwo) => {
             let date1 = new Date(dOne)
@@ -288,6 +288,8 @@ class StatBox extends Component {
                         date2 = this.props.timeStamp().split(' ')[0]
                         
                         let [ days, hours ] = compareDates(date1, date2)
+                        //console.log(days)
+                        
                         bCopy['days'] = days
                         bCopy['hours'] = hours
                         values[b.title] = Math.round(days)
@@ -314,7 +316,7 @@ class StatBox extends Component {
                         let [ , date1 ] = grabDates(findThatIndex(b))
 
                         if (cr === 1) {
-                            console.log('comparing last finished book with current date:')
+                            //console.log('comparing last finished book with current date:')
                             date1 = grabDates(findThatIndex(b))[1]
                             date2 = this.props.timeStamp().split(' ')[0]
                         }
@@ -322,7 +324,7 @@ class StatBox extends Component {
                         //console.log(i, b.title)
                         
                         if (typeof cr === 'object') {
-                            console.log('comparing current reading with last finished:')
+                            //console.log('comparing current reading with last finished:')
                             date2 = grabDates(findThatIndex(cr))[0]
                             date1 = grabDates(findThatIndex(b))[1]
                             cr = false
@@ -331,10 +333,13 @@ class StatBox extends Component {
                         //console.log(date1, date2)
                         let [ days, hours ] = compareDates(date1, date2)
                         // console.log(days)
+                        if (!days) return
                         bCopy['break'] = days
                         values[b.title] = Math.round(days)
                         dateArray2.push(bCopy)
                     })
+
+                    if(!dateArray2.length) return
                     //console.log('hmmmm:', dateArray)
                     // console.log('sorted by start date:', dateArray2)
                     dateArray2 = dateArray2.sort((a, b) => b.break - a.break)

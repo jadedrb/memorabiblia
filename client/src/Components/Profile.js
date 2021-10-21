@@ -9,7 +9,7 @@ import auth from '../auth'
 class Profile extends Component {
     constructor(props) {
         super(props)
-        this.state = {
+        this.initialState = {
             whyTextPiece: '',
             wordTextPiece: '',
             quoteTextPiece: '',
@@ -28,9 +28,13 @@ class Profile extends Component {
             previewValue: false,
             settingsModal: false
         }
+
+        this.state = this.initialState
+
         this.deleteAccount = this.deleteAccount.bind(this)
         this.changeTheme = this.changeTheme.bind(this)
     }
+
     componentDidMount() {
         let { books } = this.props.data
         let pagesRead = 0;

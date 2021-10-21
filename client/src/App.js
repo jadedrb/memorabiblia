@@ -34,7 +34,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.46"
+  currentAppVersion = "1.47"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
@@ -499,6 +499,7 @@ class App extends Component {
                                                     data={this.state} 
                                                     timeStamp={this.timeStamp} 
                                                     handleAttention={this.handleAttention}
+                                                    key={this.state.user}
                                                     defineApi={this.defineApi}/>}/>
             <Route path='/WordQuiz' render={() => <WordQuiz
                                                     books={this.state.books}
