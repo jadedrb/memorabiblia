@@ -881,6 +881,29 @@ select {
   font-size: 25pt;
 }
 
+.notes-copy {
+  border: 1px solid black;
+  padding: 5px;
+  width: inherit;
+  height: 500px;
+  overflow-x: auto;
+  overflow-y: auto;
+  overflow-wrap: anywhere;
+  background-color: grey;
+}
+
+.svg-clipboard {
+  margin: 10px;
+  margin-bottom: 0;
+  height: 40px;
+}
+
+.svg-clipboard:hover {
+  cursor: pointer;
+  font-weight: bold;
+  height: 50px;
+}
+
 /* Keyframe Animations */
 
 @keyframes spin {

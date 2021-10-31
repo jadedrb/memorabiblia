@@ -26,7 +26,8 @@ class Profile extends Component {
             rememberOrKnow: 'Remember',
             userBookShowcase: {},
             previewValue: false,
-            settingsModal: false
+            settingsModal: false,
+            modalState: false
         }
 
         this.state = this.initialState
@@ -36,6 +37,7 @@ class Profile extends Component {
     }
 
     componentDidMount() {
+        console.log(this.props.books)
         let { books } = this.props.data
         let pagesRead = 0;
         let booksRead = 0;
@@ -183,7 +185,23 @@ class Profile extends Component {
         // let cn = e.target.className
         // console.log(cn)
         // if (this.state.settingsModal && cn === 'm-settings') return
-        this.setState({ settingsModal: !this.state.settingsModal })
+        this.setState({ settingsModal: !this.state.settingsModal, modalState: false })
+    }
+
+    handleToggleModalState = () => this.setState({ modalState: !this.state.modalState })
+
+    clipboard = e => {
+        let textarea = e.target.previousSibling
+        textarea.focus()
+        textarea.select()
+        try {
+            let successful = document.execCommand('copy');
+            let msg = successful ? 'successful' : 'unsuccessful';
+            console.log('Fallback: Copying text command was ' + msg);
+        } catch (err) {
+            console.error('Fallback: Oops, unable to copy', err);
+        }
+        document.getSelection().removeAllRanges()
     }
 
     render() {
@@ -301,14 +319,28 @@ class Profile extends Component {
                 {this.state.settingsModal &&
                     <GeneralModal toggle={this.handleToggleSettings}>
                             <div className="m-settings">
-                                <h6>General Settings</h6>
-                                <div className="delete delete-account" id="e-prof" onClick={this.handleToggleSettings}>X</div>
-                                <div>Show year and total books finished in timespan (My Reads)</div>
-                                <div>Copy all of my current notes and back them up somewhere</div>
-                                <div>
-                                    <span>Delete my account and all data associated with it</span>
-                                    <button onClick={this.deleteAccount}>DELETE</button>
-                                </div>
+                                {!this.state.modalState ?
+                                    <>
+                                        <h6>General Settings</h6>
+                                        <div className="delete delete-account" id="e-prof" onClick={this.handleToggleSettings}>X</div>
+                                        <div>Show year and total books finished in timespan (My Reads)</div>
+                                        <div>
+                                            <span>Copy all of my current notes and back them up somewhere</span>
+                                            <button onClick={this.handleToggleModalState}>COPY</button>
+                                        </div>
+                                        <div>
+                                            <span>Delete my account and all data associated with it</span>
+                                            <button onClick={this.deleteAccount}>DELETE</button>
+                                        </div>
+                                    </>
+                                : 
+                                    <>
+                                        <textarea value={JSON.stringify(this.props.books)} className='notes-copy' readOnly style={{ resize: 'none' }}></textarea>
+                                        <svg className="svg-clipboard" viewBox="0 0 20 20" onClick={this.clipboard}>
+							                <path d="M17.391,2.406H7.266c-0.232,0-0.422,0.19-0.422,0.422v3.797H3.047c-0.232,0-0.422,0.19-0.422,0.422v10.125c0,0.232,0.19,0.422,0.422,0.422h10.125c0.231,0,0.422-0.189,0.422-0.422v-3.797h3.797c0.232,0,0.422-0.19,0.422-0.422V2.828C17.812,2.596,17.623,2.406,17.391,2.406 M12.749,16.75h-9.28V7.469h3.375v5.484c0,0.231,0.19,0.422,0.422,0.422h5.483V16.75zM16.969,12.531H7.688V3.25h9.281V12.531z"></path>
+						                </svg>
+                                    </>
+                                }
                             </div>
                     </GeneralModal>
                 }
