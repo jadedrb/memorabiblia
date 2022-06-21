@@ -6,6 +6,7 @@ const memoryController = require('../../controllers/memoryController');
 
 // Memory routes
 router.get('/:user', memoryController.memories_get);
+router.get('/:user/words', memoryController.memories_words);
 router.post('/', memoryController.memory_post);
 router.post('/update/:id', memoryController.memory_update)
 router.delete('/remove/:id', memoryController.memory_delete)

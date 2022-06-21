@@ -503,6 +503,7 @@ class App extends Component {
                                                     books={this.state.books}
                                                     defineApi={this.defineApi}/>}/>
             <Route path='/WordQuiz' render={() => <WordQuiz
+                                                    user={this.state.user}
                                                     books={this.state.books}
                                                     setStreak={this.setStreak}
                                                     streak={this.state.streak}

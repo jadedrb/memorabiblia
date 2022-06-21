@@ -41,3 +41,33 @@ module.exports.memory_delete = (req, res) => {
         .then(memory => memory.remove().then(() => res.json({success: true})))
         .catch(err => res.status(404).json('Error: ' + err));
 }
+
+module.exports.memories_words = (req, res) => {
+    Memory
+        .find({ user: req.params.user })
+        .then(memories => {
+            let wordCount = {}
+            let repeatedWords = {}
+           
+            try {
+                memories.forEach(b => {
+                    let wordSplit = b.words.split(/[.,\-\s]\s/)
+                    wordSplit.forEach(w => {
+                        if (w.toLowerCase() !== 'words') {
+                            if (w in wordCount) {
+                                wordCount[w].count++
+                                wordCount[w].books.push(b.title)
+                                repeatedWords[w] = wordCount[w]
+                            } else {
+                                wordCount[w] = {}
+                                wordCount[w].count = 1
+                                wordCount[w].books = [b.title]
+                            }
+                        }
+                    })
+                })
+            } catch (e) {}
+            res.json({ wordCount, repeatedWords })
+        })
+      //  .catch(err => res.status(400).json('Error: ' + err));
+}

@@ -14,22 +14,38 @@ function WordQuiz(props) {
     let [wrongWords, setWrongWords] = useState([])
     let [filteredWords, setFilteredWords] = useState([])
 
+    let [showQuiz, setShowQuiz] = useState(false)
+    let [repeatedWords, setRepeatedWords] = useState({})
+    let [showRepeated, setShowRepeated] = useState(false)
+
     useEffect(() => {
         // Convert all words for all book entries into one big array of strings
-        let bank = ''
-        props.books.forEach(b => bank += b.words + '. ')
-        let tempBank = bank.split(/[.,\-\s]\s/).filter(w => w.toLowerCase() !== 'words')
+        // let bank = ''
+        // props.books.forEach(b => bank += b.words + '. ')
+        // let tempBank = bank.split(/[.,\-\s]\s/).filter(w => w.toLowerCase() !== 'words')
+        let tempBank;
 
-        if (tempBank.length > 4) {
-            let tempChoices = determineChoices([...tempBank])
-            let tempCurrentWord = tempChoices.length ? tempChoices[randomIndex(tempChoices)] : 'test'
-            setWordBank(tempBank)
-            setChoices(tempChoices)
-            setCurrentWord(tempCurrentWord)
-            determineDef(tempCurrentWord)
-                .then(def => setCurrentDef(def))
-                .catch(e => setCurrentDef(e))
+        const generateWordBank = async () => {
+            let wordStuff = await axios.get(`/api/memories/${props.user}/words`)
+            console.log(wordStuff)
+            tempBank = Object.keys(wordStuff?.data?.wordCount ? wordStuff?.data?.wordCount : {})
+
+            if (tempBank?.length > 4) {
+                let tempChoices = determineChoices([...tempBank])
+                let tempCurrentWord = tempChoices.length ? tempChoices[randomIndex(tempChoices)] : 'test'
+                console.log(wordStuff.data?.repeatedWords)
+                setRepeatedWords(wordStuff.data?.repeatedWords)
+                setWordBank(tempBank)
+                setChoices(tempChoices)
+                setCurrentWord(tempCurrentWord)
+                determineDef(tempCurrentWord)
+                    .then(def => setCurrentDef(def))
+                    .catch(e => setCurrentDef(e))
+            }
         }
+
+        generateWordBank()
+    
     }, [])
 
     const randomIndex = arr => Math.floor(Math.random() * arr.length)
@@ -226,20 +242,52 @@ function WordQuiz(props) {
     let quizChoiceStyle = !currentDef ? {height: '0px'} : {height: `190px`}
 
     return (
-        <div id='quiz-container'>
-            <h5><p id='word-count'>Word Count: {wordBank.length}</p></h5>
-            <h6 id='quiz-definition' style={quizDefStyle}>{quizDef}</h6>
-            <ul id='quiz-choices' style={quizChoiceStyle}>
-{/*                <button onClick={() => console.log(currentDef)}>DAS IT</button>   */}
-                {choices.map((c,i) => <li key={i} id={`c-${i}`} onClick={() => !seize && checkAnswer(c, i)}>{c}</li>)}
-            </ul>
-            {currentDef ? footer : ''}
-            {wrongWordDiv}
-            {seize ? <div id='retry-button' onClick={retry}>RETRY</div> : ''}
-            {seize ? <input id='word-input' onChange={handleChange} placeholder='Find specific words to define or remove' /> : ''}
-            {seize ? <ul id='search-results'>{filteredWordsList}</ul> : ''}
-            <div id='black-space'></div>
+        <>
+        {showQuiz ?
+            <div id='quiz-container'>
+                <h5><p id='word-count'>Word Count: {wordBank.length}</p></h5>
+                <h6 id='quiz-definition' style={quizDefStyle}>{quizDef}</h6>
+                <ul id='quiz-choices' style={quizChoiceStyle}>
+    {/*                <button onClick={() => console.log(currentDef)}>DAS IT</button>   */}
+                    {choices.map((c,i) => <li key={i} id={`c-${i}`} onClick={() => !seize && checkAnswer(c, i)}>{c}</li>)}
+                </ul>
+                {currentDef ? footer : ''}
+                {wrongWordDiv}
+                {seize ? <div id='retry-button' onClick={retry}>RETRY</div> : ''}
+                {seize ? <input id='word-input' onChange={handleChange} placeholder='Find specific words to define or remove' /> : ''}
+                {seize ? <ul id='search-results'>{filteredWordsList}</ul> : ''}
+                <div id='black-space'></div>
+            </div>
+        :
+        <>
+        <div className='extra-quiz-stuff'>
+            <button onClick={() => setShowQuiz(true)} style={{ backgroundColor: wordBank.length ? '' : 'red' }}>Start Quiz</button>
+            <button onClick={() => setShowRepeated(!showRepeated)}>Check for Repeated Words</button>
+
+            
+
+            {showRepeated &&
+                <>
+                    <h3>Repeated words found: {Object.keys(repeatedWords).length}</h3>
+                    <ul>
+                        {Object.keys(repeatedWords).map((w,i) => 
+                            <li key={i} onClick={() => alert(`${w} was found in: ${repeatedWords[w]?.books?.map(b => b + ' ')?.join(', ')}`)}>{w}</li>
+                        )}
+                    </ul>
+                </>
+            }
+
+            <label>
+                Find specific words to define or remove:
+                <br /><br />
+            <input id='word-input' onChange={handleChange} placeholder='word' />
+            </label>
         </div>
+        <ul id='search-results'>{filteredWordsList}</ul>
+        <div id='black-space'></div>
+        </>
+        }
+        </>
     )
 }
 

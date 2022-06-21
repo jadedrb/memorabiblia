@@ -23,7 +23,7 @@ class Modal extends React.Component {
         let hVars = await axios.post('/heroku-env', { hVarAuth: 'PAJAMA' })
         let api = hVars.data.gBooksApi
         let book = this.props.book.title
-    
+    console.log(hVars)
         let author = this.props.book.author
         this.setState({isLoading: true})
 
@@ -299,7 +299,7 @@ class Modal extends React.Component {
     )
 
     return ReactDOM.createPortal(
-      <div className='modal'>
+    <div className='modal'>
         <div className='delete d-modal' onClick={done}>X</div>
         <div className='close' onClick={done}></div>
           <div className='modal-info-container'>

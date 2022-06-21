@@ -904,6 +904,53 @@ select {
   height: 50px;
 }
 
+.extra-quiz-stuff {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 300px;
+}
+
+.extra-quiz-stuff button:nth-child(1) {
+  background-color: black;
+  color: white;
+  border: none;
+  height: 40px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.extra-quiz-stuff button:nth-child(2) {
+  background-color: transparent;
+  color: black;
+  border: 1px solid black;
+  height: 40px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.extra-quiz-stuff #quiz-footer {
+  width: 100%;
+  margin: 0;
+}
+
+.extra-quiz-stuff ul {
+  display: flex;
+  flex-direction: column;
+  width: 100px;
+  height: 50px;
+  overflow: auto;
+  padding: 0;
+}
+
+.extra-quiz-stuff ul li:hover {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+
+
 /* Keyframe Animations */
 
 @keyframes spin {
