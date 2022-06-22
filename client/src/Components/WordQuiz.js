@@ -18,34 +18,30 @@ function WordQuiz(props) {
     let [repeatedWords, setRepeatedWords] = useState({})
     let [showRepeated, setShowRepeated] = useState(false)
 
-    useEffect(() => {
-        // Convert all words for all book entries into one big array of strings
-        // let bank = ''
-        // props.books.forEach(b => bank += b.words + '. ')
-        // let tempBank = bank.split(/[.,\-\s]\s/).filter(w => w.toLowerCase() !== 'words')
+    let [selectRepeated, setSelectRepeated] = useState(false)
+
+    const generateWordBank = async () => {
         let tempBank;
+        let wordStuff = await axios.get(`/api/memories/${props.user}/words`)
+     
+        tempBank = Object.keys(wordStuff?.data?.wordCount ? wordStuff?.data?.wordCount : {})
 
-        const generateWordBank = async () => {
-            let wordStuff = await axios.get(`/api/memories/${props.user}/words`)
-            console.log(wordStuff)
-            tempBank = Object.keys(wordStuff?.data?.wordCount ? wordStuff?.data?.wordCount : {})
-
-            if (tempBank?.length > 4) {
-                let tempChoices = determineChoices([...tempBank])
-                let tempCurrentWord = tempChoices.length ? tempChoices[randomIndex(tempChoices)] : 'test'
-                console.log(wordStuff.data?.repeatedWords)
-                setRepeatedWords(wordStuff.data?.repeatedWords)
-                setWordBank(tempBank)
-                setChoices(tempChoices)
-                setCurrentWord(tempCurrentWord)
-                determineDef(tempCurrentWord)
-                    .then(def => setCurrentDef(def))
-                    .catch(e => setCurrentDef(e))
-            }
+        if (tempBank?.length > 4) {
+            let tempChoices = determineChoices([...tempBank])
+            let tempCurrentWord = tempChoices.length ? tempChoices[randomIndex(tempChoices)] : 'test'
+       
+            setRepeatedWords(wordStuff.data?.repeatedWords)
+            setWordBank(tempBank)
+            setChoices(tempChoices)
+            setCurrentWord(tempCurrentWord)
+            determineDef(tempCurrentWord)
+                .then(def => setCurrentDef(def))
+                .catch(e => setCurrentDef(e))
         }
+    }
 
+    useEffect(() => {
         generateWordBank()
-    
     }, [])
 
     const randomIndex = arr => Math.floor(Math.random() * arr.length)
@@ -69,9 +65,7 @@ function WordQuiz(props) {
             props
                 .defineApi(word)
                 .then(def => {
-                    console.log('here')
                     let definitions = def.split('.').slice(1)
-                    console.log(definitions)
                     let chosenDefinition = definitions.length ? definitions[randomIndex(definitions)].split('\n')[0].trim() : 'No definition (API please!)'
                     resolve(chosenDefinition)
                 })
@@ -163,17 +157,26 @@ function WordQuiz(props) {
             setFilteredWords([])
             return;
         }
+     
         let filteredWords = wordBank.filter(w => w.slice(0, value.length).toLowerCase() === value.toLowerCase())
         setFilteredWords(filteredWords)
     }
 
-    const deleteWord = word => {
-        let deleting = window.confirm(`Would you like to delete ${word.toUpperCase()} from your list of interesting words?`)
-        if (!deleting) return
+    const deleteWord = (word, book) => {
+
+        if (!book) {
+            let deleting = window.confirm(`Would you like to delete ${word.toUpperCase()} from your list of interesting words?`)
+            if (!deleting) return
+        }
+        
         // this.props.book.user !== 'none'
         let updatedWordBank = []
 
         for (let i = 0; i < props.books.length; i++) {
+
+            if (book && props.books[i].title !== book) 
+                continue
+
             let currentWordBank = props.books[i].words.split(/[.,\-\s]\s/)
             let wordIndex;
             for (let j = 0; j < currentWordBank.length; j++) {
@@ -188,8 +191,6 @@ function WordQuiz(props) {
                 break;
             }
         }
-
-        console.log(updatedWordBank)
 
         let [updatedWb, bookIndex, bookId] = updatedWordBank
 
@@ -211,7 +212,10 @@ function WordQuiz(props) {
             console.log(bookId)
 
             axios
-              .post(`/api/memories/update/${bookId}`, {...updatedBook}).then(res => console.log(res.data))
+              .post(`/api/memories/update/${bookId}`, {...updatedBook}).then(res => {
+                if (book)
+                    generateWordBank()
+              })
 
         } 
 
@@ -262,7 +266,10 @@ function WordQuiz(props) {
         <>
         <div className='extra-quiz-stuff'>
             <button onClick={() => setShowQuiz(true)} style={{ backgroundColor: wordBank.length ? '' : 'red' }}>Start Quiz</button>
-            <button onClick={() => setShowRepeated(!showRepeated)}>Check for Repeated Words</button>
+            <button onClick={() => {
+                setShowRepeated(!showRepeated) 
+                setSelectRepeated(false)
+            }}>Check for Repeated Words</button>
 
             
 
@@ -271,10 +278,26 @@ function WordQuiz(props) {
                     <h3>Repeated words found: {Object.keys(repeatedWords).length}</h3>
                     <ul>
                         {Object.keys(repeatedWords).map((w,i) => 
-                            <li key={i} onClick={() => alert(`${w} was found in: ${repeatedWords[w]?.books?.map(b => b + ' ')?.join(', ')}`)}>{w}</li>
+                            <li key={i} onClick={() => {
+                                // alert(`${w} was found in: ${repeatedWords[w]?.books?.map(b => b + ' ')?.join(', ')}`)
+                                setSelectRepeated({ w, bks: repeatedWords[w]?.books })
+                            }}>{w}</li>
                         )}
                     </ul>
                 </>
+            }
+
+            {selectRepeated && 
+                <div className='select-repeat' onClick={() => setSelectRepeated(false)}>
+                    <p>{selectRepeated.w} was found in:</p>
+                    <ul>
+                        {selectRepeated.bks.map((b,i) => <li key={i} onClick={() => {
+                            let confirm = window.confirm(`Would you like to remove one instance of the word ${selectRepeated.w.toUpperCase()} from your entry for the book ${b}?`)
+                            if (confirm)
+                                deleteWord(selectRepeated.w, b)
+                        }}>{b}</li>)}
+                    </ul>
+                </div>
             }
 
             <label>

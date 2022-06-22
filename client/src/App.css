@@ -909,7 +909,7 @@ select {
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  height: 300px;
+  min-height: 400px;
 }
 
 .extra-quiz-stuff button:nth-child(1) {
@@ -936,11 +936,10 @@ select {
 }
 
 .extra-quiz-stuff ul {
-  display: flex;
-  flex-direction: column;
+  display: block;
   width: 100px;
-  height: 50px;
-  overflow: auto;
+  height: 100px;
+  overflow: scroll;
   padding: 0;
 }
 
@@ -949,6 +948,20 @@ select {
   font-weight: bold;
 }
 
+.select-repeat {
+  position: absolute;
+  top: 220px;
+  right: 38%;
+  background-color: rgb(255, 253, 230);
+}
+
+.select-repeat ul {
+  width: 100%;
+}
+
+.select-repeat li {
+  text-decoration: underline;
+}
 
 
 /* Keyframe Animations */

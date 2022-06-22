@@ -33,8 +33,8 @@ class StatBox extends Component {
         }
 
         const grabDates = i => {
-            let date1 = this.props.books.length > 0 && this.props.books[i].started ? this.props.books[i].started.split(' ')[0] : ''
-            let date2 = this.props.books.length > 0 && this.props.books[i].finished ? this.props.books[i].finished.split(' ')[0] : ''
+            let date1 = this.props.books.length > 0 && this.props.books[i]?.started ? this.props.books[i]?.started.split(' ')[0] : ''
+            let date2 = this.props.books.length > 0 && this.props.books[i]?.finished ? this.props.books[i]?.finished.split(' ')[0] : ''
             return [date1, date2]
         }
 
@@ -287,7 +287,7 @@ class StatBox extends Component {
                 }
                 case 'Longest break after reading': {
    
-                    const findThatIndex = (b) => b ? this.props.books.findIndex(item => item._id == b._id) : 0
+                    const findThatIndex = (b) => b ? this.props.books.findIndex(item => Number(item._id) === Number(b._id)) : 0
                     
                     let dateArray = []
 
@@ -356,7 +356,7 @@ class StatBox extends Component {
                         }
                         
                         //console.log(date1, date2)
-                        let [ days, hours ] = compareDates(date1, date2)
+                        let [ days ] = compareDates(date1, date2)
                         // console.log(days)
                         if (!days) return
                         bCopy['break'] = days
@@ -384,6 +384,7 @@ class StatBox extends Component {
                     title = topBook.title
                     result = `A lapse of ${Math.round(topBook.break)} days`
                 }
+                    break;
                 default:
                     break;
             }

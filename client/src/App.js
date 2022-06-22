@@ -34,7 +34,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.49"
+  currentAppVersion = "1.50"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     let { books } = this.state
@@ -456,9 +456,9 @@ class App extends Component {
             <div className='menu-btn' onClick={() => this.minimize('hamburger')}><div className='menu-btn_burger'></div></div>
             <ul className='nav-list'>
               <li><Link to="/" className='link' onClick={() => this.minimize('hamburger')}>HOME</Link></li>
-              <li><Link to="/MyReads" className='link' onClick={() => this.minimize('hamburger')}>MY READS</Link></li>
+              <li><Link to="/MyReads" className='link' onClick={() => this.minimize('hamburger')}>READING</Link></li>
               {auth.isAuthenticated() && <li><Link to="/Profile" className='link' onClick={() => this.minimize('hamburger')}>PROFILE</Link></li>}
-              <li><Link to='WordQuiz' className='link' onClick={() => this.minimize('hamburger')}>WORD QUIZ</Link></li>
+              <li><Link to='WordQuiz' className='link' onClick={() => this.minimize('hamburger')}>WORDS</Link></li>
               <li>
                 <Link 
                     onClick={() => {

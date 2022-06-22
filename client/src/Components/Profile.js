@@ -37,7 +37,7 @@ class Profile extends Component {
     }
 
     componentDidMount() {
-        console.log(this.props.books)
+    
         let { books } = this.props.data
         let pagesRead = 0;
         let booksRead = 0;
