@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { checkUser } = require('../../middleware/userMiddleware')
+const { checkUser } = require('../../middleware/middleware')
 
 // Memory controller
 const memoryController = require('../../controllers/memoryController');
