@@ -146,13 +146,14 @@ class StatBox extends Component {
                     defaultImg = longestTitle.url
                     break;
                 }
-                case 'Strongest memory': {
+                case 'Strongest memory':
+                case 'Weakest memory': {
                     let strongMem = this.props.books.filter(b => b.words !== 'words' || b.why !== 'because' || b.moments !== 'that one time when' || b.quotes !== 'to be or not to be').sort((a, b) => {
                         let firstValue = (b.why.length + b.quotes.length + b.words.length + b.moments.length)
                         let secondValue = (a.why.length + a.quotes.length + a.words.length + a.moments.length)
                         values[b.title] = firstValue
                         values[a.title] = secondValue
-                        return firstValue - secondValue
+                        return header ===  'Strongest memory' ? firstValue - secondValue : secondValue - firstValue
                     })
                     if (!strongMem.length) return 
 
@@ -287,7 +288,7 @@ class StatBox extends Component {
                 }
                 case 'Longest break after reading': {
    
-                    const findThatIndex = (b) => b ? this.props.books.findIndex(item => Number(item._id) === Number(b._id)) : 0
+                    const findThatIndex = (b) => b ? this.props.books.findIndex(item => item._id === b._id) : 0
                     
                     let dateArray = []
 
@@ -326,6 +327,7 @@ class StatBox extends Component {
                         current book (index), taking into account edge cases.
                         Assign the days between to a new property for each book.
                     */
+    
                     dateArray.forEach((b,i) => {
          
                         if (!i && b.started && !b.finished) cr = b
@@ -344,20 +346,21 @@ class StatBox extends Component {
                             //console.log('comparing last finished book with current date:')
                             date1 = grabDates(findThatIndex(b))[1]
                             date2 = this.props.timeStamp().split(' ')[0]
+                            //console.log(findThatIndex(b))
                         }
 
                         //console.log(i, b.title)
                         
                         if (typeof cr === 'object') {
-                            //console.log('comparing current reading with last finished:')
+                            // console.log('comparing current reading with last finished:')
                             date2 = grabDates(findThatIndex(cr))[0]
                             date1 = grabDates(findThatIndex(b))[1]
                             cr = false
                         }
                         
-                        //console.log(date1, date2)
+                       
                         let [ days ] = compareDates(date1, date2)
-                        // console.log(days)
+                        //console.log(days)
                         if (!days) return
                         bCopy['break'] = days
                         values[b.title] = Math.round(days)

@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const { checkUser } = require('../../middleware/userMiddleware')
 
 // User controller
 const userController = require('../../controllers/userController');
@@ -10,8 +11,8 @@ router.post('/signup', userController.signup_post);
 router.get('/logout', userController.logout_get);
 router.get('/verify', userController.verify_user_get);
 
-router.post('/:user/settings', userController.user_update)
-router.get('/:id', userController.user_get);
+router.post('/:user/settings', checkUser, userController.user_update)
+router.get('/:uid', checkUser, userController.user_get);
 
 // Original routes (GET, POST, & DELETE USERS)
 router.get('/', userController.users_get);

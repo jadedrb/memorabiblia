@@ -117,7 +117,7 @@ module.exports.logout_get = async (req, res) => {
 
 module.exports.user_get = (req, res) => {
     User
-        .findById(req.params.id)
+        .findById(req.params.uid)
         .then(user => res.status(200).json(user))
         .catch(err => res.status(400).json('Error: ' + err));
 }
