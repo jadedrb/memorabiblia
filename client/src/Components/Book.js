@@ -1,6 +1,8 @@
 import React from 'react';
 import Modal from './Modal'
 
+import mix from '../config/mixedContent'
+
 class Book extends React.Component {
   constructor(props) {
     super(props)
@@ -43,7 +45,7 @@ class Book extends React.Component {
 
     let image = (
       <React.Fragment>
-        <img className='img-div' src={book.url} alt={book.title || 'Untitled'} onClick={() => this.handleClick(1)} style={{display: window.innerWidth < 551 && this.state.tab !== 'image' ? 'none' : 'block'}}/>
+        <img className='img-div' src={mix(book.url)} alt={book.title || 'Untitled'} onClick={() => this.handleClick(1)} style={{display: window.innerWidth < 551 && this.state.tab !== 'image' ? 'none' : 'block'}}/>
       </React.Fragment>
     )
 
