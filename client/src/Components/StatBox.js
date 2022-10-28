@@ -1,5 +1,7 @@
 import React, { Component } from 'react';
 
+import mix from '../config/mixedContent'
+
 class StatBox extends Component {
     constructor(props) {
         super(props)
@@ -406,7 +408,7 @@ class StatBox extends Component {
         return(
             <div className='stat-box'>
                 {result && !String(result).includes('-1') ? <div className='stat-head' onClick={(e) => this.props.statBoxMoreToggle(e, { statMore, header, values })}>{header} <br/><span className='lil-stat'>({result}{header && header.includes('favorite') ? '/10' : ''})</span></div> : ''}
-                <div><img className='profile-book' src={defaultImg} onClick={() => this.props.handleAttention(title)} alt=''></img></div>
+                <div><img className='profile-book' src={mix(defaultImg)} onClick={() => this.props.handleAttention(title)} alt=''></img></div>
             </div>
         )
     }

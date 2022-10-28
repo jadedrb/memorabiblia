@@ -4,6 +4,8 @@ import ReactDOM from 'react-dom';
 import axiosConfig from '../config/axios';
 import axiosTP from 'axios'
 
+import mix from '../config/mixedContent'
+
 import auth from '../auth'
 
 const modal = document.getElementById('modal-root')
@@ -228,7 +230,7 @@ class Modal extends React.Component {
             </input>
           </label>
         </form>
-        <img src={book.url} alt='URL Not Found'/>
+        <img src={mix(book.url)} alt='URL Not Found'/>
       </div>
     )
 

@@ -4,6 +4,7 @@ import StatBox from './StatBox';
 import axiosConfig from '../config/axios';
 import GeneralModal from './GeneralModal';
 
+import mix from '../config/mixedContent'
 
 
 import auth from '../auth'
@@ -223,7 +224,7 @@ class Profile extends Component {
         let attention = (
             <div id='attention'>
                 <div id='attention-title'><span><i>{bookNeed && bookNeed.title ? bookNeed.title : 'Untitled'}</i> needs your attention.</span><br/> {rememberOrKnow ? 'Remember' : 'Know'} anything else about this book?</div>
-                <img className='profile-book' src={bookNeed && bookNeed.url} onClick={() => this.props.handleAttention(bookNeed.title)} alt={''}></img>
+                <img className='profile-book' src={bookNeed && mix(bookNeed.url)} onClick={() => this.props.handleAttention(bookNeed.title)} alt={''}></img>
                 <ul>
                     <li id='missing' style={{ color: rememberOrKnow ? 'red' : 'maroon' }}>Missing...</li>
                     {properties && properties.map((p,i) => <li key={i} style={i % 2 === 0 ? {color: '#505050'} : {color: 'black'}}>{p === 'url' ? 'cover' : p}</li>)}
@@ -313,7 +314,7 @@ class Profile extends Component {
                                             <img 
                                                 alt={b.title} 
                                                 className='profile-book' 
-                                                src={b.url} 
+                                                src={mix(b.url)} 
                                                 onClick={() => this.miniStatClick(b.title)} 
                                                 onMouseOver={() => this.handleMouseOvers(b.title)} 
                                                 onMouseLeave={this.handleMouseOvers}

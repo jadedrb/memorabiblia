@@ -1,5 +1,7 @@
 import React from 'react';
 
+import mix from '../config/mixedContent'
+
 const Home = (props) => {
   let started, finished;
   let defaultImg = 'https://i.pinimg.com/originals/e7/46/b5/e746b5242cc4ca1386ab8cbc87885ff5.png'
@@ -84,11 +86,11 @@ const Home = (props) => {
       <div className='current-reading'>
         <div>
           <h1>Currently Reading:</h1>
-          <img className='profile-book' onClick={() => props.handleAttention(started.title)} src={started && started.url ? started.url : defaultImg} alt='Book Cover'/>
+          <img className='profile-book' onClick={() => props.handleAttention(started.title)} src={started && started.url ? mix(started.url) : mix(defaultImg)} alt='Book Cover'/>
         </div>
         <div>
           <h1>Recently Finished:</h1>
-          <img className='profile-book' onClick={() => props.handleAttention(finished.title)} src={finished && finished.url ? finished.url : defaultImg} alt='Book Cover' />
+          <img className='profile-book' onClick={() => props.handleAttention(finished.title)} src={finished && finished.url ? mix(finished.url) : mix(defaultImg)} alt='Book Cover' />
         </div>
       </div>
     </div>
