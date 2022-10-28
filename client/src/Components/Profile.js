@@ -1,10 +1,13 @@
 import React, { Component } from 'react';
 import Login from './Login';
 import StatBox from './StatBox';
-import axios from 'axios';
+import axiosConfig from '../config/axios';
 import GeneralModal from './GeneralModal';
 
+
+
 import auth from '../auth'
+import { verifyToken } from '../config/verifyToken';
 
 class Profile extends Component {
     constructor(props) {
@@ -114,9 +117,15 @@ class Profile extends Component {
 
     async deleteAccount() {
 
+        const axios = axiosConfig()
+
         try {
+
+            let payload = verifyToken()
             
-            let verifiedUser = await axios.get('/api/users/verify')
+            if (!payload) return
+
+            // let verifiedUser = await axios.get('/api/users/verify')
             let deleting = window.confirm('Are you sure you want to delete your account? This will remove all saved entries and user information permanently.')
             
             if (deleting) {
@@ -128,7 +137,7 @@ class Profile extends Component {
                     let books = this.props.data.books
                     books.map(b => axios.delete(`/api/memories/remove/${b._id}`))
 
-                    await axios.delete(`api/users/remove/${verifiedUser.data.user}`)
+                    await axios.delete(`api/users/remove/${payload.id}`)
                     alert('Account deleted successfully.')
                     this.handleToggleSettings()
                     this.props.setUser()

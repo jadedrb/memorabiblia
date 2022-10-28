@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import './App.css';
 import { Route, Link, Switch, Redirect } from 'react-router-dom';
-import axios from 'axios';
+import axiosTP from 'axios'
+import axiosConfig from './config/axios';
 
 import Home from './Components/Home';
 import ReadingList from './Components/ReadingList';
@@ -10,6 +11,8 @@ import WordQuiz from './Components/WordQuiz';
 import PageNotFound from './Components/PageNotFound';
 
 import auth from './auth'
+import { verifyToken } from './config/verifyToken';
+
 
 class App extends Component {
   constructor() {
@@ -34,13 +37,16 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.52"
+  currentAppVersion = "1.53"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
+    
     let { books } = this.state
+
+    const axios = axiosConfig()
+
     if (user !== 'none') {
       auth.login(() => console.log('logged in - setUser'))
-      console.log(auth.isAuthenticated())
       this.setState({user, email, creationDate}) 
       let confirmTransfer = books.length > 0 && window.confirm(`Would you like to transfer your unsaved book entries (${books.length}) to your account?`)
       
@@ -52,7 +58,6 @@ class App extends Component {
           axios
             .post('/api/memories', bCopy)
             .then(res => {
-              console.log('this is what I think it is')
               console.log(`post ${i} done`)
               return axios
                       .post(`/api/memories/update/${res.data._id}`, bCopy)
@@ -75,14 +80,15 @@ class App extends Component {
         .get('/api/users/logout')
         .then(() => {
           auth.logout(() => console.log('logged out - setUser'))
-          console.log(auth.isAuthenticated())
+          localStorage.removeItem("token")
           this.setState({user, email, books: []}) 
         })
     }
   }
 
   loadUserBooks = () => {
-    console.log('READ request')
+    const axios = axiosConfig()
+
     axios
       .get(`/api/memories/${this.state.user}`)
       .then(res => {
@@ -109,6 +115,7 @@ class App extends Component {
   }
 
   deleteBook = (book) => {
+    const axios = axiosConfig()
     let { id, _id } = book
     console.log('delete book ' + id)
     let deleting = window.confirm('Are you sure you want to delete? This will remove the book entry permanently.')
@@ -140,6 +147,7 @@ class App extends Component {
   newBook = () => {
       let Book = this.bookBlueprint();
       let { books, user } = this.state
+      const axios = axiosConfig()
 
       let nextId = books.length ? this.state.nextId : 0
       let deletedIds = [...this.state.deletedIds]
@@ -327,15 +335,19 @@ class App extends Component {
    
       try {
 
-        let hVars = await axios.post('/heroku-env', { hVarAuth: 'PAJAMA' }).catch((err) => alert('PROMISE1 (failed) : ' + err))
+        // let hVars = await axios.post('/heroku-env', { hVarAuth: 'PAJAMA' }).catch((err) => alert('PROMISE1 (failed) : ' + err))
   
-        let api = hVars.data.defineApi
-        let key = hVars.data.defineApiKey
+        // let api = hVars.data.defineApi
+        // let key = hVars.data.defineApiKey
+
+        let api = process.env.REACT_APP_DEFINE_API
+        let key = process.env.REACT_APP_DEFINE_API_KEY
 
         let lastCh = word[word.length - 1].toLowerCase()
         if (!/[a-z]/.test(lastCh)) word = word.split(lastCh)[0]
      
-        let res = await axios.get(api + word + key).catch((err) => alert('PROMISE2 (failed) : ' + err))
+        // axiosTP is regular axios without added headers
+        let res = await axiosTP.get(api + word + key).catch((err) => alert('PROMISE2 (failed) : ' + err))
         
         let concatDefs = ''
         let shortdef = res.data[0].shortdef
@@ -364,6 +376,7 @@ class App extends Component {
   }
 
   newSettings = (property, value, user) => {
+    const axios = axiosConfig()
     if (user !== 'none') {
       axios
         .post(`/api/users/${user}/settings`, [property, value])
@@ -419,17 +432,20 @@ class App extends Component {
   }
 
   componentDidMount() { 
-// Check for a JWT token and convert it into a user id
-    axios
-      .get('/api/users/verify')
-      .then(response => {
+
+    // Check token and extract username and id 
+    let payload = verifyToken()
+
+  // returns false otherwise
+    if (!payload) return
+
+    const axios = axiosConfig()
+
     // Search for the user with that id and set the app state
         axios
-          .get(`/api/users/${response.data.user}`)
+          .get(`/api/users/${payload.id}`)
           .then(user => this.setUser(user.data.username, user.data.email, user.data.creationDate, user.data.settings))
           .catch(() => 'Error: fetching user data')
-      })
-      .catch(() => console.log('Error: verifying user'))
    }
 
   componentDidUpdate() {

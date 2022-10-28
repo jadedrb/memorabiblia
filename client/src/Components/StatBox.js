@@ -221,7 +221,7 @@ class StatBox extends Component {
                         let months;
                         if(property === 'month') {
                             if (!b.started) return
-                            console.log(b.started, new Date(b.started).getMonth() + 1)
+                            // console.log(b.started, new Date(b.started).getMonth() + 1)
                             months = ['', 'January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
                             b[property] = months[new Date(b.started).getMonth() + 1]
                         }

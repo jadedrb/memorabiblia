@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import axiosConfig from '../config/axios';
+
+const axios = axiosConfig()
 
 const Login = (props) => {
     let emailInput = ''
@@ -48,7 +50,10 @@ const Login = (props) => {
 
         axios
           .post('/api/users/login', { userInfo })
-          .then((res) => props.setUser(res.data.username, res.data.email, res.data.creationDate, res.data.settings))
+          .then((res) => {
+            localStorage.setItem("token", res.data.token)
+            props.setUser(res.data.username, res.data.email, res.data.creationDate, res.data.settings)
+          })
           .catch(err => {
             setErrors(err.response.data.errors)
             setLoading(false)
@@ -59,7 +64,10 @@ const Login = (props) => {
 
         axios
           .post('/api/users/signup', { userInfo })
-          .then(() => props.setUser(username, email, userInfo.creationDate))
+          .then((res) => {
+            localStorage.setItem("token", res.data.token)
+            props.setUser(username, email, userInfo.creationDate)
+          })
           .catch(err => {
             setErrors(err.response.data.errors)
             setLoading(false)

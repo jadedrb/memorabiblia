@@ -2,7 +2,9 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const path = require('path');
+// const path = require('path');
+
+require('dotenv').config()
 
 const memories = require('./routes/api/memories');
 const users = require('./routes/api/users');
@@ -13,13 +15,13 @@ const keys_dev = require('./config/keys');
 const app = express();
 
 // Middleware
-app.use(express.json());
 app.use(cookieParser());
+app.use(express.json());
 app.use(cors());
 
 // Connect to Mongo
 mongoose
-    .connect(keys_dev.mongoURI, { useUnifiedTopology: true, useNewUrlParser: true })
+    .connect(process.env.MONGO_URI, { useUnifiedTopology: true, useNewUrlParser: true })
     .then(() => console.log('MongoDB Connected...'))
     .catch(err => console.log(err));
 
@@ -46,6 +48,6 @@ if (process.env.NODE_ENV === 'production') {
 }
 */
 
-const port = process.env.PORT || 5000 || 5001;
+const PORT = process.env.PORT || 5000
 
-app.listen(port, () => console.log(`Server started on port ${port}`));
+app.listen(PORT, () => console.log(`Server started on port ${PORT}`));

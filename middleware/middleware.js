@@ -1,76 +1,36 @@
 // UNUSED MIDDLEWARE (as of now)
 
 const jwt = require('jsonwebtoken');
-const User = require('../models/User');
-const Memory = require('../models/Memory')
 
-const requireAuth = (req, res, next) => {
-    // all middleware has the "next" method
-    const token = req.cookies.jwt;
+const requireAuth = async (req, res, next) => {
+    try {
+        // 1. Check if user has a token
+        const token = req.header('token')
 
-    //check json web token exists & is verified
-    if (token) {
-        jwt.verify(token, 'super secret string wow', (err, decodedToken) => {
-            if (err) {
-                console.log(err.message)
-                res.status(400).json({ user: null })
-            } else {
-                console.log(decodedToken)
-                next()
-            }
-        })
-    } else {
-        res.status(400).json({ user: null });
-    }
-}
+        if (!token)
+            throw new Error('No token provided')
+        
+        // 2. Check that token provided is valid and not expired
+        const payload = await jwt.verify(token, process.env.SECRET_STRING)
 
-// res.status(201).json({ user: user._id });  400 for error
-
-// check current user
-const checkUser = (req, res, next) => {
-    const token = req.cookies.jwt
-    //console.log('checkUser middleware...')
-    if (token) {
-        jwt.verify(token, 'super secret string wow', async (err, decodedToken) => {
-            if (err) {
-                console.log(err.message)
-                res.locals.currentUser = null
-                next()
-            } else {
-                // console.log(decodedToken)
-                let user = await User.findById(decodedToken.id)
-
-                let requestingUser = req.params.user || req.body.user
-
-                if (requestingUser) {
-                    if (requestingUser !== user.username) {
-                        res.status(401).json({ error: 'Unauthorized user access.' });
-                    }
-                }
+        if (payload.error) 
+            throw new Error(payload.error)
+        
+        if (req.body.user)
+            if (req.body.user !== payload.user)
+                throw new Error('Wrong user trying to access.')
                 
-                if (req.params.id) {
-                    let book = await Memory.findById(req.params.id)
-                    if (book.user !== user.username) {
-                        res.status(401).json({ error: 'Unauthorized user access..' });
-                    }
-                }
+        // 3. Attach the payload (user id) to the request object
+        req.user = payload.user
+        req.user_id = payload.id
 
-                if (req.params.uid) {
-                    if (decodedToken.id !== req.params.uid) {
-                        res.status(401).json({ error: 'Unauthorized user access...' });
-                    }
-                }
-
-                //console.log('$$$')
-                res.locals.currentUser = user
-                next()
-            }
-        })
-    } else {
-        //console.log(token)
-        res.locals.user = null
+        // 4. Move on to the requested route
         next()
+
+    } catch (error) {
+        res.status(403).json({ error: error.message })
     }
 }
 
-module.exports = { requireAuth, checkUser };
+
+module.exports = { requireAuth };

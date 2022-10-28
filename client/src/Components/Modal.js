@@ -1,6 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import axios from 'axios';
+
+import axiosConfig from '../config/axios';
+import axiosTP from 'axios'
 
 import auth from '../auth'
 
@@ -20,14 +22,17 @@ class Modal extends React.Component {
 
     try {
 
-        let hVars = await axios.post('/heroku-env', { hVarAuth: 'PAJAMA' })
-        let api = hVars.data.gBooksApi
+        //let hVars = await axios.post('/heroku-env', { hVarAuth: 'PAJAMA' })
+        //let api = hVars.data.gBooksApi
+
+        let api = process.env.REACT_APP_GBOOKS_API
+
         let book = this.props.book.title
-    console.log(hVars)
+    //console.log(hVars)
         let author = this.props.book.author
         this.setState({isLoading: true})
 
-        let response = await axios.get(api + book)
+        let response = await axiosTP.get(api + book)
       
         let booksApi = response.data.items
         let infoArr = []
@@ -115,6 +120,9 @@ class Modal extends React.Component {
 
   componentWillUnmount() {
     modal.removeChild(this.el)
+    
+    const axios = axiosConfig()
+
     if (auth.isAuthenticated()) {
       let _id = this.props.book._id
       let Book = this.props.bookBlueprint()

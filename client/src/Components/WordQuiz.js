@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import axiosConfig from '../config/axios';
+import axiosTP from 'axios'
 
 import auth from '../auth'
 
@@ -21,6 +22,8 @@ function WordQuiz(props) {
     let [selectRepeated, setSelectRepeated] = useState(false)
 
     const generateWordBank = async () => {
+        const axios = axiosConfig()
+
         let tempBank;
         let wordStuff = await axios.get(`/api/memories/${props.user}/words`)
      
@@ -163,6 +166,8 @@ function WordQuiz(props) {
     }
 
     const deleteWord = (word, book) => {
+
+        const axios = axiosConfig()
 
         if (!book) {
             let deleting = window.confirm(`Would you like to delete ${word.toUpperCase()} from your list of interesting words?`)

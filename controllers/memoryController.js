@@ -2,7 +2,7 @@ const Memory = require('../models/Memory');
 
 module.exports.memories_get = (req, res) => {
     Memory
-        .find({ user: req.params.user })
+        .find({ user: req.user })
         .then(memories => res.json(memories))
         .catch(err => res.status(400).json('Error: ' + err));
 }
@@ -43,8 +43,10 @@ module.exports.memory_delete = (req, res) => {
 }
 
 module.exports.memories_words = (req, res) => {
+    console.log(req.params.user)
+    console.log(req.user)
     Memory
-        .find({ user: req.params.user })
+        .find({ user: req.user })
         .then(memories => {
             let wordCount = {}
             let repeatedWords = {}

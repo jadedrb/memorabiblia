@@ -1,6 +1,7 @@
 const User = require('../models/User');
 const jwt = require('jsonwebtoken');
-const secretString = require('../config/keys').secretString;
+// const secretString = require('../config/keys').secretString;
+const secretString = process.env.SECRET_STRING
 
 const handleErrors = (err) => {
     console.log(err.message, err.code)
@@ -49,8 +50,8 @@ const handleErrors = (err) => {
 }
 
 const maxAge = 3 * 24 * 60 * 60
-const createToken = id => {
-    return jwt.sign({ id }, secretString, { expiresIn: maxAge })
+const createToken = payload => {
+    return jwt.sign(payload, secretString, { expiresIn: maxAge })
 }
 
 module.exports.signup_post = async (req, res) => {
@@ -58,9 +59,9 @@ module.exports.signup_post = async (req, res) => {
 
     try {
         const user = await User.create({ username, creationDate, email, password })
-        const token = createToken(user._id)
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
-        res.status(201).json({ user: user._id });
+        const token = createToken({ id: user._id, user: username })
+        //res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+        res.status(201).json({ user: user._id, token });
     }
     catch (err) {
         const errors = handleErrors(err);
@@ -72,18 +73,18 @@ module.exports.signup_post = async (req, res) => {
 
 module.exports.login_post = async (req, res) => {
     const { username, password, creationDate, email } = req.body.userInfo
-    console.log(req.body.userInfo)
-    console.log(email)
+    console.log(req.headers.token)
 
     try {
         // the static method "login" is declared in the User model in User.js
         const user = await User.login(username, password) 
-        const token = createToken(user._id)
-        res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
+        const token = createToken({ id: user._id, user: username })
+        
+        // res.cookie('jwt', token, { httpOnly: true, maxAge: maxAge * 1000 });
 
         User
             .findOne({ username })
-            .then(user => res.status(200).json({ username, email: user.email, creationDate: user.creationDate, settings: user.settings }))
+            .then(user => res.status(200).json({ username, email: user.email, creationDate: user.creationDate, settings: user.settings, token }))
             .catch(err => console.log(err))
         
     } catch (err) {
@@ -92,17 +93,20 @@ module.exports.login_post = async (req, res) => {
     }
 }
 
+// Cookies stopped working after separating the frontend 
+// and backend servers (rip Heroku)
 module.exports.verify_user_get = (req, res, next) => {
     // all middleware has the "next" method
     const token = req.cookies.jwt;
     //check json web token exists & is verified
+
     if (token) {
         jwt.verify(token, secretString, (err, decodedToken) => {
             if (err) {
                 console.log(err.message)
                 res.status(400).json({ user: null })
             } else {
-                res.status(201).json({ user: decodedToken.id })
+                res.status(201).json({ user: decodedToken.id, token })
             }
         })
     } else {
@@ -117,7 +121,7 @@ module.exports.logout_get = async (req, res) => {
 
 module.exports.user_get = (req, res) => {
     User
-        .findById(req.params.uid)
+        .findById(req.user_id)
         .then(user => res.status(200).json(user))
         .catch(err => res.status(400).json('Error: ' + err));
 }
@@ -126,7 +130,7 @@ module.exports.user_get = (req, res) => {
 
 module.exports.user_update = (req, res) => {
     User
-        .findOne({ username: req.params.user })
+        .findOne({ username: req.user })
         .then(user => {
             let settings = JSON.parse(user.settings)
             let [property, value] = req.body
@@ -166,7 +170,7 @@ module.exports.user_post = (req, res) => {
 
 module.exports.user_delete = (req, res) => {
     User
-        .findById(req.params.id)
+        .findById(req.user_id)
         .then(user => user.remove().then(() => res.json({success: true})))
         .catch(err => res.status(404).json('Error: ' + err));
 }
