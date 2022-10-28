@@ -47,7 +47,7 @@ const Login = (props) => {
       if (userView) {
 
         axios
-          .post('/api/users/login', { userInfo })
+          .post(`${process.env.REACT_APP_API}/api/users/login`, { userInfo })
           .then((res) => {
             localStorage.setItem("token", res.data.token)
             props.setUser(res.data.username, res.data.email, res.data.creationDate, res.data.settings)
@@ -61,7 +61,7 @@ const Login = (props) => {
       else {
 
         axios
-          .post('/api/users/signup', { userInfo })
+          .post(`${process.env.REACT_APP_API}/api/users/signup`, { userInfo })
           .then((res) => {
             localStorage.setItem("token", res.data.token)
             props.setUser(username, email, userInfo.creationDate)
