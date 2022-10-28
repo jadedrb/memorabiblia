@@ -1,9 +1,13 @@
 import axios from 'axios'
 
-const DEVELOPMENT = window.location.hostname.includes("localhost")
+const baseURL = window.location.hostname.includes("localhost") 
+    ? 
+    "http://localhost:8080" 
+    : 
+    process.env.REACT_APP_API
 
 const axiosConfig = () => axios.create({
-    baseURL: DEVELOPMENT ? "http://localhost:8080" : process.env.REACT_APP_API,
+    baseURL,
     headers: {
         token: localStorage.getItem("token")
     }

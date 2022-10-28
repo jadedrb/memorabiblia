@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
-import axiosConfig from '../config/axios';
-
-const axios = axiosConfig()
+import axios from 'axios'
 
 const Login = (props) => {
     let emailInput = ''
