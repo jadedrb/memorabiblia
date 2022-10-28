@@ -35,6 +35,7 @@ app.post('/heroku-env', (req, res) => {
     else res.status(400).json({ error: 'Nothing to see here...'})
 })
 
+/*
 // Serve static assets if in production
 if (process.env.NODE_ENV === 'production') {
     // Set static folder
@@ -43,6 +44,7 @@ if (process.env.NODE_ENV === 'production') {
         res.sendFile(path.resolve(__dirname, 'client', 'build', 'index.html'));
     });
 }
+*/
 
 const port = process.env.PORT || 5000 || 5001;
 
