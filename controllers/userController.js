@@ -97,21 +97,22 @@ module.exports.login_post = async (req, res) => {
 // and backend servers (rip Heroku)
 module.exports.verify_user_get = (req, res, next) => {
     // all middleware has the "next" method
-    const token = req.cookies.jwt;
-    //check json web token exists & is verified
+    // const token = req.cookies.jwt;
+    // //check json web token exists & is verified
 
-    if (token) {
-        jwt.verify(token, secretString, (err, decodedToken) => {
-            if (err) {
-                console.log(err.message)
-                res.status(400).json({ user: null })
-            } else {
-                res.status(201).json({ user: decodedToken.id, token })
-            }
-        })
-    } else {
-        res.status(400).json({ user: null });
-    }
+    // if (token) {
+    //     jwt.verify(token, secretString, (err, decodedToken) => {
+    //         if (err) {
+    //             console.log(err.message)
+    //             res.status(400).json({ user: null })
+    //         } else {
+    //             res.status(201).json({ user: decodedToken.id, token })
+    //         }
+    //     })
+    // } else {
+    //     res.status(400).json({ user: null });
+    // }
+    res.status(200).json({ msg: 'Hello!' })
 }
 
 module.exports.logout_get = async (req, res) => {

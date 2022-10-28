@@ -37,7 +37,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.53"
+  currentAppVersion = "1.54"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     
@@ -433,18 +433,37 @@ class App extends Component {
 
   componentDidMount() { 
 
+    const axios = axiosConfig()
+    let loading;
+
     // Check token and extract username and id 
     let payload = verifyToken()
 
-  // returns false otherwise
-    if (!payload) return
+  // payload returns false otherwise
+    if (!payload) {
+      loading = document.querySelector('.s-u')
+      loading.classList.add('s-loading')
 
-    const axios = axiosConfig()
+      // wake up server
+      axios
+        .get('/api/users/verify')
+        .then(res => {
+          loading.classList.remove('s-loading')
+          console.log('Server: ', res.data.msg)
+        })
+      return
+    }
+    
+    loading = document.querySelector('.i-u')
+    loading.classList.add('u-loading')
 
     // Search for the user with that id and set the app state
         axios
           .get(`/api/users/${payload.id}`)
-          .then(user => this.setUser(user.data.username, user.data.email, user.data.creationDate, user.data.settings))
+          .then(user => {
+            loading.classList.remove('u-loading')
+            this.setUser(user.data.username, user.data.email, user.data.creationDate, user.data.settings)
+          })
           .catch(() => 'Error: fetching user data')
    }
 
@@ -464,6 +483,14 @@ class App extends Component {
             <h2>NEW VERSION</h2>
             <h4>{this.currentAppVersion}</h4>
             <p>this message is just to let you know there was an update recently</p>
+          </div>
+
+          <div className='l-u i-u'>
+            Verified. Retrieving user memories...
+          </div>
+
+          <div className='l-u s-u'>
+            Communicating with server...
           </div>
 
           <div className='nav-block' onClick={() => this.minimize('hamburger')}>nav block</div>

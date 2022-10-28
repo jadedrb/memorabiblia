@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import axiosConfig from '../config/axios';
-import axiosTP from 'axios'
 
 import auth from '../auth'
 

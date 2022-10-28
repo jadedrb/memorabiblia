@@ -963,6 +963,42 @@ select {
   text-decoration: underline;
 }
 
+.l-u {
+  display: none; 
+  position: fixed;
+  bottom: 0;
+  z-index: 20;
+  background-color: white;
+}
+
+.u-loading {
+  display: block;
+  animation: u-loading 1s ease-in-out infinite alternate forwards;
+}
+
+.s-loading {
+  display: block;
+  animation: s-loading 1s ease-in-out infinite alternate forwards;
+}
+
+@keyframes u-loading {
+  from {
+    background-color: white;
+  }
+  to {
+    background-color: rgb(160, 255, 160);;
+  }
+}
+
+@keyframes s-loading {
+  from {
+    background-color: white;
+  }
+  to {
+    background-color: rgb(253, 251, 146);;
+  }
+}
+
 
 /* Keyframe Animations */
 
