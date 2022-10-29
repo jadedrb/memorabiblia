@@ -112,7 +112,17 @@ module.exports.verify_user_get = (req, res, next) => {
     // } else {
     //     res.status(400).json({ user: null });
     // }
-    res.status(200).json({ msg: 'Hello!' })
+    
+    // to notify frontend when db connection is complete
+    User
+        .estimatedDocumentCount()
+        .then(c => {
+            res.status(200).json({ msg: `Hello! (${c})` })
+        })
+        .catch(() => {
+            res.status(400).json({ msg: 'H-h...help' })
+        })
+    
 }
 
 module.exports.logout_get = async (req, res) => {

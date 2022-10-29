@@ -37,7 +37,7 @@ class App extends Component {
       }
   }
 
-  currentAppVersion = "1.54"
+  currentAppVersion = "1.55"
 
   setUser = (user = 'none', email = '', creationDate, settings) => {
     
