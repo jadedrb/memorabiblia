@@ -67,5 +67,5 @@ run the app: npm run client OR npm run dev
 
 ## Deployed Link 
 
-Check out [memorabiblia](https://memora-biblia.herokuapp.com/)!
+Check out [memorabiblia](https://memorabiblia.netlify.app/)!
 
